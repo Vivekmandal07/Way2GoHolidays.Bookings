@@ -1,0 +1,7 @@
+{
+  "name": "Way2GoHolidays",
+  "description": "Premium travel agency website with custom package creation, booking management, and curated international and domestic destinations.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
