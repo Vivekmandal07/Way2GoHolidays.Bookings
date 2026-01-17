@@ -36,6 +36,21 @@ export const PACKAGES: Package[] = [
     ]
   },
   { 
+    id: 'int-6', 
+    title: 'Ultimate Maldives Overwater Luxury', 
+    price: '₹1,15,000', 
+    image: PICS.maldives, 
+    duration: '4N/5D', 
+    destination: 'Maldives',
+    itinerary: [
+      { day: 1, title: 'Arrival in Malé', activities: 'Speedboat transfer to your private island resort.', hotel: 'Soneva Jani' },
+      { day: 2, title: 'Snorkeling & Sandbank', activities: 'Guided snorkeling tour and private sandbank lunch.', hotel: 'Soneva Jani' },
+      { day: 3, title: 'Spa & Sunset Cruise', activities: 'Traditional Balinese massage and dolphin sunset cruise.', hotel: 'Soneva Jani' },
+      { day: 4, title: 'Leisure Day', activities: 'Full day at leisure to enjoy resort amenities.', hotel: 'Soneva Jani' },
+      { day: 5, title: 'Departure', activities: 'Breakfast and return transfer to Malé airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
     id: 'int-2', 
     title: 'Amazing Thailand Getaway', 
     price: '₹48,000', 
@@ -99,6 +114,22 @@ export const PACKAGES: Package[] = [
   },
 
   // Domestic Packages
+  { 
+    id: 'dom-6', 
+    title: 'The High Pass Adventure: Ladakh', 
+    price: '₹42,000', 
+    image: PICS.ladakh, 
+    duration: '5N/6D', 
+    destination: 'Ladakh',
+    itinerary: [
+      { day: 1, title: 'Leh Arrival & Acclimatization', activities: 'Arrival at Leh airport. Full day rest to acclimatize.', hotel: 'The Grand Dragon Leh' },
+      { day: 2, title: 'Leh City & Monasteries', activities: 'Visit Shanti Stupa, Leh Palace and Hall of Fame.', hotel: 'The Grand Dragon Leh' },
+      { day: 3, title: 'Nubra Valley via Khardung La', activities: 'Drive to Nubra via world’s highest motorable pass.', hotel: 'Stone Hedge Ladakh' },
+      { day: 4, title: 'Pangong Lake Excursion', activities: 'Visit the stunning Pangong Lake via Shyok river.', hotel: 'Pangong Sarai' },
+      { day: 5, title: 'Return to Leh', activities: 'Drive back to Leh via Chang La Pass.', hotel: 'The Grand Dragon Leh' },
+      { day: 6, title: 'Departure', activities: 'Transfer to Leh airport.', hotel: 'N/A' }
+    ]
+  },
   { 
     id: 'dom-1', 
     title: 'Kerala Backwaters Bliss', 
@@ -174,22 +205,6 @@ export const PACKAGES: Package[] = [
       { day: 4, title: 'Srinagar Gardens', activities: 'Mughal Gardens visit.', hotel: 'The Lalit Grand Palace' },
       { day: 5, title: 'Local Shopping', activities: 'Leisure day in Srinagar.', hotel: 'The Lalit Grand Palace' },
       { day: 6, title: 'Departure', activities: 'Drop at Srinagar airport.', hotel: 'N/A' }
-    ]
-  },
-  { 
-    id: 'dom-6', 
-    title: 'Leh Ladakh - High Passes', 
-    price: '₹32,000', 
-    image: PICS.ladakh, 
-    duration: '5N/6D', 
-    destination: 'Ladakh',
-    itinerary: [
-      { day: 1, title: 'Leh Arrival', activities: 'Rest and acclimatize to the high altitude.', hotel: 'The Grand Dragon Leh' },
-      { day: 2, title: 'Sham Valley Tour', activities: 'Magnetic Hill, Gurudwara Pathar Sahib, and Hall of Fame.', hotel: 'The Grand Dragon Leh' },
-      { day: 3, title: 'Nubra Valley via Khardung La', activities: 'Drive to Nubra Valley over world\'s highest motorable pass.', hotel: 'Stone Hedge Ladakh' },
-      { day: 4, title: 'Pangong Lake via Shyok', activities: 'Visit the world-famous high-altitude lake.', hotel: 'Pangong Lake Camp' },
-      { day: 5, title: 'Return to Leh', activities: 'Crossing Chang La pass and local market shopping.', hotel: 'The Grand Dragon Leh' },
-      { day: 6, title: 'Departure', activities: 'Transfer to Leh airport.', hotel: 'N/A' }
     ]
   },
 ];

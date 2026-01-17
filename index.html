@@ -5,28 +5,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Way2GoHolidays - Your Journey, Our Passion</title>
-    <!-- Custom Favicon: Flight tilted at 30 degrees -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cg transform='rotate(30, 12, 12)'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/g%3E%3C/svg%3E">    
+    <!-- Custom Favicon: Blue Airplane pointing top-right -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cg transform='rotate(30, 12, 12)'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/g%3E%3C/svg%3E">    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- IonIcons for phone, social, etc. -->
+    <!-- IonIcons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- html2pdf for direct PDF downloading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
       body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
       .glass-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
-      /* Custom scrollbar */
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #f1f1f1; }
-      ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-      ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+      
+      /* Refined User-Friendly Search Focus */
+      .search-focus {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .search-focus:focus-within {
+        border-color: rgba(59, 130, 246, 0.5);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+      .search-focus:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      
+      /* Custom Zoom Animation for Clicks */
+      @keyframes click-zoom {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+      .animate-click-zoom {
+        animation: click-zoom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      /* Transitions */
+      .zoom-on-click:active {
+        transform: scale(1.1);
+        transition: transform 0.1s ease-out;
+      }
       
       @keyframes fade-in {
         from { opacity: 0; transform: translateY(10px); }
@@ -45,20 +73,13 @@
         animation: soft-blink 2s infinite ease-in-out;
       }
 
-      /* Glowing pulse for primary button */
-      @keyframes glow-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-        70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+      @keyframes wave-out {
+        0% { box-shadow: 0 0 0 0 rgba(17, 72, 203, 0.6); transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { box-shadow: 0 0 0 20px rgba(17, 72, 203, 0); transform: scale(1); }
       }
-      .animate-glow-pulse {
-        animation: glow-pulse 2s infinite;
-      }
-
-      /* Search bar focus glow */
-      .search-focus:focus-within {
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-        border-color: rgba(255, 255, 255, 0.5);
+      .animate-wave-out {
+        animation: wave-out 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
       }
 
       /* Heading Reveal Animation */
@@ -73,39 +94,43 @@
         transform: translateY(0);
       }
 
-      /* Refined Animated Underline */
+      /* Redesigned Underline: Expands from middle to left and right slowly */
       .heading-underline {
         width: 100%;
-        height: 4px;
+        height: 6px;
         background-color: #2563eb;
         border-radius: 9999px;
         position: absolute;
-        bottom: -8px;
+        bottom: -12px;
         left: 0;
         transform: scaleX(0);
-        transform-origin: left;
+        transform-origin: center; /* Expanding from the middle */
         opacity: 0;
         pointer-events: none;
       }
 
-      /* Intro animation: shows for 2.5s then disappears */
       @keyframes underline-intro {
-        0% { transform: scaleX(0); opacity: 0; }
-        15% { transform: scaleX(1); opacity: 1; }
-        85% { transform: scaleX(1); opacity: 1; }
-        100% { transform: scaleX(0); opacity: 0; }
+        0% { 
+          transform: scaleX(0); 
+          opacity: 0; 
+        }
+        25% { 
+          transform: scaleX(1); 
+          opacity: 1; 
+        }
+        75% { 
+          transform: scaleX(1); 
+          opacity: 1; 
+        }
+        100% { 
+          transform: scaleX(0); 
+          opacity: 0; 
+        }
       }
 
       .reveal-active .heading-underline {
-        animation: underline-intro 2.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      }
-
-      /* Hover Animation: Sweeps from left to right */
-      .reveal-heading:hover .heading-underline {
-        animation: none !important; /* Stop the intro if hovering early */
-        transform: scaleX(1) !important;
-        opacity: 1 !important;
-        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease !important;
+        /* Increased duration to 4 seconds for a slower, premium feel */
+        animation: underline-intro 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
       }
     </style>
   <script type="importmap">

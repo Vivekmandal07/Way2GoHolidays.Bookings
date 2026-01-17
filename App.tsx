@@ -71,14 +71,24 @@ const App: React.FC = () => {
   };
 
   const handleExploreDestination = (destName: string) => {
-    const found = PACKAGES.find(p => 
-      p.destination.toLowerCase().includes(destName.toLowerCase()) || 
-      destName.toLowerCase().includes(p.destination.toLowerCase())
+    // 1. Try to find an exact match first
+    let found = PACKAGES.find(p => 
+      p.destination.toLowerCase() === destName.toLowerCase() ||
+      p.title.toLowerCase().includes(destName.toLowerCase())
     );
+
+    // 2. Fallback to a partial match if no exact match found
+    if (!found) {
+      found = PACKAGES.find(p => 
+        p.destination.toLowerCase().includes(destName.toLowerCase()) || 
+        destName.toLowerCase().includes(p.destination.toLowerCase())
+      );
+    }
 
     if (found) {
       handleOpenPackage(found);
     } else {
+      // If still nothing, let them design their own
       setActiveModal('create');
     }
   };
@@ -90,7 +100,7 @@ const App: React.FC = () => {
         onLogin={() => setActiveModal('login')} 
       />
       
-      <main className="flex-grow pt-28">
+      <main className="flex-grow pt-20 md:pt-28">
         <Hero 
           onBookNow={() => setActiveModal('booking')} 
           onCreatePackage={() => setActiveModal('create')}
@@ -126,8 +136,7 @@ const App: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
             <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
               <span className="text-blue-600 font-bold uppercase tracking-widest text-sm mb-4 block">Our Story</span>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tighter">About Way2GoHolidays</h2>
-              <p className="text-blue-500 font-black text-xs md:text-sm uppercase tracking-[0.4em] mb-10 select-none opacity-80">Your Journey, Our Passion</p>
+              <h2 className="text-4xl md:text-5xl font-black mb-10 text-gray-900 tracking-tighter">About Way2GoHolidays</h2>
               <p className="text-gray-600 text-lg md:text-xl leading-relaxed mb-8">
                 At Way2GoHolidays, we believe that travel is more than just visiting a new place; it's about creating memories that last a lifetime. Based in the heart of New Delhi, we specialize in crafting bespoke travel experiences tailored to your dreams. 
               </p>
