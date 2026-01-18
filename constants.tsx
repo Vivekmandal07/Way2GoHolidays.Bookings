@@ -228,7 +228,7 @@ export const GALLERY_IMAGES = [
   { url: PICS.traveler_16, tag: 'Serene Lakes' },
   { url: PICS.traveler_17, tag: 'Park Moments' },
   { url: PICS.traveler_18, tag: 'Summer Love' },
-  { url: PICS.traveler_19, tag: 'Phuket Beach' },
+  { url: PICS.gallery_6, tag: 'Phuket Beach' },
 ];
 
 export const CONTACT_DETAILS = {
