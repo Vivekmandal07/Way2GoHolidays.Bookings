@@ -242,7 +242,14 @@ export const COUNTRY_CODES = [
   { code: '+91', country: 'India', flag: '🇮🇳' },
   { code: '+1', country: 'USA/Canada', flag: '🇺🇸' },
   { code: '+44', country: 'UK', flag: '🇬🇧' },
+  { code: '+66', country: 'Thailand', flag: 'TH' },
   { code: '+971', country: 'UAE', flag: '🇦🇪' },
-  { code: '+61', country: 'Australia', flag: '🇦🇺' },
+  { code: '+62', country: 'Bali', flag: 'BA' },
   { code: '+65', country: 'Singapore', flag: '🇸🇬' },
+  { code: '+84', country: 'Vietnam', flag: 'VN' },
+  { code: '+855', country: 'Cambodia', flag: 'KH' },
+  { code: '+852', country: 'HongKong', flag: 'HK' },
+  { code: '+994', country: 'Baku', flag: 'AZ' },
+  { code: '+61', country: 'Australia', flag: '🇦🇺' },
+  
 ];
