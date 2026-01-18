@@ -50,4 +50,8 @@ export const PICS = {
   traveler_16: 'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?auto=format&fit=crop&w=800&q=80',
   traveler_17: 'https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80',
   traveler_18: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+
+  gallery_6: 'gallery-6.png'
 };
+
+
