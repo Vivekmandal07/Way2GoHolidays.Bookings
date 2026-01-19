@@ -100,7 +100,7 @@ const App: React.FC = () => {
         onLogin={() => setActiveModal('login')} 
       />
       
-      <main className="flex-grow pt-20 md:pt-28">
+      <main className="flex-grow pt-20">
         <Hero 
           onBookNow={() => setActiveModal('booking')} 
           onCreatePackage={() => setActiveModal('create')}
