@@ -80,20 +80,20 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="xl:hidden absolute top-20 left-0 w-full bg-white border-t p-6 flex flex-col space-y-3 shadow-2xl animate-in slide-in-from-top duration-300 z-50 max-h-[calc(100vh-80px)] overflow-y-auto">
+        <div className="xl:hidden absolute top-20 left-0 w-full bg-white border-t p-6 flex flex-col space-y-2 shadow-2xl animate-in slide-in-from-top duration-300 z-50">
           {navLinks.map((link) => (
             <button
               key={link.label}
               onClick={() => { link.action(); setIsMenuOpen(false); }}
-              className="text-left text-lg text-gray-700 hover:text-blue-700 font-bold py-3 border-b border-gray-50 last:border-0"
+              className="text-left text-base text-gray-700 hover:text-blue-700 font-bold py-2.5 px-3 hover:bg-blue-50 rounded-lg transition-colors"
             >
               {link.label}
             </button>
           ))}
-          <div className="mt-4 pt-6 border-t border-gray-100">
+          <div className="mt-2 pt-4 border-t border-gray-100">
             <button 
               onClick={() => { onLogin(); setIsMenuOpen(false); }}
-              className="w-full bg-[#1148CB] text-white py-5 rounded-full font-black text-xl uppercase tracking-[0.2em] shadow-xl animate-wave-out flex items-center justify-center"
+              className="w-full bg-[#1148CB] text-white py-3 rounded-full font-black text-sm uppercase tracking-widest shadow-xl transition-all hover:brightness-110 active:scale-95"
             >
               SIGN IN
             </button>
