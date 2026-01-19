@@ -20,8 +20,8 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
   ];
 
   return (
-    <nav className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-[100] h-20 md:h-28 transition-all duration-300 border-b border-gray-100 flex items-center">
-      <div className="container mx-auto px-5 h-full flex items-center justify-between">
+    <nav className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-[100] h-20 md:h-20 transition-all duration-300 border-b border-gray-100 flex items-center overflow-hidden">
+      <div className="container mx-auto px-5 h-full flex items-center justify-between max-w-full">
         {/* BRAND LOGO */}
         <div 
           className="flex items-center cursor-pointer group py-2"
@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
         >
           <div className="flex flex-col">
             <h1 className="flex items-baseline">
-              <span className="text-2xl md:text-5xl font-extrabold tracking-tight leading-none select-none drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
+              <span className="text-xl md:text-3xl font-extrabold tracking-tight leading-none select-none drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-900">Way2Go</span>
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-700">Holidays</span>
               </span>
@@ -56,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
           <div className="flex items-center border-l border-gray-200 pl-8 space-x-6">
             <button 
               onClick={onLogin}
-              className="bg-[#1148CB] text-white px-10 py-3.5 rounded-full font-black text-xs uppercase tracking-widest shadow-xl transition-all hover:brightness-110 active:scale-95 animate-wave-out"
+              className="bg-[#1148CB] text-white px-8 py-2.5 rounded-full font-black text-xs uppercase tracking-widest shadow-xl transition-all hover:brightness-110 active:scale-95 animate-wave-out"
             >
               SIGN IN
             </button>
