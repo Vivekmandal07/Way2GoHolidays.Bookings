@@ -1,4 +1,3 @@
-import GEMINI_API_KEY='gemini-3-pro-preview';
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
