@@ -1,3 +1,4 @@
+GEMINI_API_KEY=your_actual_api_key_here;
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -22,7 +23,7 @@ const AiTravelAssistant: React.FC<AiTravelAssistantProps> = ({ onBookNow }) => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       // Fix: Use 'gemini-3-pro-preview' for complex text tasks such as generating detailed travel itineraries.
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-3-flash-preview', //'gemini-3-pro-preview'
         contents: `I want to plan a holiday. My requirements are: ${query}. 
         As a travel expert from Way2GoHolidays, suggest 2 detailed itinerary options. 
         Format the response with clear headings for each day. 
