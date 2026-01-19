@@ -21,18 +21,17 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
     <nav className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-[100] h-20 transition-all duration-300 border-b border-gray-100 flex items-center">
       <div className="container mx-auto px-6 h-full flex items-center justify-between">
         
-        {/* REVERTED TYPOGRAPHIC LOGO - Bold weight, Way2Go in Navy, Holidays in Blue */}
+        {/* REFINED TYPOGRAPHIC LOGO - Bold weight (700), Way2Go in Navy, Holidays in Blue */}
         <div 
           className="flex items-center cursor-pointer group relative py-2"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <h1 className="text-xl md:text-[33px] font-bold tracking-tight select-none transition-transform duration-300 group-hover:scale-[1.01] flex items-baseline">
-            <span className="text-[#1E3A8A]">Way</span>
-            <span className="text-[#1E3A8A]">2Go</span>
+            <span className="text-[#1E3A8A]">Way2Go</span>
             <span className="text-[#1D4ED8]">Holidays</span>
           </h1>
           
-          {/* Bold Animated Hover Underscore - Left to Right (Whole Logo, 4px) */}
+          {/* Animated Hover Underscore (Matching the premium blue) */}
           <span className="absolute bottom-0 left-0 w-0 h-1 bg-[#1D4ED8] transition-all duration-500 ease-out group-hover:w-full z-10"></span>
         </div>
 
@@ -43,16 +42,17 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
               <button
                 key={link.label}
                 onClick={link.action}
-                className="text-sm text-gray-700 hover:text-blue-700 font-semibold transition-all duration-200 relative group py-1"
+                className="text-sm text-gray-700 hover:text-blue-700 font-bold transition-all duration-200 relative group py-1"
               >
                 {link.label}
-                {/* Bold Underscore animation for Links - Left to Right (2px) */}
+                {/* Thin Underscore animation for Nav Links */}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#1D4ED8] transition-all duration-500 ease-out group-hover:w-full"></span>
               </button>
             ))}
           </div>
 
-          <div className="flex items-center border-l border-gray-200 pl-8">
+          {/* Vertical Separator Line as seen in screenshot */}
+          <div className="flex items-center border-l border-gray-200 pl-8 h-8">
             <button 
               onClick={onLogin}
               className="bg-[#1D4ED8] text-white px-8 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg transition-all hover:brightness-110 active:scale-95 animate-wave-out"
