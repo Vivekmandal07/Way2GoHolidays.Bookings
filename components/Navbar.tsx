@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
       <div className="container mx-auto px-5 h-full flex items-center justify-between max-w-full">
         {/* BRAND LOGO */}
         <div 
-          className="flex items-center cursor-pointer group py-2"
+          className="flex items-center cursor-pointer group py-2 mr-16"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <div className="flex flex-col">
