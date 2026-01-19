@@ -72,10 +72,10 @@ const Hero: React.FC<HeroProps> = ({ onBookNow, onCreatePackage, onContactExpert
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
       </div>
 
-      <div className="relative z-10 text-center text-white px-5 max-w-5xl w-full flex flex-col items-center pt-12 md:pt-16">
+      <div className="relative z-10 text-center text-white px-5 max-w-5xl w-full flex flex-col items-center">
         
         {/* Refined Search Bar */}
-        <div className="w-full max-w-xl mx-auto mb-6 animate-fade-in relative z-[60]">
+        <div className="w-full max-w-xl mx-auto mb-8 animate-fade-in relative z-[60] pt-12 md:pt-16">
           <form 
             onSubmit={handleSearch}
             className="glass-card flex items-center p-1 rounded-full transition-all duration-300 shadow-2xl hover:scale-[1.01] focus-within:border-white focus-within:ring-2 focus-within:ring-white/10"
