@@ -75,7 +75,7 @@ const Hero: React.FC<HeroProps> = ({ onBookNow, onCreatePackage, onContactExpert
       <div className="relative z-10 text-center text-white px-5 max-w-5xl w-full flex flex-col items-center">
         
         {/* Refined Search Bar */}
-        <div className="w-full max-w-xl mx-auto mb-8 animate-fade-in relative z-[60] pt-12 md:pt-16">
+        <div className="w-full max-w-xl mx-auto mb-12 animate-fade-in relative z-[60] pt-12 md:pt-16">
           <form 
             onSubmit={handleSearch}
             className="glass-card flex items-center p-1 rounded-full transition-all duration-300 shadow-2xl hover:scale-[1.01] focus-within:border-white focus-within:ring-2 focus-within:ring-white/10"
@@ -118,7 +118,7 @@ const Hero: React.FC<HeroProps> = ({ onBookNow, onCreatePackage, onContactExpert
         </div>
 
         {/* Floating animated headers */}
-        <div className="mb-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <div className="mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <div className="flex flex-col items-center space-y-2 animate-float">
             <span className="text-blue-400 font-bold text-[10px] md:text-xs uppercase tracking-[0.4em]">
               Premium Travel Services
@@ -130,14 +130,14 @@ const Hero: React.FC<HeroProps> = ({ onBookNow, onCreatePackage, onContactExpert
         </div>
 
         <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tighter leading-[1.1] sm:leading-[1]">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-[1.1] sm:leading-[1]">
               Your Journey,<br/> 
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-white to-cyan-300">
                 Our Passion
               </span>
             </h1>
             
-            <p className="text-sm md:text-xl mb-8 text-blue-50 max-w-xl mx-auto font-medium leading-relaxed opacity-80 px-2">
+            <p className="text-sm md:text-xl mb-10 text-blue-50 max-w-xl mx-auto font-medium leading-relaxed opacity-80 px-2">
               Bespoke travel experiences crafted for those who seek the extraordinary. Plan your next adventure for free.
             </p>
 
