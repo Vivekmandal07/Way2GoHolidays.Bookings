@@ -12,11 +12,7 @@
   <!-- TAB PROPERTIES (Title & Favicon) -->
   <!-- ============================================ -->
   <title>Way2GoHolidays - Luxury Travel & Holiday Packages | New Delhi</title>
-  <!-- Favicon - Multiple formats for better compatibility -->
-  <!-- <link rel="icon" type="image/png" href="/assets/image/way2goholiday logo.png"> -->
-  <!-- <link rel="shortcut icon" type="image/png" href="/assets/image/way2goholiday logo.png"> -->
-  <!-- <link rel="apple-touch-icon" href="/assets/image/way2goholiday logo.png"> -->
-  <!-- Fallback SVG favicon -->
+  <!-- Favicon - Browser Tab Icon (SVG Airplane) -->
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cg transform='rotate(30, 12, 12)'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/g%3E%3C/svg%3E">
   
@@ -40,6 +36,7 @@
   
   <!-- ============================================ -->
   <!-- STRUCTURED DATA (JSON-LD) - Google Rich Results -->
+  <!-- Logo in Google Search Results comes from here -->
   <!-- ============================================ -->
   <script type="application/ld+json">
   {
@@ -48,8 +45,18 @@
     "name": "Way2GoHolidays",
     "description": "We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday and travel experiences globally.",
     "url": "https://way2goholidays.com",
-    "logo": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
-    "image": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
+      "width": 512,
+      "height": 512
+    },
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
+      "width": 512,
+      "height": 512
+    },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "New Delhi",
@@ -62,6 +69,17 @@
       "@type": "Offer",
       "category": "Travel Packages"
     }
+  }
+  </script>
+  
+  <!-- Additional Organization Schema for Better Logo Recognition -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Way2GoHolidays",
+    "url": "https://way2goholidays.com",
+    "logo": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png"
   }
   </script>
   
