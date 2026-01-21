@@ -16,10 +16,10 @@ const Footer: React.FC = () => {
             </p>
             {/* Social Icons - Footer */}
             <div className="flex items-center space-x-4">
-              <a href="https://facebook.com" className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="https://www.facebook.com/61578600231733/" className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
-              <a href="https://instagram.com" className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="https://www.instagram.com/way2goholidays?igsh=MTJ2cm9nMnBvcnl2Zw%3D%3D&utm_source=qr" className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
               <a href={`tel:${CONTACT_DETAILS.phone}`} className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-green-600 hover:text-white transition-all transform hover:-translate-y-1">
