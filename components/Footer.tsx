@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
             <p className="text-slate-400 leading-relaxed font-medium">
               We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.
             </p>
-            {/* Social Icons - Footer */}
+            {/* Social Icons Way2GoHolidays - Footer */}
             <div className="flex items-center space-x-4">
               <a href="https://www.facebook.com/61578600231733/" className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <ion-icon name="logo-facebook"></ion-icon>
