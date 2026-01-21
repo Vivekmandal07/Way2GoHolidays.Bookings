@@ -1,155 +1,241 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Way2GoHolidays - Luxury Travel & Holiday Packages | New Delhi</title>
-    <!-- SEO Meta Description for Google Search Results -->
-    <meta name="description" content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally. Book your dream vacation with Way2GoHolidays.">
-    <!-- Custom Favicon: Blue Airplane pointing top-right -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cg transform='rotate(30, 12, 12)'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/g%3E%3C/svg%3E">    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- IonIcons -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <!-- html2pdf for direct PDF downloading -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Open Graph / Facebook / Social Media Meta Tags -->
-    <meta property="og:url" content="https://way2goholidays.com/">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Way2GoHolidays - Luxury Travel & Holiday Packages">
-    <meta property="og:description" content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.">
-    <meta property="og:image" content="https://way2goholidays.com/assets/image/way2goholiday%20logo.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Way2GoHolidays Logo - Luxury Travel & Holiday Packages">
-    <meta property="og:site_name" content="Way2GoHolidays">
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Way2GoHolidays - Luxury Travel & Holiday Packages">
-    <meta name="twitter:description" content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.">
-    <meta name="twitter:image" content="https://way2goholidays.com/assets/image/way2goholiday%20logo.png">
-    <meta name="twitter:image:alt" content="Way2GoHolidays Logo - Luxury Travel & Holiday Packages">
-    <style>
-      body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      /* Refined User-Friendly Search Focus */
-      .search-focus {
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-      }
-      .search-focus:focus-within {
-        border-color: rgba(59, 130, 246, 0.5);
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-      }
-      .search-focus:hover {
-        border-color: rgba(255, 255, 255, 0.3);
-      }
-      
-      /* Custom Zoom Animation for Clicks */
-      @keyframes click-zoom {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-      }
-      .animate-click-zoom {
-        animation: click-zoom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Way2GoHolidays - Luxury Travel & Holiday Packages | New Delhi</title>
+  <!-- SEO Meta Description for Google Search Results -->
+  <meta name="description"
+    content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally. Book your dream vacation with Way2GoHolidays.">
+  <!-- Keywords for SEO -->
+  <meta name="keywords" content="Way2GoHolidays, travel packages, holiday packages, luxury travel, New Delhi travel agency, international tours, domestic tours, vacation booking">
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://way2goholidays.com/">
+  <!-- Favicon - Multiple formats for better compatibility -->
+  <!-- <link rel="icon" type="image/png" href="/assets/image/way2goholiday logo.png"> -->
+  <!-- <link rel="shortcut icon" type="image/png" href="/assets/image/way2goholiday logo.png"> -->
+  <!-- <link rel="apple-touch-icon" href="/assets/image/way2goholiday logo.png"> -->
+  <!-- Fallback SVG favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cg transform='rotate(30, 12, 12)'%3E%3Cpath d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/%3E%3C/g%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- IonIcons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <!-- html2pdf for direct PDF downloading -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Open Graph / Facebook / Social Media Meta Tags -->
+  <meta property="og:url" content="https://way2goholidays.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Way2GoHolidays - Luxury Travel & Holiday Packages">
+  <meta property="og:description"
+    content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.">
+  <meta property="og:image" content="https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Way2GoHolidays Logo - Luxury Travel & Holiday Packages">
+  <meta property="og:site_name" content="Way2GoHolidays">
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Way2GoHolidays - Luxury Travel & Holiday Packages">
+  <meta name="twitter:description"
+    content="We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.">
+  <meta name="twitter:image" content="https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png">
+  <meta name="twitter:image:alt" content="Way2GoHolidays Logo - Luxury Travel & Holiday Packages">
+  <!-- Structured Data (JSON-LD) for Better SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Way2GoHolidays",
+    "description": "We are a dedicated team of travel enthusiasts based in New Delhi, committed to providing the most luxurious and seamless holiday experiences globally.",
+    "url": "https://way2goholidays.com",
+    "logo": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
+    "image": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "New Delhi",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.facebook.com/way2goholidays"
+    ],
+    "offers": {
+      "@type": "Offer",
+      "category": "Travel Packages"
+    }
+  }
+  </script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Refined User-Friendly Search Focus */
+    .search-focus {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .search-focus:focus-within {
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .search-focus:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Custom Zoom Animation for Clicks */
+    @keyframes click-zoom {
+      0% {
+        transform: scale(1);
       }
 
-      /* Transitions */
-      .zoom-on-click:active {
+      50% {
         transform: scale(1.1);
-        transition: transform 0.1s ease-out;
-      }
-      
-      @keyframes fade-in {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      .animate-fade-in {
-        animation: fade-in 0.6s ease-out forwards;
-      }
-      
-      /* Blinking/Pulsing status dot */
-      @keyframes soft-blink {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.4; transform: scale(0.8); }
-      }
-      .animate-soft-blink {
-        animation: soft-blink 2s infinite ease-in-out;
       }
 
-      @keyframes wave-out {
-        0% { box-shadow: 0 0 0 0 rgba(17, 72, 203, 0.6); transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { box-shadow: 0 0 0 20px rgba(17, 72, 203, 0); transform: scale(1); }
+      100% {
+        transform: scale(1);
       }
-      .animate-wave-out {
-        animation: wave-out 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
-      }
+    }
 
-      /* Heading Reveal Animation */
-      .reveal-heading {
+    .animate-click-zoom {
+      animation: click-zoom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Transitions */
+    .zoom-on-click:active {
+      transform: scale(1.1);
+      transition: transform 0.1s ease-out;
+    }
+
+    @keyframes fade-in {
+      from {
         opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: default;
+        transform: translateY(10px);
       }
-      .reveal-heading.reveal-active {
+
+      to {
         opacity: 1;
         transform: translateY(0);
       }
+    }
 
-      /* Redesigned Underline: Expands from middle to left and right slowly */
-      .heading-underline {
-        width: 100%;
-        height: 6px;
-        background-color: #2563eb;
-        border-radius: 9999px;
-        position: absolute;
-        bottom: -12px;
-        left: 0;
+    .animate-fade-in {
+      animation: fade-in 0.6s ease-out forwards;
+    }
+
+    /* Blinking/Pulsing status dot */
+    @keyframes soft-blink {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
+    }
+
+    .animate-soft-blink {
+      animation: soft-blink 2s infinite ease-in-out;
+    }
+
+    @keyframes wave-out {
+      0% {
+        box-shadow: 0 0 0 0 rgba(17, 72, 203, 0.6);
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.02);
+      }
+
+      100% {
+        box-shadow: 0 0 0 20px rgba(17, 72, 203, 0);
+        transform: scale(1);
+      }
+    }
+
+    .animate-wave-out {
+      animation: wave-out 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Heading Reveal Animation */
+    .reveal-heading {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+    }
+
+    .reveal-heading.reveal-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Redesigned Underline: Expands from middle to left and right slowly */
+    .heading-underline {
+      width: 100%;
+      height: 6px;
+      background-color: #2563eb;
+      border-radius: 9999px;
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      transform: scaleX(0);
+      transform-origin: center;
+      /* Expanding from the middle */
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes underline-intro {
+      0% {
         transform: scaleX(0);
-        transform-origin: center; /* Expanding from the middle */
         opacity: 0;
-        pointer-events: none;
       }
 
-      @keyframes underline-intro {
-        0% { 
-          transform: scaleX(0); 
-          opacity: 0; 
-        }
-        25% { 
-          transform: scaleX(1); 
-          opacity: 1; 
-        }
-        75% { 
-          transform: scaleX(1); 
-          opacity: 1; 
-        }
-        100% { 
-          transform: scaleX(0); 
-          opacity: 0; 
-        }
+      25% {
+        transform: scaleX(1);
+        opacity: 1;
       }
 
-      .reveal-active .heading-underline {
-        /* Increased duration to 4 seconds for a slower, premium feel */
-        animation: underline-intro 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      75% {
+        transform: scaleX(1);
+        opacity: 1;
       }
-    </style>
+
+      100% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+    }
+
+    .reveal-active .heading-underline {
+      /* Increased duration to 4 seconds for a slower, premium feel */
+      animation: underline-intro 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -160,10 +246,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-gray-50 text-gray-900 overflow-x-hidden">
-    <div id="root"></div>
+
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>
