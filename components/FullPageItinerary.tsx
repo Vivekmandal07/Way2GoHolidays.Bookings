@@ -34,7 +34,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     let message = `*Interest in ${pkg.title}*\n`;
     message += `*Destination:* ${pkg.destination}\n`;
     message += `*Price Quote:* ${editablePrice}\n\n`;
-    message += `I'm viewing this day-wise itinerary and want to proceed with booking!\n\n; *Thankyou for Connecting Way2GoHolidays!*\n; Our Destination Expert will Connect you very Shortly!`;
+    message += `I'm viewing this day-wise itinerary and want to proceed with booking!\n\n`;
+    message += `*Thankyou for Connecting Way2GoHolidays!*\n`;
+    message += `Our Destination Expert will Connect you very Shortly!`;
     window.open(`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
