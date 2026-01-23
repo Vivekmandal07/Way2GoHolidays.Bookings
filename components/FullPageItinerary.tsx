@@ -34,7 +34,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     let message = `*Interest in ${pkg.title}*\n`;
     message += `*Destination:* ${pkg.destination}\n`;
     message += `*Price Quote:* ${editablePrice}\n\n`;
-    message += `I'm viewing the full-screen itinerary and want to proceed with booking!`;
+    message += `I'm viewing this`; message+= `${pkg.destination} day-eise itinerary on screen and want to proceed with booking!`;
     window.open(`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
