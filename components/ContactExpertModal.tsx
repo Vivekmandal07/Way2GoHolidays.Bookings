@@ -104,7 +104,7 @@ const ContactExpertModal: React.FC<ContactExpertModalProps> = ({ onClose }) => {
                     required
                     type="tel" 
                     className="flex-grow p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 font-bold text-sm text-slate-900 placeholder:text-slate-300" 
-                    placeholder="88888 88888"
+                    placeholder="73034 02841"
                     value={phone}
                     onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
                   />
