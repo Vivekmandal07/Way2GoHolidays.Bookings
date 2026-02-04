@@ -141,6 +141,7 @@ const App: React.FC = () => {
                 At Way2GoHolidays, we believe that travel is more than just visiting a new place; it's about creating memories that last a lifetime. Based in the heart of New Delhi, we specialize in crafting bespoke travel experiences tailored to your dreams.
               </p>
               <p><b>Founder & CEO of Way2GoHolidays : Subodh Mandal</b></p>
+              <p><centre>Founded at 22 Dec 2024</centre></p>
             </div>
           </section>
         </div>
