@@ -138,8 +138,9 @@ const App: React.FC = () => {
               <span className="text-blue-600 font-bold uppercase tracking-widest text-sm mb-4 block">Our Story</span>
               <h2 className="text-4xl md:text-5xl font-black mb-10 text-gray-900 tracking-tighter">About Way2GoHolidays</h2>
               <p className="text-gray-600 text-lg md:text-xl leading-relaxed mb-8">
-                At Way2GoHolidays, we believe that travel is more than just visiting a new place; it's about creating memories that last a lifetime. Based in the heart of New Delhi, we specialize in crafting bespoke travel experiences tailored to your dreams. 
-              <br><b>Founder & CEO of Way2GoHolidays : Subodh Mandal</b></br></p>
+                At Way2GoHolidays, we believe that travel is more than just visiting a new place; it's about creating memories that last a lifetime. Based in the heart of New Delhi, we specialize in crafting bespoke travel experiences tailored to your dreams.
+              </p>
+              <p><b>Founder & CEO of Way2GoHolidays : Subodh Mandal</b></p>
             </div>
           </section>
         </div>
