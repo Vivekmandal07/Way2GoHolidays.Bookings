@@ -7,6 +7,7 @@ import CreatePackageModal from './components/CreatePackageModal';
 import DestinationsSection from './components/DestinationsSection';
 import PackageSection from './components/PackageSection';
 import GallerySection from './components/GallerySection';
+import ServicesSection from './components/ServicesSection';
 import ContactExpertModal from './components/ContactExpertModal';
 import LoginModal from './components/LoginModal';
 import FullPageItinerary from './components/FullPageItinerary';
@@ -108,6 +109,9 @@ const App: React.FC = () => {
         />
 
         <AiTravelAssistant onBookNow={() => setActiveModal('booking')} />
+
+        {/* services cards section inserted between hero/search and destinations */}
+        <ServicesSection />
 
         <div id="destinations" className="scroll-mt-24">
           <DestinationsSection 

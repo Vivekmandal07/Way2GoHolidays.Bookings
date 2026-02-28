@@ -2,6 +2,23 @@
 import { Destination, Package } from './types';
 import { PICS } from './assets/images';
 
+// automatically load all images from assets/image directory
+// Vite's `import.meta.glob` returns an object of paths to modules
+// path is relative to this file; constants.tsx sits in project root
+const travellerModules = import.meta.glob('./assets/image/travellers/*.{png,jpg,jpeg}', { eager: true, as: 'url' });
+
+// convert the imported modules into an array of {url, tag}
+export const GALLERY_IMAGES = Object.entries(travellerModules)
+  .map(([path, url]) => {
+    const filename = path.split('/').pop() || '';
+    const tag = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    return { url: url as string, tag };
+  });
+
+
+
+
+
 export const INTERNATIONAL_DESTINATIONS: Destination[] = [
   { id: '1', name: 'Paris, France', type: 'International', image: PICS.paris, description: 'Experience the city of love and lights.' },
   { id: '2', name: 'Maldives', type: 'International', image: PICS.maldives, description: 'Luxury water villas and crystal clear oceans.' },
@@ -209,27 +226,7 @@ export const PACKAGES: Package[] = [
   },
 ];
 
-export const GALLERY_IMAGES = [
-  { url: PICS.traveler_1, tag: 'Beach Vibes' },
-  { url: PICS.traveler_2, tag: 'Ocean Fun' },
-  { url: PICS.traveler_3, tag: 'Night Streets' },
-  { url: PICS.traveler_4, tag: 'Thai Temples' },
-  { url: PICS.traveler_5, tag: 'Coastal Landmarks' },
-  { url: PICS.traveler_6, tag: 'Boat Delights' },
-  { url: PICS.traveler_7, tag: 'Mountain Tours' },
-  { url: PICS.traveler_8, tag: 'Friendship' },
-  { url: PICS.traveler_9, tag: 'Premium Stays' },
-  { url: PICS.traveler_10, tag: 'Adventure' },
-  { url: PICS.traveler_11, tag: 'Peak Views' },
-  { url: PICS.traveler_12, tag: 'Waterfall' },
-  { url: PICS.traveler_13, tag: 'Nature Hugs' },
-  { url: PICS.traveler_14, tag: 'Misty Valleys' },
-  { url: PICS.traveler_15, tag: 'Europe Trip' },
-  { url: PICS.traveler_16, tag: 'Serene Lakes' },
-  { url: PICS.traveler_17, tag: 'Park Moments' },
-  { url: PICS.traveler_18, tag: 'Summer Love' },
-  { url: PICS.gallery_6, tag: 'Phuket Beach' },
-];
+/* GALLERY_IMAGES is generated above by globbing all files in assets/image. */
 
 export const CONTACT_DETAILS = {
   name: 'Way2GoHolidays',
