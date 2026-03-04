@@ -21,6 +21,10 @@ export const PICS = {
   malaysia: 'https://images.unsplash.com/photo-1596422846543-75c6fc18a593?auto=format&fit=crop&w=600&q=80',
   vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
   thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80', // Iconic Thailand longtail boat in turquoise water
+  hongkong: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=600&q=80',
+  cambodia: 'https://images.unsplash.com/photo-1548013146-72aeb3e704b4?auto=format&fit=crop&w=600&q=80',
+  australia: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe3e?auto=format&fit=crop&w=600&q=80',
+  baku: 'https://images.unsplash.com/photo-1562883676-8c6fbdf67635?auto=format&fit=crop&w=600&q=80',
   europe: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80',
 
   // Domestic Destinations
@@ -30,6 +34,11 @@ export const PICS = {
   himachal: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
   rajasthan: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80',
   kashmir: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=600&q=80',
+  srilanka: 'https://images.unsplash.com/photo-1552821554-5fefe9c9ef14?auto=format&fit=crop&w=600&q=80',
+  andaman: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=600&q=80',
+  sikkim: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?auto=format&fit=crop&w=600&q=80',
+  wayanad: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80',
+  azerbaijan: 'https://images.unsplash.com/photo-1518684913167-e98f3f5c2c07?auto=format&fit=crop&w=600&q=80',
 
   // Guest Gallery (Happy Travelers)
   traveler_1: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=800&q=80',

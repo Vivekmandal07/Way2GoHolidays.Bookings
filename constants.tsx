@@ -24,6 +24,14 @@ export const INTERNATIONAL_DESTINATIONS: Destination[] = [
   { id: '2', name: 'Maldives', type: 'International', image: PICS.maldives, description: 'Luxury water villas and crystal clear oceans.' },
   { id: '3', name: 'Dubai, UAE', type: 'International', image: PICS.dubai, description: 'Modern architecture and desert adventures.' },
   { id: '4', name: 'Bali, Indonesia', type: 'International', image: PICS.bali, description: 'Tropical paradise with rich culture.' },
+  { id: '5', name: 'Vietnam', type: 'International', image: PICS.vietnam, description: 'Vibrant culture and stunning landscapes.' },
+  { id: '6', name: 'Thailand', type: 'International', image: PICS.thailand, description: 'Beaches, temples, and vibrant culture.' },
+  { id: '7', name: 'Malaysia', type: 'International', image: PICS.malaysia, description: 'Diverse culture and beautiful landscapes.' },
+  { id: '8', name: 'Australia', type: 'International', image: PICS.australia, description: 'Unique wildlife and stunning landscapes.' },
+  { id: '9', name: 'Hong Kong', type: 'International', image: PICS.hongkong, description: 'Modern cityscape and vibrant culture.' },
+  { id: '10', name: 'Cambodia', type: 'International', image: PICS.cambodia, description: 'Rich history and beautiful temples.' },
+  { id: '11', name: 'Azerbaijan', type: 'International', image: PICS.azerbaijan, description: 'Cultural blend and historical sites.' },
+  { id: '12', name: 'Singapore', type: 'International', image: PICS.singapore, description: 'Garden city with modern amenities.' }
 ];
 
 export const DOMESTIC_DESTINATIONS: Destination[] = [
@@ -31,6 +39,12 @@ export const DOMESTIC_DESTINATIONS: Destination[] = [
   { id: '7', name: 'Goa', type: 'Domestic', image: PICS.goa, description: 'Beaches, parties, and serenity.' },
   { id: '8', name: 'Himachal', type: 'Domestic', image: PICS.himachal, description: 'The snowy peaks and lush valleys.' },
   { id: '5', name: 'Ladakh', type: 'Domestic', image: PICS.ladakh, description: 'The land of high passes.' },
+  { id: '9', name: 'Rajasthan', type: 'Domestic', image: PICS.rajasthan, description: 'Royal palaces and desert mystique.' },
+  { id: '10', name: 'Kashmir', type: 'Domestic', image: PICS.kashmir, description: 'Paradise on Earth with stunning landscapes.' },
+  { id: '11', name: 'Srilanka', type: 'Domestic', image: PICS.srilanka, description: 'Island nation with rich culture and nature.' },
+  { id: '12', name: 'Andaman & Nicobar', type: 'Domestic', image: PICS.andaman, description: 'Tropical paradise with pristine beaches.' },
+  { id: '13', name: 'Sikkim', type: 'Domestic', image: PICS.sikkim, description: 'The land of dreams with breathtaking views.' },
+  { id: '14', name: 'Wayanad', type: 'Domestic', image: PICS.wayanad, description: 'The greenest corner of Kerala with lush forests and waterfalls.' }
 ];
 
 export const PACKAGES: Package[] = [
