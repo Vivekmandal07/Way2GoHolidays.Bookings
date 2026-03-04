@@ -134,7 +134,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <input 
                 required type="text" 
                 className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
-                placeholder="Ex: Rahul Sharma"
+                placeholder="Ex: Subodh Mandal"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
               />
@@ -145,7 +145,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <input 
                 required type="email" 
                 className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
-                placeholder="rahul@example.com"
+                placeholder="way2goholidays.bookings@gmail.com"
                 value={formData.email}
                 onChange={e => setFormData({...formData, email: e.target.value})}
               />
