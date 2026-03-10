@@ -18,7 +18,7 @@ export const PICS = {
   dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80',
   bali: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
   singapore: 'https://images.unsplash.com/photo-1525625239514-75b4b17b9979?auto=format&fit=crop&w=600&q=80',
-  malaysia: 'https://images.unsplash.com/photo-1596422846543-75c6fc18a593?auto=format&fit=crop&w=600&q=80',
+  malaysia: 'https://www.istockphoto.com/photo/petronas-towers-gm466842820-59952574?utm_source=unsplash&utm_medium=affiliate&utm_campaign=srp_photos_bottom&utm_content=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fmalaysia-image&utm_term=malaysia+image%3A%3Aaffiliate-signature-content%3Acontrol%3A8574670a-1f74-4c40-b7cc-76fc61fa403a',
   vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
   thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80', // Iconic Thailand longtail boat in turquoise water
   europe: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80',
