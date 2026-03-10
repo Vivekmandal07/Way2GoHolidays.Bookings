@@ -18,7 +18,7 @@ export const PICS = {
   dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80',
   bali: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
   singapore: 'https://images.unsplash.com/photo-1525625239514-75b4b17b9979?auto=format&fit=crop&w=600&q=80',
-  malaysia: 'https://plus.unsplash.com/premium_photo-1700955569575-439bed2d50f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fG1hbGF5c2lhJTIwaW1hZ2V8ZW58MHx8MHx8fDA%3D',
+  malaysia: 'https://media.istockphoto.com/id/503588918/photo/kuala-lumper-skyline-at-twilight.webp?a=1&b=1&s=612x612&w=0&k=20&c=TT6Xme08tOOgLGAhQr_K7IiVDIov8coB12EzjkN-fwI=',
   vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
   thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80', // Iconic Thailand longtail boat in turquoise water
   europe: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80',
