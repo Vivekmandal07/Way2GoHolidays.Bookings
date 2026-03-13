@@ -43,7 +43,7 @@ const ChippestDeal: React.FC = () => {
                 src={chippestImages[activeIndex]}
                 alt={`Chippest deal ${activeIndex + 1}`}
                 className="w-full h-full object-cover transition-all duration-700 ease-in-out"
-                style={{ animation: 'slideRightToLeft 0.7s ease both' }}
+                style={{ animation: 'slideRightToLeft 1.2s ease both' }}
               />
             </div>
             <div className="mt-4 flex items-center justify-between gap-3">
