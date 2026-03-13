@@ -23,9 +23,9 @@ const ChippestDeal: React.FC = () => {
     <section id="chippest-deal" className="py-16 md:py-20 bg-gradient-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
-          <span className="text-sm uppercase font-bold tracking-[0.22em] text-blue-600">Hot Picks</span>
-          <div className="mt-3 inline-flex flex-col items-center justify-center">
-            <div className="relative group inline-block">
+          <div className="mx-auto inline-flex flex-col items-center">
+            <span className="text-sm uppercase font-bold tracking-[0.22em] text-blue-600">Hot Picks</span>
+            <div className="mt-3 relative group inline-block">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">Chippest Deals for Your Next Escape</h2>
               <span className="absolute left-1/2 top-full mt-2 h-1 w-0 -translate-x-1/2 rounded-full bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </div>
