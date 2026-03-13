@@ -24,7 +24,10 @@ const ChippestDeal: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
           <span className="text-sm uppercase font-bold tracking-[0.22em] text-blue-600">Hot Picks</span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3">Chippest Deals for Your Next Escape</h2>
+          <div className="mt-3 inline-flex flex-col items-center justify-center group">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">Chippest Deals for Your Next Escape</h2>
+            <span className="mt-2 inline-block h-1 w-28 origin-center scale-x-0 rounded-full bg-blue-600 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </div>
           <p className="mt-3 text-gray-600 max-w-2xl mx-auto">Discover handpicked budget-friendly packages updated every 2 seconds.</p>
         </div>
 
