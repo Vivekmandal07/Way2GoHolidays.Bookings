@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BookingModal from './components/BookingModal';
-import CreatePackageModal from './components/CreatePackageModal';
+import RaiseYourTrip from './components/RaiseYourTrip';
 import DestinationsSection from './components/DestinationsSection';
 import PackageSection from './components/PackageSection';
 import GallerySection from './components/GallerySection';
@@ -156,7 +156,7 @@ const App: React.FC = () => {
 
       {/* Modals */}
       {activeModal === 'booking' && <BookingModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'create' && <CreatePackageModal onClose={() => setActiveModal(null)} />}
+      {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} />}
       {activeModal === 'expert' && <ContactExpertModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'login' && <LoginModal onClose={() => setActiveModal(null)} />}
       

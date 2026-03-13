@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { PackageFormData } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
-interface CreatePackageModalProps {
+interface RaiseYourTripProps {
   onClose: () => void;
 }
 
-const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
+const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const allDestinations = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
@@ -108,7 +108,7 @@ const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
         {/* Header Section */}
         <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0">
           <div>
-            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Design Your Route</h3>
+            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way & Raise!</h3>
             <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Plan Every Detail of Your Journey</p>
           </div>
           <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
@@ -241,7 +241,7 @@ const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
               type="submit"
               className="w-full bg-[#F97316] text-white py-4 rounded-full font-black text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-orange-100/50 flex items-center justify-center space-x-3 uppercase tracking-widest"
             >
-              <span>DESIGN VIA WHATSAPP</span>
+              <span>Raise Trip Via WHATSAPP</span>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.12.552 4.189 1.598 6.04L0 24l6.135-1.61a11.802 11.802 0 005.912 1.569h.005c6.638 0 12.039-5.404 12.042-12.041a11.79 11.79 0 00-3.483-8.498z"/></svg>
             </button>
           </div>
@@ -251,4 +251,4 @@ const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
   );
 };
 
-export default CreatePackageModal;
+export default RaiseYourTrip;
