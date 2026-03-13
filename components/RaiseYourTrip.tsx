@@ -108,8 +108,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
         {/* Header Section */}
         <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0">
           <div>
-            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way & Raise!</h3>
-            <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Plan Every Detail of Your Journey</p>
+            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way - Raise!</h3>
+            <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Write the Details & Plan Every Detail of Your Journey</p>
           </div>
           <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
