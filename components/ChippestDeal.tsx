@@ -21,6 +21,7 @@ const ChippestDeal: React.FC = () => {
 
   return (
     <section id="chippest-deal" className="py-16 md:py-20 bg-gradient-to-br from-white via-blue-50 to-indigo-50 relative overflow-hidden">
+      <style>{`@keyframes slideRightToLeft { from { transform: translateX(30%); opacity: 0.3; } to { transform: translateX(0); opacity: 1; } }`}</style>
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
           <div className="mx-auto inline-flex flex-col items-center">
@@ -38,9 +39,11 @@ const ChippestDeal: React.FC = () => {
           <div className="relative p-4 md:p-6">
             <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 bg-gray-100">
               <img
+                key={activeIndex}
                 src={chippestImages[activeIndex]}
                 alt={`Chippest deal ${activeIndex + 1}`}
                 className="w-full h-full object-cover transition-all duration-700 ease-in-out"
+                style={{ animation: 'slideRightToLeft 0.7s ease both' }}
               />
             </div>
             <div className="mt-4 flex items-center justify-between gap-3">
