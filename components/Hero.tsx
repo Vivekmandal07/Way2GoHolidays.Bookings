@@ -153,7 +153,7 @@ const Hero: React.FC<HeroProps> = ({ onBookNow, onCreatePackage, onContactExpert
                 onClick={onCreatePackage}
                 className="w-full sm:w-auto bg-transparent text-white border-2 border-white/40 px-10 py-4 rounded-full font-bold text-sm transition-all hover:bg-white/10 hover:scale-105 active:scale-95 uppercase tracking-widest"
               >
-                Create Package
+                Raise Your Trip
               </button>
 
               <button 
