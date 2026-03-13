@@ -13,23 +13,32 @@ export const PICS = {
   logo_placeholder: 'https://images.unsplash.com/photo-1522199755839-a2bacb67c546?auto=format&fit=crop&w=100&q=80',
 
   // International Destinations
-  paris: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80', // Highly popular iconic Eiffel Tower shot
-  maldives: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80',
-  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80',
-  bali: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
-  singapore: 'https://images.unsplash.com/photo-1525625239514-75b4b17b9979?auto=format&fit=crop&w=600&q=80',
-  malaysia: 'https://media.istockphoto.com/id/503588918/photo/kuala-lumper-skyline-at-twilight.webp?a=1&b=1&s=612x612&w=0&k=20&c=TT6Xme08tOOgLGAhQr_K7IiVDIov8coB12EzjkN-fwI=',
-  vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
-  thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80', // Iconic Thailand longtail boat in turquoise water
-  europe: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80',
+  paris: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80', // Eiffel Tower, Paris
+  maldives: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80', // Overwater bungalows, Maldives
+  dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80', // Burj Khalifa, Dubai
+  bali: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80', // Rice terraces, Bali
+  singapore: 'https://images.unsplash.com/photo-1525625239514-75b4b17b9979?w=600&q=80', // Marina Bay, Singapore
+  malaysia: 'https://images.unsplash.com/photo-1596422846543-75c6fc18a593?w=600&q=80', // Petronas Towers, Malaysia
+  vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80', // Ha Long Bay, Vietnam
+  thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80', // Thai temple, Thailand
+  hongkong: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&q=80', // Hong Kong skyline
+  cambodia: 'https://images.unsplash.com/photo-1548013146-72aeb3e704b4?w=600&q=80', // Angkor Wat, Cambodia
+  australia: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe3e?w=600&q=80', // Sydney Opera House, Australia
+  baku: 'https://images.unsplash.com/photo-1562883676-8c6fbdf67635?w=600&q=80', // Baku cityscape, Azerbaijan
+  europe: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80',
 
   // Domestic Destinations
-  ladakh: 'https://images.unsplash.com/photo-1581791534721-e599df4417f7?auto=format&fit=crop&w=600&q=80',
-  kerala: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=600&q=80',
-  goa: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
-  himachal: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
-  rajasthan: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80',
-  kashmir: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=600&q=80',
+  ladakh: 'https://images.unsplash.com/photo-1581791534721-e599df4417f7?w=600&q=80', // Ladakh mountains, India
+  kerala: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80', // Backwaters, Kerala
+  goa: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80', // Goa beach, India
+  himachal: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80', // Himachal mountains, India
+  rajasthan: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80', // Jaipur palace, Rajasthan
+  kashmir: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=600&q=80', // Dal Lake, Kashmir
+  srilanka: 'https://images.unsplash.com/photo-1552821554-5fefe9c9ef14?w=600&q=80', // Sri Lanka coast
+  andaman: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', // Andaman & Nicobar paradise
+  sikkim: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=600&q=80', // Sikkim mountains, India
+  wayanad: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', // Wayanad forests, Kerala
+  azerbaijan: 'https://images.unsplash.com/photo-1518684913167-e98f3f5c2c07?w=600&q=80', // Baku architecture, Azerbaijan
 
   // Guest Gallery (Happy Travelers)
   traveler_1: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=800&q=80',

@@ -32,11 +32,15 @@ const DestinationsSection: React.FC<DestinationsSectionProps> = ({ title, destin
               key={dest.id} 
               className="group bg-slate-50 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-100"
             >
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-64 overflow-hidden bg-slate-200">
                 <img 
                   src={dest.image} 
-                  alt={dest.name} 
+                  alt={dest.name}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  // onError={(e) => {
+                  //   e.currentTarget.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80';
+                  // }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 <div className="absolute bottom-6 left-6">

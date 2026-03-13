@@ -24,6 +24,14 @@ export const INTERNATIONAL_DESTINATIONS: Destination[] = [
   { id: '2', name: 'Maldives', type: 'International', image: PICS.maldives, description: 'Luxury water villas and crystal clear oceans.' },
   { id: '3', name: 'Dubai, UAE', type: 'International', image: PICS.dubai, description: 'Modern architecture and desert adventures.' },
   { id: '4', name: 'Bali, Indonesia', type: 'International', image: PICS.bali, description: 'Tropical paradise with rich culture.' },
+  { id: '5', name: 'Vietnam', type: 'International', image: PICS.vietnam, description: 'Vibrant culture and stunning landscapes.' },
+  { id: '6', name: 'Thailand', type: 'International', image: PICS.thailand, description: 'Beaches, temples, and vibrant culture.' },
+  { id: '7', name: 'Malaysia', type: 'International', image: PICS.malaysia, description: 'Diverse culture and beautiful landscapes.' },
+  { id: '8', name: 'Australia', type: 'International', image: PICS.australia, description: 'Unique wildlife and stunning landscapes.' },
+  { id: '9', name: 'Hong Kong', type: 'International', image: PICS.hongkong, description: 'Modern cityscape and vibrant culture.' },
+  { id: '10', name: 'Cambodia', type: 'International', image: PICS.cambodia, description: 'Rich history and beautiful temples.' },
+  { id: '11', name: 'Azerbaijan', type: 'International', image: PICS.azerbaijan, description: 'Cultural blend and historical sites.' },
+  { id: '12', name: 'Singapore', type: 'International', image: PICS.singapore, description: 'Garden city with modern amenities.' }
 ];
 
 export const DOMESTIC_DESTINATIONS: Destination[] = [
@@ -31,6 +39,12 @@ export const DOMESTIC_DESTINATIONS: Destination[] = [
   { id: '7', name: 'Goa', type: 'Domestic', image: PICS.goa, description: 'Beaches, parties, and serenity.' },
   { id: '8', name: 'Himachal', type: 'Domestic', image: PICS.himachal, description: 'The snowy peaks and lush valleys.' },
   { id: '5', name: 'Ladakh', type: 'Domestic', image: PICS.ladakh, description: 'The land of high passes.' },
+  { id: '9', name: 'Rajasthan', type: 'Domestic', image: PICS.rajasthan, description: 'Royal palaces and desert mystique.' },
+  { id: '10', name: 'Kashmir', type: 'Domestic', image: PICS.kashmir, description: 'Paradise on Earth with stunning landscapes.' },
+  { id: '11', name: 'Srilanka', type: 'Domestic', image: PICS.srilanka, description: 'Island nation with rich culture and nature.' },
+  { id: '12', name: 'Andaman & Nicobar', type: 'Domestic', image: PICS.andaman, description: 'Tropical paradise with pristine beaches.' },
+  { id: '13', name: 'Sikkim', type: 'Domestic', image: PICS.sikkim, description: 'The land of dreams with breathtaking views.' },
+  { id: '14', name: 'Wayanad', type: 'Domestic', image: PICS.wayanad, description: 'The greenest corner of Kerala with lush forests and waterfalls.' }
 ];
 
 export const PACKAGES: Package[] = [
@@ -222,6 +236,164 @@ export const PACKAGES: Package[] = [
       { day: 4, title: 'Srinagar Gardens', activities: 'Mughal Gardens visit.', hotel: 'The Lalit Grand Palace' },
       { day: 5, title: 'Local Shopping', activities: 'Leisure day in Srinagar.', hotel: 'The Lalit Grand Palace' },
       { day: 6, title: 'Departure', activities: 'Drop at Srinagar airport.', hotel: 'N/A' }
+    ]
+  },
+  // Additional International Packages
+  { 
+    id: 'int-7', 
+    title: 'Malaysian Wonders Tour', 
+    price: '₹51,000', 
+    image: PICS.malaysia, 
+    duration: '5N/6D', 
+    destination: 'Malaysia',
+    itinerary: [
+      { day: 1, title: 'Kuala Lumpur Arrival', activities: 'Welcome and Petronas Towers visit.', hotel: 'Hilton Kuala Lumpur' },
+      { day: 2, title: 'City Exploration', activities: 'Batu Caves and National Mosque tour.', hotel: 'Hilton Kuala Lumpur' },
+      { day: 3, title: 'Penang Island', activities: 'Drive to Penang. Georgetown heritage tour.', hotel: 'Eastern & Oriental Hotel' },
+      { day: 4, title: 'Penang Beach & Culture', activities: 'Penang Hill and Kek Lok Si Temple visit.', hotel: 'Eastern & Oriental Hotel' },
+      { day: 5, title: 'Return to Kuala Lumpur', activities: 'Shopping and leisure time.', hotel: 'Hilton Kuala Lumpur' },
+      { day: 6, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'int-8', 
+    title: 'Australian Adventure', 
+    price: '₹85,000', 
+    image: PICS.australia, 
+    duration: '6N/7D', 
+    destination: 'Australia',
+    itinerary: [
+      { day: 1, title: 'Sydney Arrival', activities: 'Welcome and Opera House tour.', hotel: 'Park Hyatt Sydney' },
+      { day: 2, title: 'Sydney Highlights', activities: 'Harbour Bridge climb and Bondi Beach.', hotel: 'Park Hyatt Sydney' },
+      { day: 3, title: 'Blue Mountains Tour', activities: 'Three Sisters rock and scenic railway.', hotel: 'Echoes Boutique Hotel' },
+      { day: 4, title: 'Wildlife Experience', activities: 'Taronga Zoo and animal encounters.', hotel: 'Park Hyatt Sydney' },
+      { day: 5, title: 'Great Barrier Reef', activities: 'Fly to Cairns and reef snorkeling.', hotel: 'Reef House Luxury Resort' },
+      { day: 6, title: 'Rainforest Adventure', activities: 'Daintree Rainforest exploration.', hotel: 'Reef House Luxury Resort' },
+      { day: 7, title: 'Departure', activities: 'Return to Sydney and flight.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'int-9', 
+    title: 'Hong Kong City Escape', 
+    price: '₹56,000', 
+    image: PICS.hongkong, 
+    duration: '4N/5D', 
+    destination: 'Hong Kong',
+    itinerary: [
+      { day: 1, title: 'Hong Kong Arrival', activities: 'Star Ferry ride and iconic skyline views.', hotel: 'Langham Hong Kong' },
+      { day: 2, title: 'Peak Tram & Market', activities: 'Victoria Peak and Temple Street Night Market.', hotel: 'Langham Hong Kong' },
+      { day: 3, title: 'Island Hopping', activities: 'Lantau Island and Big Buddha visit.', hotel: 'Langham Hong Kong' },
+      { day: 4, title: 'Shopping & Culture', activities: 'IFC Mall and local markets exploration.', hotel: 'Langham Hong Kong' },
+      { day: 5, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'int-10', 
+    title: 'Cambodian Heritage Explorer', 
+    price: '₹52,000', 
+    image: PICS.cambodia, 
+    duration: '5N/6D', 
+    destination: 'Cambodia',
+    itinerary: [
+      { day: 1, title: 'Siem Reap Arrival', activities: 'Welcome and local market visit.', hotel: 'Sofitel Angkor Phokeethra' },
+      { day: 2, title: 'Angkor Wat Sunrise', activities: 'Sunrise at Angkor Wat temple complex.', hotel: 'Sofitel Angkor Phokeethra' },
+      { day: 3, title: 'Angkor Exploration', activities: 'Bayon and Baphuon temple tours.', hotel: 'Sofitel Angkor Phokeethra' },
+      { day: 4, title: 'Floating Villages', activities: 'Tonlé Sap Lake and floating markets.', hotel: 'Sofitel Angkor Phokeethra' },
+      { day: 5, title: 'Artisan Workshops', activities: 'Traditional craftworks and silk weaving.', hotel: 'Sofitel Angkor Phokeethra' },
+      { day: 6, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'int-11', 
+    title: 'Baku Modern Marvels', 
+    price: '₹60,000', 
+    image: PICS.baku, 
+    duration: '4N/5D', 
+    destination: 'Azerbaijan',
+    itinerary: [
+      { day: 1, title: 'Baku Arrival', activities: 'Old City tour and Flame Towers visit.', hotel: 'Fairmont Baku' },
+      { day: 2, title: 'Baku City Tour', activities: 'Heydar Aliyev Center and Boulevard walk.', hotel: 'Fairmont Baku' },
+      { day: 3, title: 'Mud Volcanoes & Fire', activities: 'Natural phenomena tour and Atashgah Fire Temple.', hotel: 'Fairmont Baku' },
+      { day: 4, title: 'Extended Leisure', activities: 'Spa and traditional hammam experience.', hotel: 'Fairmont Baku' },
+      { day: 5, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'int-12', 
+    title: 'Singapore City Marvel', 
+    price: '₹67,000', 
+    image: PICS.singapore, 
+    duration: '4N/5D', 
+    destination: 'Singapore',
+    itinerary: [
+      { day: 1, title: 'Singapore Arrival', activities: 'Marina Bay Sands hotel visit and Gardens by the Bay.', hotel: 'Marina Bay Sands' },
+      { day: 2, title: 'City Exploration', activities: 'Universal Studios and Sentosa Island.', hotel: 'Marina Bay Sands' },
+      { day: 3, title: 'Cultural Districts', activities: 'Chinatown, Arabian Quarter, and Indian Heritage centres.', hotel: 'Marina Bay Sands' },
+      { day: 4, title: 'Nature & Adventure', activities: 'Singapore Zoo and Night Safari.', hotel: 'Marina Bay Sands' },
+      { day: 5, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  // Additional Domestic Packages
+  { 
+    id: 'dom-7', 
+    title: 'Sri Lankan Coastal Beauty', 
+    price: '₹38,000', 
+    image: PICS.srilanka, 
+    duration: '5N/6D', 
+    destination: 'Srilanka',
+    itinerary: [
+      { day: 1, title: 'Colombo Arrival', activities: 'City tour and beach relaxation.', hotel: 'Galle Face Hotel' },
+      { day: 2, title: 'Kandy Journey', activities: 'Train ride and Temple of the Tooth visit.', hotel: 'The Kandy House' },
+      { day: 3, title: 'Tea Plantations', activities: 'Nuwara Eliya tea garden tour.', hotel: 'St. Andrew\'s Hotel' },
+      { day: 4, title: 'Mirissa Beach', activities: 'Whale watching and beach time.', hotel: 'Mirissa New Resort' },
+      { day: 5, title: 'Galle Fort', activities: 'Historic fort exploration and seafood dinner.', hotel: 'The Galle Fort Hotel' },
+      { day: 6, title: 'Departure', activities: 'Return to Colombo and flight.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'dom-8', 
+    title: 'Andaman Island Paradise', 
+    price: '₹41,000', 
+    image: PICS.andaman, 
+    duration: '5N/6D', 
+    destination: 'Andaman & Nicobar',
+    itinerary: [
+      { day: 1, title: 'Port Blair Arrival', activities: 'City tour and Cellular Jail visit.', hotel: 'Taj Exotica Andaman' },
+      { day: 2, title: 'North Bay Island', activities: 'Snorkeling and glass bottom boat tour.', hotel: 'Taj Exotica Andaman' },
+      { day: 3, title: 'Havelock Island', activities: 'Radhanagar Beach and water sports.', hotel: 'The Barefoot at Havelock' },
+      { day: 4, title: 'Neil Island Exploration', activities: 'Laxmanpur Beach and coral reefs.', hotel: 'The Barefoot at Neil' },
+      { day: 5, title: 'Underwater World', activities: 'Scuba diving and marine sanctuary visit.', hotel: 'Taj Exotica Andaman' },
+      { day: 6, title: 'Departure', activities: 'Return to Port Blair and flight.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'dom-9', 
+    title: 'Sikkim Mountain Magic', 
+    price: '₹36,000', 
+    image: PICS.sikkim, 
+    duration: '4N/5D', 
+    destination: 'Sikkim',
+    itinerary: [
+      { day: 1, title: 'Gangtok Arrival', activities: 'City tour and Rumtek Monastery visit.', hotel: 'The Elgin Sikkim' },
+      { day: 2, title: 'Tsomgo Lake Trek', activities: 'High altitude lake and Baba Mandir pilgrimage.', hotel: 'The Elgin Sikkim' },
+      { day: 3, title: 'Kanyam Exploration', activities: 'Scenic beauty and organic farming experience.', hotel: 'Soar Sikkim' },
+      { day: 4, title: 'Pelling Caves', activities: 'Ravangla and Maenam Hill visit.', hotel: 'The Elgin Sikkim' },
+      { day: 5, title: 'Departure', activities: 'Transfer to airport.', hotel: 'N/A' }
+    ]
+  },
+  { 
+    id: 'dom-10', 
+    title: 'Wayanad Wilderness Escape', 
+    price: '₹32,000', 
+    image: PICS.wayanad, 
+    duration: '4N/5D', 
+    destination: 'Wayanad',
+    itinerary: [
+      { day: 1, title: 'Wayanad Arrival', activities: 'Scenic drive and plantation tour.', hotel: 'Tranquil Wayanad Resort' },
+      { day: 2, title: 'Waterfall Adventure', activities: 'Soochipara Falls and jungle trekking.', hotel: 'Tranquil Wayanad Resort' },
+      { day: 3, title: 'Wildlife Sanctuary', activities: 'Muthanga Wildlife Sanctuary visit.', hotel: 'Tranquil Wayanad Resort' },
+      { day: 4, title: 'Adventure Activities', activities: 'Rock climbing and cave exploration.', hotel: 'Tranquil Wayanad Resort' },
+      { day: 5, title: 'Departure', activities: 'Return journey.', hotel: 'N/A' }
     ]
   },
 ];

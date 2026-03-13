@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PackageFormData } from '../types';
-import { CONTACT_DETAILS, COUNTRY_CODES } from '../constants';
+import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
 interface CreatePackageModalProps {
   onClose: () => void;
@@ -9,6 +9,11 @@ interface CreatePackageModalProps {
 const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
+  const allDestinations = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
+  const [searchQueryDest, setSearchQueryDest] = useState('');
+  const [isDropdownOpenDest, setIsDropdownOpenDest] = useState(false);
+  const dropdownRefDest = React.useRef<HTMLDivElement>(null);
+
   const [formData, setFormData] = useState<Omit<PackageFormData, 'pax' | 'children'> & { pax: string, children: string }>({
     name: '',
     leavingFrom: '',
@@ -32,8 +37,33 @@ const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
     setFormData({ ...formData, children: formData.children, childAges: newAges });
   };
 
+  // destination search helpers
+  const filteredDestinations = allDestinations.filter(dest =>
+    dest.name.toLowerCase().includes(searchQueryDest.toLowerCase())
+  );
+
+  const selectDestination = (name: string) => {
+    setFormData({ ...formData, destination: name });
+    setSearchQueryDest(name);
+    setIsDropdownOpenDest(false);
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRefDest.current && !dropdownRefDest.current.contains(event.target as Node)) {
+        setIsDropdownOpenDest(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.destination) {
+      alert('Please select a destination from the list.');
+      return;
+    }
     const fullPhoneNumber = `${selectedCountry.code}${clientPhone}`;
     const childAgesInfo = formData.childAges.length > 0 
       ? `\n*Child Ages:* ${formData.childAges.join(', ')}` 
@@ -136,15 +166,27 @@ const CreatePackageModal: React.FC<CreatePackageModalProps> = ({ onClose }) => {
               />
             </div>
 
-            <div className="space-y-1">
+            <div className="relative space-y-1" ref={dropdownRefDest}>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Target Destination</label>
-              <input 
-                required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
-                placeholder="Going to..." 
-                value={formData.destination} 
-                onChange={e => setFormData({...formData, destination: e.target.value})} 
+              <input
+                required
+                type="text"
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                placeholder="Going to..."
+                value={searchQueryDest}
+                onFocus={() => setIsDropdownOpenDest(true)}
+                onChange={e => { setSearchQueryDest(e.target.value); setIsDropdownOpenDest(true); }}
               />
+
+              {isDropdownOpenDest && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {filteredDestinations.map(d => (
+                    <button key={d.id} type="button" className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors" onClick={() => selectDestination(d.name)}>
+                      {d.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="md:col-span-2 grid grid-cols-3 gap-3">
