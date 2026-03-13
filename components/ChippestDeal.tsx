@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const ChippestDeal: React.FC = () => {
-  const chippestImages = [
-    new URL('../assets/image/packege-1 pattaya beach.png', import.meta.url).href,
-    new URL('../assets/image/packege-2 burjkhalifa.png', import.meta.url).href,
-    new URL('../assets/image/packege-3 bali.png', import.meta.url).href,
-    new URL('../assets/image/packege-4 pattaya city.png', import.meta.url).href,
-    new URL('../assets/image/packege-5 vietnam train street.png', import.meta.url).href,
-  ];
+  const chippestImages = useMemo(() => {
+    const modules = import.meta.glob('../assets/image/ChippestDealImage/*.{png,jpg,jpeg,webp,svg}', { eager: true, as: 'url' }) as Record<string, string>;
+    const urls = Object.entries(modules).sort(([a], [b]) => a.localeCompare(b)).map(([, url]) => url);
+    return urls.length > 0
+      ? urls
+      : ['https://via.placeholder.com/1200x700?text=Add+images+to+assets/image/ChippestDealImage'];
+  }, []);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
