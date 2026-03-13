@@ -14,6 +14,7 @@ import FullPageItinerary from './components/FullPageItinerary';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import AiTravelAssistant from './components/AiTravelAssistant';
+import ChippestDeal from './components/ChippestDeal';
 import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './constants';
 import { Package } from './types';
 
@@ -109,6 +110,7 @@ const App: React.FC = () => {
         />
 
         <AiTravelAssistant onBookNow={() => setActiveModal('booking')} />
+        <ChippestDeal />
 
         {/* services cards section inserted between hero/search and destinations */}
         <ServicesSection />
