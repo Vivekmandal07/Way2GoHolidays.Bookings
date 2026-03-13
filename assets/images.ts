@@ -18,7 +18,7 @@ export const PICS = {
   dubai: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80', // Burj Khalifa, Dubai
   bali: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80', // Rice terraces, Bali
   singapore: 'https://images.unsplash.com/photo-1525625239514-75b4b17b9979?w=600&q=80', // Marina Bay, Singapore
-  malaysia: 'https://images.unsplash.com/photo-1596422846543-75c6fc18a593?w=600&q=80', // Petronas Towers, Malaysia
+  malaysia: 'https://images.unsplash.com/photo-1542164478-35df4f6ec199?w=600&q=80', // Petronas Towers, Malaysia
   vietnam: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80', // Ha Long Bay, Vietnam
   thailand: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80', // Thai temple, Thailand
   hongkong: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&q=80', // Hong Kong skyline
