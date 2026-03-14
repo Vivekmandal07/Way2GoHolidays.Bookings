@@ -51,12 +51,28 @@ const TravelersReview: React.FC = () => {
                 <span className="text-yellow-300">★ ★ ★ ★ ★</span>
                 <span className="text-slate-100">4.9</span>
               </div>
-              <img
-                src={travelerImages[galleryIndex]}
-                alt={`Traveler ${galleryIndex + 1}`}
-                className="w-full h-full object-cover transition-all duration-700"
-                loading="lazy"
-              />
+
+              <div className="h-full w-full flex items-stretch gap-1">
+                {Array.from({ length: Math.min(3, travelerImages.length) }, (_, slideIndex) => {
+                  const imageIndex = (galleryIndex + slideIndex) % travelerImages.length;
+                  return (
+                    <div key={imageIndex} className="h-full w-1/3 transition-all duration-700">
+                      <div className="relative h-full w-full overflow-hidden rounded-xl border border-slate-200">
+                        <img
+                          src={travelerImages[imageIndex]}
+                          alt={`Traveler ${imageIndex + 1}`}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute top-2 left-2 bg-black/70 text-white rounded-full px-2 py-1 text-[10px] font-semibold flex items-center gap-1">
+                          <span className="text-yellow-300">★ ★ ★ ★ ★</span>
+                          <span className="text-[10px]">5</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="mt-3 flex justify-center gap-2">
