@@ -1,31 +1,4 @@
-import React from 'react';
-
-interface ServiceCard {
-  title: string;
-  img: string;
-  buttonText: string;
-  onClick?: () => void;
-}
-
-const cards: ServiceCard[] = [
-  {
-    title: 'Flights',
-    img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-    buttonText: 'Book Flight',
-  },
-  {
-    title: 'Hotels',
-    img: 'https://images.unsplash.com/photo-1560347876-aeef00ee58a1?auto=format&fit=crop&w=800&q=80',
-    buttonText: 'Find Hotels',
-  },
-  {
-    title: 'Transfers',
-    img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
-    buttonText: 'Arrange Transfer',
-  },
-];
-
-import React, { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 interface ServiceCard {
   title: string;
@@ -73,12 +46,12 @@ const serviceConfig = {
   },
 };
 
-const ServicesSection: React.FC = () => {
+const ServicesSection = () => {
   const [selectedService, setSelectedService] = useState<'Flights' | 'Hotels' | 'Transfers' | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [result, setResult] = useState('');
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selectedService) return;
     setResult(`${selectedService} request received: ${inputValue || '(no value entered)'}`);
@@ -130,12 +103,12 @@ const ServicesSection: React.FC = () => {
             </div>
             <form onSubmit={onSubmit} className="grid gap-3 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">{serviceConfig[selectedService].label}</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{serviceConfig[selectedService as keyof typeof serviceConfig].label}</label>
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={serviceConfig[selectedService].placeholder}
+                  placeholder={serviceConfig[selectedService as keyof typeof serviceConfig].placeholder}
                   className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                 />
               </div>
@@ -144,7 +117,7 @@ const ServicesSection: React.FC = () => {
                   type="submit"
                   className="w-full rounded-xl bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
                 >
-                  {serviceConfig[selectedService].button}
+                  {serviceConfig[selectedService as keyof typeof serviceConfig].button}
                 </button>
               </div>
             </form>
