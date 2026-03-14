@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 const TravelersReview: React.FC = () => {
-  // Load all traveler images from the folder. Add new images to this folder and they appear automatically.
-  const travelerModules = import.meta.glob('../assets/image/travelersReview/*.{png,jpg,jpeg,webp}', { eager: true, as: 'url' });
+  // Load all traveler images from TravelersReview folder. Add new images to this folder and they appear automatically.
+  const travelerModules = import.meta.glob('../assets/image/TravelersReview/*.{png,jpg,jpeg,webp}', { eager: true, as: 'url' });
   const travelerImages = useMemo(() => Object.values(travelerModules) as string[], [travelerModules]);
 
   const reviews = [
@@ -13,14 +13,24 @@ const TravelersReview: React.FC = () => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const visibleImages = 3;
 
   useEffect(() => {
     if (reviews.length === 0) return;
     const id = window.setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % reviews.length);
-    }, 3500);
+    }, 3200);
     return () => window.clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    if (travelerImages.length <= visibleImages) return;
+    const id = window.setInterval(() => {
+      setGalleryIndex((prev) => (prev + 1) % travelerImages.length);
+    }, 2800);
+    return () => window.clearInterval(id);
+  }, [travelerImages.length]);
 
   if (!travelerImages.length) {
     return (
@@ -32,6 +42,9 @@ const TravelersReview: React.FC = () => {
     );
   }
 
+  const loopedImages = travelerImages.concat(travelerImages);
+  const displayedImages = loopedImages.slice(galleryIndex, galleryIndex + visibleImages);
+
   return (
     <section className="py-20 bg-slate-50 overflow-hidden">
       <div className="container mx-auto px-6">
@@ -39,7 +52,7 @@ const TravelersReview: React.FC = () => {
           <span className="text-blue-600 uppercase tracking-[0.2em] text-xs font-bold">Traveler Reviews</span>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-3">Happy Travels, Real Stories</h2>
           <p className="mt-3 text-slate-500 max-w-2xl mx-auto">
-            We show all traveler images from the assets folder, and reviews slide automatically.
+            Scroll through traveler images and reviews. 3 images show at once in a sliding carousel.
           </p>
         </div>
 
@@ -47,30 +60,31 @@ const TravelersReview: React.FC = () => {
           <div className="rounded-3xl border border-slate-200 bg-white p-4 md:p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-blue-600 font-bold">Gallery Frame</p>
-                <p className="text-sm text-slate-500">Auto-displays all images from travelers folder</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-blue-600 font-bold">Review Images</p>
+                <p className="text-sm text-slate-500">Slides 3 images at a time from travelers folder</p>
               </div>
               <p className="text-xs uppercase tracking-[0.18em] text-slate-400">{travelerImages.length} images</p>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
-              {travelerImages.slice(0, 3).map((img, index) => (
-                <div key={index} className="rounded-2xl overflow-hidden h-24 md:h-28 border border-slate-200">
-                  <img src={img} alt={`Traveler ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
-                </div>
-              ))}
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 h-64">
+              <div className="grid grid-cols-3 gap-2 h-full p-1">
+                {displayedImages.map((img, index) => (
+                  <div key={`${img}-${galleryIndex}-${index}`} className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100 h-full">
+                    <img src={img} alt={`Traveler ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              {travelerImages.slice(3, 9).map((img, index) => (
-                <div key={index} className="rounded-xl overflow-hidden h-20 border border-slate-200">
-                  <img src={img} alt={`Traveler ${index + 4}`} className="w-full h-full object-cover" loading="lazy" />
-                </div>
+            <div className="mt-3 flex justify-center gap-2">
+              {travelerImages.slice(0, Math.min(5, travelerImages.length)).map((_, i) => (
+                <button
+                  key={i}
+                  aria-label={`Go to gallery ${i + 1}`}
+                  className={`w-2.5 h-2.5 rounded-full ${galleryIndex % travelerImages.length === i ? 'bg-blue-600' : 'bg-slate-300'}`}
+                  onClick={() => setGalleryIndex(i)}
+                />
               ))}
-            </div>
-
-            <div className="mt-5 rounded-2xl bg-blue-50 border border-blue-100 p-3 text-sm text-slate-700">
-              Add new images to <code className="bg-white px-1 py-0.5 rounded">assets/image/travellers/</code> and they appear automatically.
             </div>
           </div>
 
