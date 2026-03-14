@@ -40,7 +40,7 @@ const TravelersReview: React.FC = () => {
           <div className="w-full rounded-3xl border border-slate-200 bg-white p-4 md:p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-blue-600 font-bold">Traveler Images</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-blue-600 font-bold">Traveler Review</p>
                 <p className="text-sm text-slate-500">Image carousel with top-left star rating overlay</p>
               </div>
               <p className="text-xs uppercase tracking-[0.18em] text-slate-400">{travelerImages.length} images</p>
