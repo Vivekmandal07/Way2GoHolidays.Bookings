@@ -26,8 +26,8 @@ const TravelersReview: React.FC = () => {
   }
 
   return (
-    <section className="py-20 bg-slate-50 overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="w-full py-20 bg-slate-50 overflow-hidden">
+      <div className="w-full mx-auto px-6">
         <div className="text-center mb-10">
           <span className="text-blue-600 uppercase tracking-[0.2em] text-xs font-bold">Traveler Reviews</span>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-3">Happy Travels, Real Stories</h2>
