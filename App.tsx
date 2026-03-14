@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import AiTravelAssistant from './components/AiTravelAssistant';
 import ChippestDeal from './components/ChippestDeal';
+import TravelersReview from './components/TravelersReview';
 import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './constants';
 import { Package } from './types';
 
@@ -135,6 +136,10 @@ const App: React.FC = () => {
 
         <div id="gallery" className="scroll-mt-24">
           <GallerySection />
+        </div>
+
+        <div id="travelers-review" className="scroll-mt-24">
+          <TravelersReview />
         </div>
 
         <div id="about" className="scroll-mt-24">
