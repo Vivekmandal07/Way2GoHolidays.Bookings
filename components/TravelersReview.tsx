@@ -32,7 +32,7 @@ const TravelersReview: React.FC = () => {
           <span className="text-blue-600 uppercase tracking-[0.2em] text-xs font-bold">Traveler Reviews</span>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-3">Travelers Review, Real Stories</h2>
           <p className="mt-3 text-slate-500 max-w-2xl mx-auto">
-            Scroll through traveler images and reviews. 3 images show at once in a sliding carousel.
+            Scroll through traveler reviews. 3 images show at once in a sliding carousel.
           </p>
         </div>
 
