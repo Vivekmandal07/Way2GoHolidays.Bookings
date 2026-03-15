@@ -127,10 +127,9 @@ const ServicesSection = () => {
 
         <div className="grid gap-5 md:grid-cols-3 mb-8">
           {cards.map((card) => (
-            <button
+            <div
               key={card.title}
-              onClick={() => setSelectedService(card.serviceKey)}
-              className={`rounded-3xl p-4 border transition-all text-left shadow-sm hover:-translate-y-0.5 transform ${selectedService === card.serviceKey ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-white ring-1 ring-blue-200' : 'border-slate-200 bg-white hover:border-blue-300'}`}
+              className={`rounded-3xl p-4 border transition-all shadow-sm ${selectedService === card.serviceKey ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-white ring-1 ring-blue-200' : 'border-slate-200 bg-white hover:border-blue-300 hover:-translate-y-0.5 transform'}`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -147,7 +146,15 @@ const ServicesSection = () => {
                   <span key={feature} className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">{feature}</span>
                 ))}
               </div>
-            </button>
+              <div className="mt-4">
+                <button
+                  onClick={() => setSelectedService(card.serviceKey)}
+                  className="w-full rounded-xl bg-blue-600 text-white font-bold px-4 py-2 hover:bg-blue-700 transition"
+                >
+                  {card.buttonText}
+                </button>
+              </div>
+            </div>
           ))}
         </div>
 
