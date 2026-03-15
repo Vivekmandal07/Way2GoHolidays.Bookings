@@ -37,7 +37,7 @@ const cards: ServiceCard[] = [
 ];
 
 const ServicesSection = () => {
-  const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey']>('Flights');
+  const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey'] | null>(null);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [departDate, setDepartDate] = useState('');
@@ -159,7 +159,12 @@ const ServicesSection = () => {
         </div>
 
         <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
-          {selectedService === 'Flights' ? (
+          {selectedService === null ? (
+            <div className="text-center p-8 text-slate-500">
+              <p className="text-lg font-semibold text-slate-700">Select a service to start booking</p>
+              <p className="text-sm mt-1">Click Book Flight, Find Hotels, or Arrange Transfer to open the form.</p>
+            </div>
+          ) : selectedService === 'Flights' ? (
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
