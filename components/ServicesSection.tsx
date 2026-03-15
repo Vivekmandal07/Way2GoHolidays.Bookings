@@ -51,6 +51,8 @@ const ServicesSection = () => {
   const [checkOutDate, setCheckOutDate] = useState('');
   const [rooms, setRooms] = useState(1);
   const [hotelAdults, setHotelAdults] = useState(2);
+  const [hotelChildren, setHotelChildren] = useState(0);
+  const [hotelChildAges, setHotelChildAges] = useState<string[]>([]);
   const [nationality, setNationality] = useState('India');
 
   const [pickup, setPickup] = useState('');
@@ -64,6 +66,18 @@ const ServicesSection = () => {
     const safe = Math.max(0, Math.min(9, value));
     setChildren(safe);
     setChildAges((prev) => {
+      const newAges = [...prev];
+      if (newAges.length < safe) {
+        return [...newAges, ...Array(safe - newAges.length).fill('')];
+      }
+      return newAges.slice(0, safe);
+    });
+  };
+
+  const updateHotelChildren = (value: number) => {
+    const safe = Math.max(0, Math.min(9, value));
+    setHotelChildren(safe);
+    setHotelChildAges((prev) => {
       const newAges = [...prev];
       if (newAges.length < safe) {
         return [...newAges, ...Array(safe - newAges.length).fill('')];
@@ -89,7 +103,11 @@ const ServicesSection = () => {
         setResult('Please fill Hotel destination and travel dates.');
         return;
       }
-      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s), ${hotelAdults} adults, ${nationality}`);
+      if (hotelChildren > 0 && hotelChildAges.some((age) => age.trim() === '')) {
+        setResult('Please enter all hotel child ages.');
+        return;
+      }
+      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s), ${hotelAdults} adults, ${hotelChildren} children, ${nationality}`);
     } else {
       if (!pickup || !dropoff || !transferDate) {
         setResult('Please fill pickup, dropoff, and transfer date.');
@@ -197,7 +215,7 @@ const ServicesSection = () => {
                 <label className="block text-xs font-bold text-slate-500 mb-1">Check-out</label>
                 <input type="date" value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
               </div>
-              <div className="lg:col-span-2 grid grid-cols-2 gap-2">
+              <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Rooms</label>
                   <input type="number" min={1} max={10} value={rooms} onChange={(e) => setRooms(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
@@ -206,7 +224,25 @@ const ServicesSection = () => {
                   <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
                   <input type="number" min={1} max={9} value={hotelAdults} onChange={(e) => setHotelAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
                 </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Children</label>
+                  <input type="number" min={0} max={9} value={hotelChildren} onChange={(e) => updateHotelChildren(Number(e.target.value) || 0)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
               </div>
+              {hotelChildren > 0 && (
+                <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                  {hotelChildAges.map((age, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <label className="text-[10px] font-semibold uppercase text-slate-500">Child {idx + 1} age</label>
+                      <input type="number" min={2} max={11} value={age} onChange={(e) => setHotelChildAges((prev) => {
+                        const next = [...prev];
+                        next[idx] = e.target.value;
+                        return next;
+                      })} className="w-full rounded-xl border border-slate-300 px-2 py-2 outline-none" />
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
                 <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
