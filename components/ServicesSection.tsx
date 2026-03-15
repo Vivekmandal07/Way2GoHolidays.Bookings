@@ -30,8 +30,8 @@ const cards: ServiceCard[] = [
 
 const serviceConfig = {
   Flights: {
-    label: 'Enter route or city (e.g., DEL to BOM)',
-    placeholder: 'Start city / destination',
+    label: 'From' + ' - ' + 'To',
+    placeholder: 'city or airport',
     button: 'Search Flights',
   },
   Hotels: {
