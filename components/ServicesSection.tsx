@@ -50,6 +50,8 @@ const ServicesSection = () => {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [rooms, setRooms] = useState(1);
+  const [hotelAdults, setHotelAdults] = useState(2);
+  const [nationality, setNationality] = useState('India');
 
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
@@ -87,7 +89,7 @@ const ServicesSection = () => {
         setResult('Please fill Hotel destination and travel dates.');
         return;
       }
-      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s)`);
+      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s), ${hotelAdults} adults, ${nationality}`);
     } else {
       if (!pickup || !dropoff || !transferDate) {
         setResult('Please fill pickup, dropoff, and transfer date.');
@@ -181,8 +183,69 @@ const ServicesSection = () => {
                 </div>
               )}
             </form>
+          ) : selectedService === 'Hotels' ? (
+            <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
+              <div className="lg:col-span-3">
+                <label className="block text-xs font-bold text-slate-500 mb-1">Going to</label>
+                <input type="text" value={hotelDestination} onChange={(e) => setHotelDestination(e.target.value)} placeholder="City or hotel name" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Check-in</label>
+                <input type="date" value={checkInDate} onChange={(e) => setCheckInDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Check-out</label>
+                <input type="date" value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div className="lg:col-span-2 grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Rooms</label>
+                  <input type="number" min={1} max={10} value={rooms} onChange={(e) => setRooms(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
+                  <input type="number" min={1} max={9} value={hotelAdults} onChange={(e) => setHotelAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
+              </div>
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
+                <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
+                  <option>India</option>
+                  <option>USA</option>
+                  <option>UK</option>
+                  <option>UAE</option>
+                </select>
+              </div>
+              <div className="lg:col-span-1 flex justify-end">
+                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Hotels</button>
+              </div>
+            </form>
           ) : (
-            <div className="text-center py-8 text-slate-500">Selected service has a simplified form. Please choose Flights for advanced search.</div>
+            <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">Pickup</label>
+                <input type="text" value={pickup} onChange={(e) => setPickup(e.target.value)} placeholder="Airport or hotel" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">Dropoff</label>
+                <input type="text" value={dropoff} onChange={(e) => setDropoff(e.target.value)} placeholder="Destination" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Transfer</label>
+                <input type="date" value={transferDate} onChange={(e) => setTransferDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">Vehicle</label>
+                <select className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white" value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}>
+                  <option>Sedan</option>
+                  <option>SUV</option>
+                  <option>Van</option>
+                </select>
+              </div>
+              <div className="lg:col-span-1 flex justify-end">
+                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Arrange Transfer</button>
+              </div>
+            </form>
           )}
           {result && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
         </div>
