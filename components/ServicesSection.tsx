@@ -164,7 +164,18 @@ const ServicesSection = () => {
               <p className="text-lg font-semibold text-slate-700">Select a service to start booking</p>
               <p className="text-sm mt-1">Click Book Flight, Find Hotels, or Arrange Transfer to open the form.</p>
             </div>
-          ) : selectedService === 'Flights' ? (
+          ) : (
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-slate-700">{selectedService === 'Flights' ? 'Flight Search' : selectedService === 'Hotels' ? 'Hotel Search' : 'Transfer Booking'}</p>
+                <p className="text-xs text-slate-500">Close to hide search inputs.</p>
+              </div>
+              <button type="button" onClick={() => setSelectedService(null)} className="rounded-full p-2 text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition">
+                ✕
+              </button>
+            </div>
+          )}
+          {selectedService === 'Flights' ? (
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
