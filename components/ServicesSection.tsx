@@ -279,7 +279,7 @@ const ServicesSection = () => {
                 <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Hotels</button>
               </div>
             </form>
-          ) : (
+          ) : selectedService === 'Transfers' ? (
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">Pickup</label>
@@ -305,7 +305,7 @@ const ServicesSection = () => {
                 <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Arrange Transfer</button>
               </div>
             </form>
-          )}
+          ) : null}
           {result && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
         </div>
       </div>
