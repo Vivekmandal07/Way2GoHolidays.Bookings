@@ -43,6 +43,7 @@ const ServicesSection = () => {
   const [departDate, setDepartDate] = useState('');
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [infants, setInfants] = useState(0);
   const [childAges, setChildAges] = useState<string[]>([]);
 
   const [hotelDestination, setHotelDestination] = useState('');
@@ -80,7 +81,7 @@ const ServicesSection = () => {
         setResult('Please enter all child ages.');
         return;
       }
-      setResult(`Flight search: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren)`);
+      setResult(`Flight search: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
     } else if (selectedService === 'Hotels') {
       if (!hotelDestination || !checkInDate || !checkOutDate) {
         setResult('Please fill Hotel destination and travel dates.');
@@ -146,14 +147,18 @@ const ServicesSection = () => {
                 <input type="date" value={departDate} onChange={(e) => setDepartDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
               </div>
 
-              <div className="lg:col-span-2 grid grid-cols-2 gap-2">
+              <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Adults (12+)</label>
                   <input type="number" min={1} max={9} value={adults} onChange={(e) => setAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Children</label>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Children (2-11)</label>
                   <input type="number" min={0} max={9} value={children} onChange={(e) => updateChildren(Number(e.target.value) || 0)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Infants (&lt;2)</label>
+                  <input type="number" min={0} max={5} value={infants} onChange={(e) => setInfants(Math.max(0, Number(e.target.value) || 0))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
                 </div>
               </div>
 
