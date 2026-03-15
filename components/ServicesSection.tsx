@@ -28,102 +28,126 @@ const cards: ServiceCard[] = [
   },
 ];
 
-const serviceConfig = {
-  Flights: {
-    label: 'From' + ' - ' + 'To',
-    placeholder: 'city or airport',
-    button: 'Search Flights',
-  },
-  Hotels: {
-    label: 'Enter city or hotel name',
-    placeholder: 'City or hotel name',
-    button: 'Search Hotels',
-  },
-  Transfers: {
-    label: 'Enter pickup location',
-    placeholder: 'Pickup location',
-    button: 'Book Transfer',
-  },
-};
-
 const ServicesSection = () => {
-  const [selectedService, setSelectedService] = useState<'Flights' | 'Hotels' | 'Transfers' | null>(null);
-  const [inputValue, setInputValue] = useState('');
+  const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey'] | null>('Flights');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [departDate, setDepartDate] = useState('');
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [childAges, setChildAges] = useState<string[]>([]);
   const [result, setResult] = useState('');
+
+  const updateChildren = (value: number) => {
+    const safe = Math.max(0, Math.min(9, value));
+    setChildren(safe);
+    setChildAges((prev) => {
+      const newAges = [...prev];
+      if (newAges.length < safe) {
+        return [...newAges, ...Array(safe - newAges.length).fill('')];
+      }
+      return newAges.slice(0, safe);
+    });
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!selectedService) return;
-    setResult(`${selectedService} request received: ${inputValue || '(no value entered)'}`);
+    if (!from || !to || !departDate) {
+      setResult('Please fill From, To, and Depart date.');
+      return;
+    }
+
+    if (children > 0 && childAges.some((age) => age.trim() === '')) {
+      setResult('Please enter all child ages.');
+      return;
+    }
+
+    setResult(
+      `Search request: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren)${
+        children > 0 ? ' (ages: ' + childAges.join(', ') + ')' : ''
+      }`
+    );
   };
 
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tighter">
-            Flights, Hotels & Transfers
-          </h2>
-          <p className="mt-3 text-slate-500 max-w-2xl mx-auto">Click a card to open the right booking input.</p>
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Search Flights & Travel Services</h2>
+          <p className="mt-2 text-slate-500 max-w-2xl mx-auto">Quickly search flights and choose passenger counts with child age inputs.</p>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3 mb-8">
           {cards.map((card) => (
-            <div
+            <button
               key={card.title}
-              className="relative rounded-2xl overflow-hidden shadow-lg group h-72"
+              onClick={() => setSelectedService(card.serviceKey)}
+              className={`rounded-2xl p-4 border transition-all text-left ${selectedService === card.serviceKey ? 'border-blue-600 bg-blue-50 shadow-sm' : 'border-slate-200 bg-white hover:border-blue-300'}`}
             >
-              <img
-                src={card.img}
-                alt={card.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <button
-                onClick={() => {
-                  setSelectedService(card.serviceKey);
-                  setInputValue('');
-                  setResult('');
-                }}
-                className="absolute bottom-6 right-6 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl transition-transform duration-300 hover:scale-110 active:scale-95 shadow-lg"
-              >
-                {card.buttonText}
-              </button>
-            </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{card.title}</p>
+                  <h3 className="text-lg font-bold text-slate-900 mt-1">{card.buttonText}</h3>
+                </div>
+                <div className="w-16 h-16 rounded-xl overflow-hidden">
+                  <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </button>
           ))}
         </div>
 
-        {selectedService && (
-          <div className="mt-8 mx-auto max-w-3xl bg-slate-50 rounded-2xl border border-slate-200 p-5">
-            <div className="flex items-center justify-between mb-3">
+        <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
+          {selectedService === 'Flights' ? (
+            <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
+                <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} placeholder="City or airport" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-bold text-slate-500 mb-1">To</label>
+                <input type="text" value={to} onChange={(e) => setTo(e.target.value)} placeholder="City or airport" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+              </div>
               <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-blue-600 font-bold">Selected Service</p>
-                <h3 className="text-xl font-bold text-slate-900">{selectedService}</h3>
+                <label className="block text-xs font-bold text-slate-500 mb-1">Depart on</label>
+                <input type="date" value={departDate} onChange={(e) => setDepartDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
               </div>
-              <span className="text-xs text-slate-500">Please enter your {selectedService.toLowerCase()} details</span>
-            </div>
-            <form onSubmit={onSubmit} className="grid gap-3 md:grid-cols-2">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">{serviceConfig[selectedService as keyof typeof serviceConfig].label}</label>
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={serviceConfig[selectedService as keyof typeof serviceConfig].placeholder}
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                />
+
+              <div className="lg:col-span-2 grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
+                  <input type="number" min={1} max={9} value={adults} onChange={(e) => setAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Children</label>
+                  <input type="number" min={0} max={9} value={children} onChange={(e) => updateChildren(Number(e.target.value) || 0)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                </div>
               </div>
-              <div className="self-end">
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                >
-                  {serviceConfig[selectedService as keyof typeof serviceConfig].button}
-                </button>
+
+              <div className="lg:col-span-1 flex justify-end">
+                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Flights</button>
               </div>
+
+              {children > 0 && (
+                <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                  {childAges.map((age, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <label className="text-[10px] font-semibold uppercase text-slate-500">Child {idx + 1} age</label>
+                      <input type="number" min={0} max={17} value={age} onChange={(e) => setChildAges((prev) => {
+                        const next = [...prev];
+                        next[idx] = e.target.value;
+                        return next;
+                      })} className="w-full rounded-xl border border-slate-300 px-2 py-2 outline-none" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </form>
-            {result && <p className="mt-3 text-sm text-green-700">{result}</p>}
-          </div>
-        )}
+          ) : (
+            <div className="text-center py-8 text-slate-500">Selected service has a simplified form. Please choose Flights for advanced search.</div>
+          )}
+          {result && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
+        </div>
       </div>
     </section>
   );
