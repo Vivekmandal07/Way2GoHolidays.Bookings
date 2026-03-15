@@ -5,6 +5,8 @@ interface ServiceCard {
   img: string;
   buttonText: string;
   serviceKey: 'Flights' | 'Hotels' | 'Transfers';
+  tagline: string;
+  features: string[];
 }
 
 const cards: ServiceCard[] = [
@@ -13,29 +15,46 @@ const cards: ServiceCard[] = [
     img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
     buttonText: 'Book Flight',
     serviceKey: 'Flights',
+    tagline: 'Fast, flexible flight search with price insights',
+    features: ['Smart fare alerts', 'Multi-city route support', 'Instant e-ticket'],
   },
   {
     title: 'Hotels',
     img: 'https://images.unsplash.com/photo-1560347876-aeef00ee58a1?auto=format&fit=crop&w=800&q=80',
     buttonText: 'Find Hotels',
     serviceKey: 'Hotels',
+    tagline: 'Curated stays with verified reviews and free cancellation',
+    features: ['Top-rated properties', 'Flexible check-in options', 'Room-only or B&B'],
   },
   {
     title: 'Transfers',
     img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
     buttonText: 'Arrange Transfer',
     serviceKey: 'Transfers',
+    tagline: 'Airport, city and private transfers in one click',
+    features: ['Door-to-door', 'Professional drivers', '24/7 support'],
   },
 ];
 
 const ServicesSection = () => {
-  const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey'] | null>('Flights');
+  const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey']>('Flights');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [departDate, setDepartDate] = useState('');
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [childAges, setChildAges] = useState<string[]>([]);
+
+  const [hotelDestination, setHotelDestination] = useState('');
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [rooms, setRooms] = useState(1);
+
+  const [pickup, setPickup] = useState('');
+  const [dropoff, setDropoff] = useState('');
+  const [transferDate, setTransferDate] = useState('');
+  const [vehicleType, setVehicleType] = useState('Sedan');
+
   const [result, setResult] = useState('');
 
   const updateChildren = (value: number) => {
@@ -52,21 +71,29 @@ const ServicesSection = () => {
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!from || !to || !departDate) {
-      setResult('Please fill From, To, and Depart date.');
-      return;
+    if (selectedService === 'Flights') {
+      if (!from || !to || !departDate) {
+        setResult('Please fill From, To, and Depart date.');
+        return;
+      }
+      if (children > 0 && childAges.some((age) => age.trim() === '')) {
+        setResult('Please enter all child ages.');
+        return;
+      }
+      setResult(`Flight search: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren)`);
+    } else if (selectedService === 'Hotels') {
+      if (!hotelDestination || !checkInDate || !checkOutDate) {
+        setResult('Please fill Hotel destination and travel dates.');
+        return;
+      }
+      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s)`);
+    } else {
+      if (!pickup || !dropoff || !transferDate) {
+        setResult('Please fill pickup, dropoff, and transfer date.');
+        return;
+      }
+      setResult(`Transfer request: ${pickup} → ${dropoff} on ${transferDate} · ${vehicleType}`);
     }
-
-    if (children > 0 && childAges.some((age) => age.trim() === '')) {
-      setResult('Please enter all child ages.');
-      return;
-    }
-
-    setResult(
-      `Search request: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren)${
-        children > 0 ? ' (ages: ' + childAges.join(', ') + ')' : ''
-      }`
-    );
   };
 
   return (
@@ -77,21 +104,27 @@ const ServicesSection = () => {
           <p className="mt-2 text-slate-500 max-w-2xl mx-auto">Quickly search flights and choose passenger counts with child age inputs.</p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3 mb-8">
+        <div className="grid gap-5 md:grid-cols-3 mb-8">
           {cards.map((card) => (
             <button
               key={card.title}
               onClick={() => setSelectedService(card.serviceKey)}
-              className={`rounded-2xl p-4 border transition-all text-left ${selectedService === card.serviceKey ? 'border-blue-600 bg-blue-50 shadow-sm' : 'border-slate-200 bg-white hover:border-blue-300'}`}
+              className={`rounded-3xl p-4 border transition-all text-left shadow-sm hover:-translate-y-0.5 transform ${selectedService === card.serviceKey ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-white ring-1 ring-blue-200' : 'border-slate-200 bg-white hover:border-blue-300'}`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{card.title}</p>
-                  <h3 className="text-lg font-bold text-slate-900 mt-1">{card.buttonText}</h3>
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">{card.title}</p>
+                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">{card.buttonText}</h3>
+                  <p className="mt-1 text-sm text-slate-500 max-w-xs">{card.tagline}</p>
                 </div>
-                <div className="w-16 h-16 rounded-xl overflow-hidden">
+                <div className="w-14 h-14 rounded-xl overflow-hidden border-2 border-slate-200">
                   <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
                 </div>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {card.features.map((feature) => (
+                  <span key={feature} className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">{feature}</span>
+                ))}
               </div>
             </button>
           ))}
