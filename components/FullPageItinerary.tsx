@@ -215,7 +215,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
               </div>
 
               {/* Booking Details */}
-              <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+              <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
                 <div className="flex items-center justify-between">
                   <h4 className="text-lg md:text-xl font-bold text-slate-900">Travel Details</h4>
                   <span className="text-sm text-slate-500">Specify your travel preferences</span>
@@ -228,7 +228,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       type="date"
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     />
                   </div>
 
@@ -237,7 +237,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     <select
                       value={rooms}
                       onChange={(e) => setRooms(Number(e.target.value))}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {[1, 2, 3, 4, 5].map((num) => (
                         <option key={num} value={num}>{num}</option>
@@ -250,7 +250,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     <select
                       value={adults}
                       onChange={(e) => setAdults(Number(e.target.value))}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
                         <option key={num} value={num}>{num}</option>
@@ -263,7 +263,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     <select
                       value={children}
                       onChange={(e) => setChildren(Number(e.target.value))}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 6 }, (_, i) => i).map((num) => (
                         <option key={num} value={num}>{num}</option>
@@ -284,7 +284,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                             next[idx] = e.target.value;
                             setChildrenAges(next);
                           }}
-                          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                         >
                           <option value="<2">&lt;2</option>
                           {Array.from({ length: 16 }, (_, i) => i + 2).map((ageOption) => (
