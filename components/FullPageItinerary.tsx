@@ -344,7 +344,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                 
                 {editableItinerary.map((day, idx) => (
                   <div key={day.day} className="relative pl-14 md:pl-32 group break-inside-avoid">
-                    <div className={`absolute left-0 top-0 w-12 h-12 md:w-24 md:h-24 bg-white border-2 text-slate-900 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center shadow-sm z-10 no-print transition-all duration-500 ${isEditMode ? 'border-orange-400 scale-105 shadow-md' : 'border-slate-100 group-hover:border-blue-500 group-hover:scale-110 group-hover:shadow-lg'}`}>
+                    <div className={`absolute left-0 top-0 w-12 h-12 md:w-24 md:h-24 bg-white border-2 text-slate-900 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center shadow-sm z-10 transition-all duration-500 ${isEditMode ? 'border-orange-400 scale-105 shadow-md' : 'border-slate-100 group-hover:border-blue-500 group-hover:scale-110 group-hover:shadow-lg'}`}>
                       <span className="text-[7px] md:text-[10px] font-black uppercase tracking-widest">Day</span>
                       <span className="text-xl md:text-5xl font-bold tracking-tighter leading-none">{day.day}</span>
                     </div>
