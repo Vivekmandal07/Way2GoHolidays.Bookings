@@ -95,18 +95,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
         margin: [0, 0],
         filename: `Way2Go_${pkg.title.replace(/\s+/g, '_')}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
           letterRendering: true,
-          scrollY: 0,
-          windowWidth: element.scrollWidth,
-          // Crucial: ensure the capture height is calculated correctly
-          height: element.scrollHeight,
+          scrollY: -window.scrollY,
+          scrollX: 0,
+          // Avoid forcing a height so html2pdf can calculate the full content length
           logging: false
         },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'] }
       };
 
       try {
