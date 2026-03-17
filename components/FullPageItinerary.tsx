@@ -17,6 +17,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 }))
   );
 
+  const [travelName, setTravelName] = useState<string>('');
   const [travelDate, setTravelDate] = useState<string>('');
   const [rooms, setRooms] = useState<number>(1);
   const [adults, setAdults] = useState<number>(2);
@@ -52,6 +53,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     let message = `*Interest in ${pkg.title}*\n`;
     message += `*Destination:* ${pkg.destination}\n`;
     message += `*Price Quote:* ${editablePrice}\n`;
+    if (travelName) message += `*Traveller:* ${travelName}\n`;
     if (travelDate) message += `*Travel Date:* ${travelDate}\n`;
     message += `*Rooms:* ${rooms} | *Adults:* ${adults} | *Children:* ${children}\n`;
 
@@ -220,6 +222,20 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                   <h4 className="text-lg md:text-xl font-bold text-slate-900">Travel Details</h4>
                   <span className="text-sm text-slate-500">Specify your travel preferences</span>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Travel Name</label>
+                    <input
+                      type="text"
+                      value={travelName}
+                      onChange={(e) => setTravelName(e.target.value)}
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
+                    />
+                  </div>
+
+              
+
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="space-y-2">
