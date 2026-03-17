@@ -18,6 +18,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   );
 
   const [travelName, setTravelName] = useState<string>('');
+  const [travelEmail, setTravelEmail] = useState<string>('');
+  const [travelPhone, setTravelPhone] = useState<string>('');
   const [travelDate, setTravelDate] = useState<string>('');
   const [rooms, setRooms] = useState<number>(1);
   const [adults, setAdults] = useState<number>(2);
@@ -54,6 +56,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     message += `*Destination:* ${pkg.destination}\n`;
     message += `*Price Quote:* ${editablePrice}\n`;
     if (travelName) message += `*Traveller:* ${travelName}\n`;
+    if (travelEmail) message += `*Email:* ${travelEmail}\n`;
+    if (travelPhone) message += `*WhatsApp:* ${travelPhone}\n`;
     if (travelDate) message += `*Travel Date:* ${travelDate}\n`;
     message += `*Rooms:* ${rooms} | *Adults:* ${adults} | *Children:* ${children}\n`;
 
@@ -223,7 +227,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                   <span className="text-sm text-slate-500">Specify your travel preferences</span>
                 </div>
 
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+                  <div className="space-y-2 md:col-span-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Traveller Name</label>
                     <input
                       type="text"
@@ -234,8 +239,28 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     />
                   </div>
 
-              
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</label>
+                    <input
+                      type="email"
+                      value={travelEmail}
+                      onChange={(e) => setTravelEmail(e.target.value)}
+                      placeholder="Enter email"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
+                    />
+                  </div>
 
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">WhatsApp No.</label>
+                    <input
+                      type="tel"
+                      value={travelPhone}
+                      onChange={(e) => setTravelPhone(e.target.value)}
+                      placeholder="Enter WhatsApp number"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
+                    />
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="space-y-2">
