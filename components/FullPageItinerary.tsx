@@ -99,9 +99,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
           scale: 2,
           useCORS: true,
           letterRendering: true,
-          scrollY: -window.scrollY,
+          scrollY: 0,
           scrollX: 0,
-          // Avoid forcing a height so html2pdf can calculate the full content length
+          windowWidth: element.scrollWidth,
+          height: element.scrollHeight,
           logging: false
         },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
