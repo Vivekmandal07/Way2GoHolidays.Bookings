@@ -26,6 +26,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
 
+  const formatTravelDate = (value: string) => {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
   useEffect(() => {
     if (children === 0) {
       setChildrenAges([]);
@@ -58,7 +65,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     if (travelName) message += `*Traveller:* ${travelName}\n`;
     if (travelEmail) message += `*Email:* ${travelEmail}\n`;
     if (travelPhone) message += `*WhatsApp:* ${travelPhone}\n`;
-    if (travelDate) message += `*Travel Date:* ${travelDate}\n`;
+    if (travelDate) message += `*Travel Date:* ${formatTravelDate(travelDate)}\n`;
     message += `*Rooms:* ${rooms} | *Adults:* ${adults} | *Children:* ${children}\n`;
 
     if (children > 0) {
@@ -271,6 +278,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       onChange={(e) => setTravelDate(e.target.value)}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     />
+                    {travelDate && (
+                      <p className="text-xs text-slate-500 mt-1">{formatTravelDate(travelDate)}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
