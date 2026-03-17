@@ -17,6 +17,24 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 }))
   );
 
+  const [travelDate, setTravelDate] = useState<string>('');
+  const [rooms, setRooms] = useState<number>(1);
+  const [adults, setAdults] = useState<number>(2);
+  const [children, setChildren] = useState<number>(0);
+  const [childrenAges, setChildrenAges] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (children === 0) {
+      setChildrenAges([]);
+      return;
+    }
+
+    setChildrenAges(prev => {
+      const next = Array.from({ length: children }, (_, i) => prev[i] ?? '<2');
+      return next;
+    });
+  }, [children]);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -33,10 +51,19 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   const handleBookNow = () => {
     let message = `*Interest in ${pkg.title}*\n`;
     message += `*Destination:* ${pkg.destination}\n`;
-    message += `*Price Quote:* ${editablePrice}\n\n`;
-    message += `I'm viewing this day-wise itinerary and want to proceed with booking!\n\n`;
+    message += `*Price Quote:* ${editablePrice}\n`;
+    if (travelDate) message += `*Travel Date:* ${travelDate}\n`;
+    message += `*Rooms:* ${rooms} | *Adults:* ${adults} | *Children:* ${children}\n`;
+
+    if (children > 0) {
+      const ages = childrenAges.filter(Boolean).join(', ');
+      if (ages) message += `*Children Ages:* ${ages}\n`;
+    }
+
+    message += `\nI'm viewing this day-wise itinerary and want to proceed with booking!\n\n`;
     message += `*Thankyou for Connecting Way2GoHolidays!*\n`;
     message += `Our Destination Expert will Connect you very Shortly!`;
+
     window.open(`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -185,6 +212,89 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       <span className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tighter transition-all group-hover:text-blue-700 block">{editablePrice}</span>
                     )}
                  </div>
+              </div>
+
+              {/* Booking Details */}
+              <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-lg md:text-xl font-bold text-slate-900">Travel Details</h4>
+                  <span className="text-sm text-slate-500">Specify your travel preferences</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Travel Date</label>
+                    <input
+                      type="date"
+                      value={travelDate}
+                      onChange={(e) => setTravelDate(e.target.value)}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Rooms</label>
+                    <select
+                      value={rooms}
+                      onChange={(e) => setRooms(Number(e.target.value))}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                    >
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <option key={num} value={num}>{num}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Adults</label>
+                    <select
+                      value={adults}
+                      onChange={(e) => setAdults(Number(e.target.value))}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                    >
+                      {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
+                        <option key={num} value={num}>{num}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Children</label>
+                    <select
+                      value={children}
+                      onChange={(e) => setChildren(Number(e.target.value))}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                    >
+                      {Array.from({ length: 6 }, (_, i) => i).map((num) => (
+                        <option key={num} value={num}>{num}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {children > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {childrenAges.map((age, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Child {idx + 1} age</label>
+                        <select
+                          value={age}
+                          onChange={(e) => {
+                            const next = [...childrenAges];
+                            next[idx] = e.target.value;
+                            setChildrenAges(next);
+                          }}
+                          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+                        >
+                          <option value="<2">&lt;2</option>
+                          {Array.from({ length: 16 }, (_, i) => i + 2).map((ageOption) => (
+                            <option key={ageOption} value={`${ageOption}+`}>{ageOption}+</option>
+                          ))}
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Day wise details */}
