@@ -16,7 +16,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   const [editableItinerary, setEditableItinerary] = useState<ItineraryDay[]>(
     pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 }))
   );
-
+  
+  const [numberOfDays, setNumberOfDays] = useState<number>(pkg.itinerary.length);
+  const [numberOfNights, setNumberOfNights] = useState<number>(Math.max(0, pkg.itinerary.length - 1));
   const [travelName, setTravelName] = useState<string>('');
   const [travelEmail, setTravelEmail] = useState<string>('');
   const [travelPhone, setTravelPhone] = useState<string>('');
