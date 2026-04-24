@@ -341,7 +341,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                         >
                           <option value="<2 yrs">&lt;2 yrs</option>
                           {Array.from({ length: 16 }, (_, i) => i + 2).map((ageOption) => (
-                            <option key={ageOption} value={`${ageOption}+`}>{ageOption}+</option>
+                            <option key={ageOption} value={`${ageOption}+`}>{ageOption}+ yrs</option>
                           ))}
                         </select>
                       </div>
