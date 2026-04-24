@@ -292,7 +292,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       onChange={(e) => setRooms(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
-                      {[1, 2, 3, 4, 5].map((num) => (
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                         <option key={num} value={num}>{num}</option>
                       ))}
                     </select>
@@ -305,7 +305,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       onChange={(e) => setAdults(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
-                      {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
+                      {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => (
                         <option key={num} value={num}>{num}</option>
                       ))}
                     </select>
@@ -318,7 +318,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                       onChange={(e) => setChildren(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
-                      {Array.from({ length: 6 }, (_, i) => i).map((num) => (
+                      {Array.from({ length: 30 }, (_, i) => i).map((num) => (
                         <option key={num} value={num}>{num}</option>
                       ))}
                     </select>
