@@ -219,8 +219,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
                     {isEditMode ? (
                       <input 
-                        value={editablePrice}
-                        onChange={(e) => setEditablePrice(e.target.value)}
+                        //value={editablePrice}
+                        //onChange={(e) => setEditablePrice(e.target.value)}
                         className="text-xl md:text-2xl font-bold text-black tracking-tighter bg-white border-2 border-orange-200 rounded-lg px-2 py-1 outline-none w-full md:text-right"
                       />
                     ) : (
