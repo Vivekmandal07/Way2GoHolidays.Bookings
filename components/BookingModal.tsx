@@ -21,7 +21,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
     destination: '',
     travelDate: '',
     rooms: '1',
-    pax: '2',
+    pax: '1',
     children: '0',
     childAges: [],
     specialRequest: ''
