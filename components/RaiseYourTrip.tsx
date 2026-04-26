@@ -200,7 +200,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest outline-orange text-center block">Adults</label>
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest focus:border-orange-500 text-center block">Adults</label>
                 <input 
                   required type="number" min="1" 
                   className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" 
