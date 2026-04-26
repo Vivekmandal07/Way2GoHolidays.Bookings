@@ -198,7 +198,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Travel Date</label>
-              <input required type="date" className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none font-bold text-sm text-black" value={formData.travelDate} onChange={e => setFormData({...formData, travelDate: e.target.value})} />
+              <input required type="date" className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500  font-bold text-sm text-black" value={formData.travelDate} onChange={e => setFormData({...formData, travelDate: e.target.value})} />
             </div>
 
             <div className="md:col-span-2 grid grid-cols-4 gap-3">
