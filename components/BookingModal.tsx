@@ -145,7 +145,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
               <input 
                 required type="email" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20  transition-all font-bold text-sm text-black placeholder:text-slate-300"
                 placeholder="way2goholidays.bookings@gmail.com"
                 value={formData.email}
                 onChange={e => setFormData({...formData, email: e.target.value})}
