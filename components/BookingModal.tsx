@@ -207,11 +207,11 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 <input required type="number" min="1" className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Ex: 2" value={formData.rooms} onChange={e => setFormData({...formData, rooms: e.target.value})} />
               </div>
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Adults</label>
                 <input required type="number" min="1" className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" value={formData.pax} onChange={e => setFormData({...formData, pax: e.target.value})} />
               </div>
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Children</label>
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Children</label>
                 <input type="number" min="0" className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" value={formData.children} onChange={e => handleChildCountChange(e.target.value)} />
               </div>
               <div className="col-span-2 space-y-1">
