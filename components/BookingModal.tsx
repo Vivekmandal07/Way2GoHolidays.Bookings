@@ -134,7 +134,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20  transition-all font-bold text-sm text-black placeholder:text-slate-300"
                 placeholder="Ex: Subodh Mandal"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
@@ -156,7 +156,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">WhatsApp Number</label>
               <div className="flex items-stretch border border-slate-200 rounded-xl focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm">
                 <select 
-                  className="bg-slate-100/50 border-r border-slate-200 px-3 py-3 font-bold text-black outline-none cursor-pointer text-xs"
+                  className="bg-slate-100/50 border-r border-slate-200 px-3 py-3 font-bold text-black  cursor-pointer text-xs"
                   value={selectedCountry.code}
                   onChange={(e) => {
                     const found = COUNTRY_CODES.find(c => c.code === e.target.value);
@@ -167,7 +167,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 </select>
                 <input 
                   required type="tel" 
-                  className="flex-grow px-5 py-3 bg-transparent outline-none font-bold text-sm text-black placeholder:text-slate-300"
+                  className="flex-grow px-5 py-3 bg-transparent  font-bold text-sm text-black placeholder:text-slate-300"
                   placeholder="7303402841"
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
@@ -179,7 +179,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Destination</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500  transition-all font-bold text-sm text-black placeholder:text-slate-300"
                 placeholder="Where to?"
                 value={searchQuery}
                 onFocus={() => setIsDropdownOpen(true)}
