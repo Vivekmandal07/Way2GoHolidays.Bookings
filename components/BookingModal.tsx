@@ -216,7 +216,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               </div>
               <div className="col-span-2 space-y-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Preferences</label>
-                <input type="text" className="w-full px-4 py-3 bg-slate-100/100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} />
+                <input type="text" className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} />
               </div>
             </div>
 
@@ -224,7 +224,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               <div className="md:col-span-2 bg-blue-50/10 p-3 rounded-2xl border border-blue-100 flex flex-wrap gap-3 animate-in fade-in duration-300 shadow-inner">
                 {formData.childAges.map((age, i) => (
                   <div key={i} className="flex flex-col space-y-1">
-                    <span className="text-[8px] font-bold text-blue-500 uppercase ml-1 tracking-wider">Child {i+1}</span>
+                    <span className="text-[8px] font-bold text-blue-500 uppercase ml-1 tracking-wider">Child {i+1} yrs</span>
                     <input 
                       required type="number" min="0" max="17" 
                       className="w-14 px-2 py-2 border border-slate-200 rounded-lg text-center font-bold text-xs text-black focus:border-blue-500 outline-none bg-white" 
