@@ -203,7 +203,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
                 <input 
                   required type="number" min="1" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 text-center font-bold text-black text-sm transition-all" 
+                  className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 focus:outline-none text-center font-bold text-black text-sm transition-all" 
                   value={formData.pax} 
                   onChange={e => setFormData({...formData, pax: e.target.value})} 
                 />
@@ -212,7 +212,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Children</label>
                 <input 
                   type="number" min="0" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 text-center font-bold text-black text-sm transition-all" 
+                  className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 focus:outline-none text-center font-bold text-black text-sm transition-all" 
                   value={formData.children} 
                   onChange={e => handleChildCountChange(e.target.value)} 
                 />
