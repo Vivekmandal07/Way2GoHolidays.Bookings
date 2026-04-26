@@ -214,10 +214,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Children</label>
                 <input type="number" min="0" className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" value={formData.children} onChange={e => handleChildCountChange(e.target.value)} />
               </div>
-              <div className="col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Preferences</label>
-                <input type="text" className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} />
-              </div>
             </div>
 
             {parseInt(formData.children) > 0 && (
@@ -235,6 +231,11 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 ))}
               </div>
             )}
+
+            <div className="md:col-span-2 space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Preferences</label>
+              <input type="text" className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} />
+            </div>
           </div>
 
           <div className="pt-2 sticky bottom-0 bg-white pb-2">
