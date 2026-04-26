@@ -26,7 +26,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
     childAges: [],
     specialRequest: ''
   });
-  const [preferenceHeight, setPreferenceHeight] = useState(120);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -235,11 +234,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
 
             <div className="md:col-span-2">
               <div className="relative">
-                <textarea className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-0 font-medium text-sm text-slate-800 placeholder:text-slate-400 resize-y transition-all" placeholder="Special Request" value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} style={{height: `${preferenceHeight}px`}} />
-                <div className="absolute bottom-2 right-2 flex flex-col gap-1 pointer-events-auto">
-                  <button type="button" onClick={() => setPreferenceHeight(Math.max(60, preferenceHeight - 20))} className="w-8 h-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all shadow-md active:scale-90">↓</button>
-                  <button type="button" onClick={() => setPreferenceHeight(preferenceHeight + 20)} className="w-8 h-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all shadow-md active:scale-90">↑</button>
-                </div>
+                <textarea className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-0 font-medium text-sm text-slate-800 placeholder:text-slate-400 transition-all resize-y" placeholder="Special Request" value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} style={{minHeight: '120px'}} />
               </div>
             </div>
           </div>
