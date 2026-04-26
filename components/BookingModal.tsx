@@ -235,7 +235,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
 
             <div className="md:col-span-2">
               <div className="relative">
-                <textarea className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-0 font-medium text-sm text-slate-400 placeholder:text-slate-400 transition-all resize-y" placeholder="Special Request" value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} style={{minHeight: '120px'}} />
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Preferences</label>
+                <textarea className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:ring-0 font-medium text-sm text-slate-400 placeholder:text-slate-400 transition-all resize-y" placeholder="Special Request - Like Hotel Preferences(e.g., 3* or 4* or 5*) Candle Light Dinner or bed Decoration etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} style={{minHeight: '120px'}} />
               </div>
             </div>
           </div>
