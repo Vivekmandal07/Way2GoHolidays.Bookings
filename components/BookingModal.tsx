@@ -221,7 +221,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
             </div>
 
             {parseInt(formData.children) > 0 && (
-              <div className="md:col-span-2 bg-blue-50/10 p-3 rounded-2xl border border-blue-100 flex flex-wrap gap-3 animate-in fade-in duration-300 shadow-inner">
+              <div className="w-full bg-blue-50/10 p-3 rounded-2xl border border-blue-100 flex flex-wrap gap-3 animate-in fade-in duration-300 shadow-inner">
                 {formData.childAges.map((age, i) => (
                   <div key={i} className="flex flex-col space-y-1">
                     <span className="text-[8px] font-bold text-blue-500 uppercase ml-1 tracking-wider">Child {i+1} Age</span>
