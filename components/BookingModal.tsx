@@ -76,6 +76,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
       `*Phone:* ${fullPhoneNumber}\n` +
       `*Destination:* ${formData.destination}\n` +
       `*Travel Date:* ${formData.travelDate}\n` +
+      `*No of Rooms:* ${formData.rooms}\n` +
       `*Adults:* ${formData.pax}\n` +
       `*Children:* ${formData.children}${childAgesInfo}\n` +
       `*Special:* ${formData.specialRequest || 'None'}\n` +
