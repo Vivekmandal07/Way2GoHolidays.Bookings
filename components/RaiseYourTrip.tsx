@@ -125,7 +125,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Your Full Name</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
+                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
                 placeholder="Ex: John Doe" 
                 value={formData.name} 
                 onChange={e => setFormData({...formData, name: e.target.value})} 
@@ -159,7 +159,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Departure City</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
+                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
                 placeholder="Leaving from..." 
                 value={formData.leavingFrom} 
                 onChange={e => setFormData({...formData, leavingFrom: e.target.value})} 
@@ -171,7 +171,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <input
                 required
                 type="text"
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
                 placeholder="Going to..."
                 value={searchQueryDest}
                 onFocus={() => setIsDropdownOpenDest(true)}
@@ -194,7 +194,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Travel Date</label>
                 <input 
                   required type="date" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all" 
+                  className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all" 
                   value={formData.travelDate} 
                   onChange={e => setFormData({...formData, travelDate: e.target.value})} 
                 />
