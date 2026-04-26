@@ -79,7 +79,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
       `*No of Rooms:* ${formData.rooms}\n` +
       `*Adults:* ${formData.pax}\n` +
       `*Children:* ${formData.children}${childAgesInfo}\n` +
-      `*Special:* ${formData.specialRequest || 'None'}\n` +
+      `*Special Requests:* ${formData.specialRequest || 'None'}\n` +
       `--------------------------------\n`;
 
     const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
