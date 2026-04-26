@@ -209,10 +209,10 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:bg-orange-50 text-center block">Children</label>
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Children</label>
                 <input 
                   type="number" min="0" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 text-center font-bold text-black text-sm" 
+                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 text-center font-bold text-black text-sm transition-all" 
                   value={formData.children} 
                   onChange={e => handleChildCountChange(e.target.value)} 
                 />
