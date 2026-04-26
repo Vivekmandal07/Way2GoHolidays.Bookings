@@ -26,6 +26,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
     childAges: [],
     specialRequest: ''
   });
+  const [preferenceHeight, setPreferenceHeight] = useState(40);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -235,10 +236,10 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
             <div className="md:col-span-2 space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Preferences</label>
               <div className="relative">
-                <input type="text" className="w-full px-4 py-3 pr-24 bg-slate-100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} />
-                <div className="absolute bottom-2 right-2 flex gap-2">
-                  <button type="button" onClick={() => setFormData({...formData, specialRequest: formData.specialRequest.slice(0, -1)})} className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-lg transition-all shadow-md active:scale-90">−</button>
-                  <button type="button" onClick={() => setFormData({...formData, specialRequest: formData.specialRequest + ' '})} className="w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg transition-all shadow-md active:scale-90">+</button>
+                <textarea className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300 resize-none" placeholder="Honey Moon, Veg, etc." value={formData.specialRequest} onChange={e => setFormData({...formData, specialRequest: e.target.value})} style={{height: `${preferenceHeight}px`}} />
+                <div className="absolute bottom-2 right-2 flex flex-col gap-1">
+                  <button type="button" onClick={() => setPreferenceHeight(Math.max(40, preferenceHeight - 20))} className="w-8 h-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all shadow-md active:scale-90">↓</button>
+                  <button type="button" onClick={() => setPreferenceHeight(preferenceHeight + 20)} className="w-8 h-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all shadow-md active:scale-90">↑</button>
                 </div>
               </div>
             </div>
