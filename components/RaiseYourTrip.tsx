@@ -119,7 +119,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
         </div>
         
         <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 space-y-5 overflow-y-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 hover:bg-orange-50 sm:gap-6">
             
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Your Full Name</label>
@@ -194,7 +194,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Travel Date</label>
                 <input 
                   required type="date" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl hover:bg-orange-50outline-none font-bold text-black text-xs" 
+                  className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl hover:bg-orange-50 outline-none font-bold text-black text-xs" 
                   value={formData.travelDate} 
                   onChange={e => setFormData({...formData, travelDate: e.target.value})} 
                 />
