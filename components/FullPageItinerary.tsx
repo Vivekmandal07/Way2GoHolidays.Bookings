@@ -215,17 +215,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                      Your curated {pkg.duration} holiday to {pkg.destination}. Every detail designed for perfection.
                    </p>
                  </div>
-                 <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
+                  <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
-                    {isEditMode ? (
-                      <input 
-                        //value={editablePrice}
-                        //onChange={(e) => setEditablePrice(e.target.value)}
-                        className="text-xl md:text-2xl font-bold text-black tracking-tighter bg-white border-2 border-orange-200 rounded-lg px-2 py-1 outline-none w-full md:text-right"
-                      />
-                    ) : (
-                      <span className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tighter transition-all group-hover:text-blue-700 block">{editablePrice}</span>
-                    )}
+                    <span className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
                  </div>
               </div>
 
