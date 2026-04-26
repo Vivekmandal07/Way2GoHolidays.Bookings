@@ -214,6 +214,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                    <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed">
                      Your curated {pkg.duration} holiday to {pkg.destination}. Every detail designed for perfection.
                    </p>
+                   <p className="text-sm md:text-base text-slate-400 mt-4">
+                    <b>Note:</b> This Price is subject to availability at the time of booking & You can edit this day-wise itinerary as per your preferences after editing and as per your requirements price may increase or decrease when confirming the booking
+
+                   </p>
                  </div>
                   <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
