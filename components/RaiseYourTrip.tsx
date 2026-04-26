@@ -134,7 +134,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">WhatsApp Number</label>
-              <div className="flex items-stretch w-full border border-slate-200 rounded-xl focus-within:border-orange-500 focus-within:ring-4 focus-within:ring-orange-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm">
+              <div className="flex items-stretch w-full border-2 border-slate-200 rounded-xl focus-within:border-orange-500 focus-within:ring-4 focus-within:ring-orange-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm">
                 <select 
                   className="bg-slate-100/50 border-r border-slate-200 px-2 py-3 font-bold text-black outline-none cursor-pointer text-xs" 
                   value={selectedCountry.code} 
