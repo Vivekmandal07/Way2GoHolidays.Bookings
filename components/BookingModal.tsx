@@ -14,12 +14,13 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  const [formData, setFormData] = useState<Omit<BookingFormData, 'pax' | 'children'> & { pax: string, children: string }>({
+  const [formData, setFormData] = useState<Omit<BookingFormData, 'pax' | 'children' | 'rooms'> & { pax: string, children: string, rooms: string }>({
     name: '',
     email: '',
     phone: '',
     destination: '',
     travelDate: '',
+    rooms: '1',
     pax: '1',
     children: '0',
     childAges: [],
@@ -201,6 +202,14 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
             </div>
 
             <div className="md:col-span-2 grid grid-cols-4 gap-3">
+              <div className="col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Number of Rooms</label>
+                <input required type="number" min="1" className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black placeholder:text-slate-300" placeholder="Ex: 2" value={formData.rooms} onChange={e => setFormData({...formData, rooms: e.target.value})} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
+                <input required type="number" min="1" className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" value={formData.pax} onChange={e => setFormData({...formData, pax: e.target.value})} />
+              </div>
               <div className="space-y-1">
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
                 <input required type="number" min="1" className="w-full px-2 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-center font-bold text-black text-sm" value={formData.pax} onChange={e => setFormData({...formData, pax: e.target.value})} />

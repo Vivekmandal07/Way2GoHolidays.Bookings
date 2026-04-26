@@ -32,6 +32,7 @@ export interface BookingFormData {
   phone: string;
   destination: string;
   travelDate: string;
+  rooms: number;
   pax: number;
   children: number;
   childAges: string[];
