@@ -246,105 +246,105 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             )}
           </div>
 
-  <div className="space-y-1">
-  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Trip Type</label>
-  <select
-    required
-    className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
-    value={formData.tripType}
-    onChange={e => setFormData({ ...formData, tripType: e.target.value })}
-  >
-    <option value="" disabled>Select Trip Type</option>
-    <option value="Solo Trip">Solo Trip</option>
-    <option value="Honeymoon Trip">Honeymoon Trip</option>
-    <option value="Adventure Trip">Adventure Trip</option>
-    <option value="Group Tour">Group Tour</option>
-    <option value="Customized Package">Customized Package</option>
-  </select>
-</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Trip Type</label>
+              <select
+                required
+                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
+                value={formData.tripType}
+                onChange={e => setFormData({ ...formData, tripType: e.target.value })}
+              >
+                <option value="" disabled>Select Trip Type</option>
+                <option value="Solo Trip">Solo Trip</option>
+                <option value="Honeymoon Trip">Honeymoon Trip</option>
+                <option value="Adventure Trip">Adventure Trip</option>
+                <option value="Group Tour">Group Tour</option>
+                <option value="Customized Package">Customized Package</option>
+              </select>
+            </div>
 
-<div className="space-y-1">
-  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Hotel Catogery</label>
-  <select
-    required
-    className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
-    value={formData.hotelCategory}
-    onChange={e => setFormData({ ...formData, hotelCategory: e.target.value })}
-  >
-    <option value="" disabled>Select Hotel Category</option>
-    <option value="3 Star">3 Star</option>
-    <option value="4 Star">4 Star</option>
-    <option value="5 Star">5 Star</option>
-  </select>
-</div>
+            <div className="space-y-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Hotel Category</label>
+              <select
+                required
+                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
+                value={formData.hotelCategory}
+                onChange={e => setFormData({ ...formData, hotelCategory: e.target.value })}
+              >
+                <option value="" disabled>Select Hotel Category</option>
+                <option value="3 Star">3 Star</option>
+                <option value="4 Star">4 Star</option>
+                <option value="5 Star">5 Star</option>
+              </select>
+            </div>
 
-<div className="space-y-1">
-  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">No of Night</label>
-  <select
-    required
-    className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
-    value={formData.noOfNights}
-    onChange={e => setFormData({ ...formData, noOfNights: e.target.value })}
-  >
-    <option value="" disabled>Select Number of Nights</option>
-    <option value="1N/2D">1N/2D</option>
-    <option value="2N/3D">2N/3D</option>
-    <option value="3N/4D">3N/4D</option>
-    <option value="4N/5D">4N/5D</option>
-    <option value="5N/6D">5N/6D</option>
-    <option value="6N/7D">6N/7D</option>
-    <option value="7N/8D">7N/8D</option>
-    <option value="8N/9D">8N/9D</option>
-    <option value="9N/10D">9N/10D</option>
-    <option value="10N/11D">10N/11D</option>
-    <option value="11N/12D">11N/12D</option>
-    <option value="12N/13D">12N/13D</option>
-    <option value="13N/14D">13N/14D</option>
-    <option value="14N/15D">14N/15D</option>
-  </select>
-</div>
+            <div className="space-y-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">No of Night</label>
+              <select
+                required
+                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
+                value={formData.noOfNights}
+                onChange={e => setFormData({ ...formData, noOfNights: e.target.value })}
+              >
+                <option value="" disabled>Select Number of Nights</option>
+                <option value="1N/2D">1N/2D</option>
+                <option value="2N/3D">2N/3D</option>
+                <option value="3N/4D">3N/4D</option>
+                <option value="4N/5D">4N/5D</option>
+                <option value="5N/6D">5N/6D</option>
+                <option value="6N/7D">6N/7D</option>
+                <option value="7N/8D">7N/8D</option>
+                <option value="8N/9D">8N/9D</option>
+                <option value="9N/10D">9N/10D</option>
+                <option value="10N/11D">10N/11D</option>
+                <option value="11N/12D">11N/12D</option>
+                <option value="12N/13D">12N/13D</option>
+                <option value="13N/14D">13N/14D</option>
+                <option value="14N/15D">14N/15D</option>
+              </select>
+            </div>
 
-<div className="space-y-1">
-  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Budget Range</label>
-  <select
-    required
-    className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
-    value={formData.budgetRange}
-    onChange={e => setFormData({ ...formData, budgetRange: e.target.value })}
-  >
-    <option value="" disabled>Select Budget Range</option>
-    <option value="₹15K - ₹25K">₹15K - ₹25K</option>
-    <option value="₹25K - ₹35K">₹25K - ₹35K</option>
-    <option value="₹35K - ₹40K">₹35K - ₹45K</option>
-    <option value="₹45K - ₹50K">₹45K - ₹50K</option>
-    <option value="₹50K - ₹60K">₹50K - ₹60K</option>
-    <option value="₹60K - ₹75K">₹60K - ₹75K</option>
-    <option value="₹75K - ₹1L">₹75K - ₹1L</option>
-    <option value="Above ₹1L">Above ₹1L</option>
-    <option value="₹1L - ₹1.5L">₹1L - ₹1.5L</option>
-    <option value="₹1.5L - ₹2L">₹1.5L - ₹2L</option>
-      <option value="₹2L - ₹3L">₹2L - ₹3L</option>
-      <option value="₹3L - ₹5L">₹3L - ₹5L</option>
-      <option value="Above ₹5L">Above ₹5L</option>
+            <div className="space-y-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Budget Range</label>
+              <select
+                required
+                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
+                value={formData.budgetRange}
+                onChange={e => setFormData({ ...formData, budgetRange: e.target.value })}
+              >
+                <option value="" disabled>Select Budget Range</option>
+                <option value="₹15K - ₹25K">₹15K - ₹25K</option>
+                <option value="₹25K - ₹35K">₹25K - ₹35K</option>
+                <option value="₹35K - ₹40K">₹35K - ₹45K</option>
+                <option value="₹45K - ₹50K">₹45K - ₹50K</option>
+                <option value="₹50K - ₹60K">₹50K - ₹60K</option>
+                <option value="₹60K - ₹75K">₹60K - ₹75K</option>
+                <option value="₹75K - ₹1L">₹75K - ₹1L</option>
+                <option value="Above ₹1L">Above ₹1L</option>
+                <option value="₹1L - ₹1.5L">₹1L - ₹1.5L</option>
+                <option value="₹1.5L - ₹2L">₹1.5L - ₹2L</option>
+                <option value="₹2L - ₹3L">₹2L - ₹3L</option>
+                <option value="₹3L - ₹5L">₹3L - ₹5L</option>
+                <option value="Above ₹5L">Above ₹5L</option>
+              </select>
+            </div>
 
-  </select>
-</div>
-
-
-<div className="space-y-1">
-  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Flight Options</label>
-  <select
-    required
-    className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
-    value={formData.flightOptions}
-    onChange={e => setFormData({ ...formData, flightOptions: e.target.value })}
-  >
-    <option value="" disabled>Select Flight Options</option>
-    <option value="With Flight">With Flight</option>
-    <option value="Without Flight">Without Flight</option>
-    <option value="We Have Book the Flight">We Have Booked the</option>
-  </select>
-</div>
+            <div className="md:col-span-2 space-y-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Flight Options</label>
+              <select
+                required
+                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
+                value={formData.flightOptions}
+                onChange={e => setFormData({ ...formData, flightOptions: e.target.value })}
+              >
+                <option value="" disabled>Select Flight Options</option>
+                <option value="With Flight">With Flight</option>
+                <option value="Without Flight">Without Flight</option>
+                <option value="We Have Book the Flight">We Have Booked the</option>
+              </select>
+            </div>
+          </div>
 
 
           <div className="pt-2 sticky bottom-0 bg-white pb-2">
