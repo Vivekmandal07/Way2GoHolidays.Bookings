@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { PackageFormData } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
+const TRIP_TYPES = ['Solo Trip', 'Honeymoon Trip', 'Adventure Trip', 'Group Tour', 'Customized Package'];
+const HOTEL_CATEGORIES = ['3 Star', '4 Star', '5 Star'];
+const NIGHT_OPTIONS = ['1N/2D', '2N/3D', '3N/4D', '4N/5D', '5N/6D', '6N/7D', '7N/8D', '8N/9D', '9N/10D', '10N/11D', '11N/12D', '12N/13D', '13N/14D', '14N/15D'];
+const BUDGET_RANGES = ['₹15K - ₹25K', '₹25K - ₹35K', '₹35K - ₹45K', '₹45K - ₹50K', '₹50K - ₹60K', '₹60K - ₹75K', '₹75K - ₹1L', 'Above ₹1L', '₹1L - ₹1.5L', '₹1.5L - ₹2L', '₹2L - ₹3L', '₹3L - ₹5L', 'Above ₹5L'];
+const FLIGHT_OPTIONS = ['With Flight', 'Without Flight', 'We Have Booked the Flight'];
+
 interface RaiseYourTripProps {
   onClose: () => void;
 }
@@ -13,6 +19,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const [searchQueryDest, setSearchQueryDest] = useState('');
   const [isDropdownOpenDest, setIsDropdownOpenDest] = useState(false);
   const dropdownRefDest = React.useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState<Omit<PackageFormData, 'pax' | 'children'> & { pax: string, children: string }>({
     name: '',
@@ -57,6 +65,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRefDest.current && !dropdownRefDest.current.contains(event.target as Node)) {
         setIsDropdownOpenDest(false);
+      }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -246,103 +257,160 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
+          <div ref={dropdownRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1 relative">
               <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Trip Type</label>
-              <select
-                required
-                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
-                value={formData.tripType}
-                onChange={e => setFormData({ ...formData, tripType: e.target.value })}
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'tripType' ? null : 'tripType')}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
               >
-                <option value="" disabled>Select Trip Type</option>
-                <option value="Solo Trip">Solo Trip</option>
-                <option value="Honeymoon Trip">Honeymoon Trip</option>
-                <option value="Adventure Trip">Adventure Trip</option>
-                <option value="Group Tour">Group Tour</option>
-                <option value="Customized Package">Customized Package</option>
-              </select>
+                <span>{formData.tripType || 'Select Trip Type'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'tripType' && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {TRIP_TYPES.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors"
+                      onClick={() => {
+                        setFormData({ ...formData, tripType: option });
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Hotel Category</label>
-              <select
-                required
-                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
-                value={formData.hotelCategory}
-                onChange={e => setFormData({ ...formData, hotelCategory: e.target.value })}
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'hotelCategory' ? null : 'hotelCategory')}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
               >
-                <option value="" disabled>Select Hotel Category</option>
-                <option value="3 Star">3 Star</option>
-                <option value="4 Star">4 Star</option>
-                <option value="5 Star">5 Star</option>
-              </select>
+                <span>{formData.hotelCategory || 'Select Hotel Category'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'hotelCategory' && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {HOTEL_CATEGORIES.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors"
+                      onClick={() => {
+                        setFormData({ ...formData, hotelCategory: option });
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">No of Night</label>
-              <select
-                required
-                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
-                value={formData.noOfNights}
-                onChange={e => setFormData({ ...formData, noOfNights: e.target.value })}
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'noOfNights' ? null : 'noOfNights')}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
               >
-                <option value="" disabled>Select Number of Nights</option>
-                <option value="1N/2D">1N/2D</option>
-                <option value="2N/3D">2N/3D</option>
-                <option value="3N/4D">3N/4D</option>
-                <option value="4N/5D">4N/5D</option>
-                <option value="5N/6D">5N/6D</option>
-                <option value="6N/7D">6N/7D</option>
-                <option value="7N/8D">7N/8D</option>
-                <option value="8N/9D">8N/9D</option>
-                <option value="9N/10D">9N/10D</option>
-                <option value="10N/11D">10N/11D</option>
-                <option value="11N/12D">11N/12D</option>
-                <option value="12N/13D">12N/13D</option>
-                <option value="13N/14D">13N/14D</option>
-                <option value="14N/15D">14N/15D</option>
-              </select>
+                <span>{formData.noOfNights || 'Select Number of Nights'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'noOfNights' && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {NIGHT_OPTIONS.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors"
+                      onClick={() => {
+                        setFormData({ ...formData, noOfNights: option });
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Budget Range</label>
-              <select
-                required
-                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
-                value={formData.budgetRange}
-                onChange={e => setFormData({ ...formData, budgetRange: e.target.value })}
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'budgetRange' ? null : 'budgetRange')}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
               >
-                <option value="" disabled>Select Budget Range</option>
-                <option value="₹15K - ₹25K">₹15K - ₹25K</option>
-                <option value="₹25K - ₹35K">₹25K - ₹35K</option>
-                <option value="₹35K - ₹40K">₹35K - ₹45K</option>
-                <option value="₹45K - ₹50K">₹45K - ₹50K</option>
-                <option value="₹50K - ₹60K">₹50K - ₹60K</option>
-                <option value="₹60K - ₹75K">₹60K - ₹75K</option>
-                <option value="₹75K - ₹1L">₹75K - ₹1L</option>
-                <option value="Above ₹1L">Above ₹1L</option>
-                <option value="₹1L - ₹1.5L">₹1L - ₹1.5L</option>
-                <option value="₹1.5L - ₹2L">₹1.5L - ₹2L</option>
-                <option value="₹2L - ₹3L">₹2L - ₹3L</option>
-                <option value="₹3L - ₹5L">₹3L - ₹5L</option>
-                <option value="Above ₹5L">Above ₹5L</option>
-              </select>
+                <span>{formData.budgetRange || 'Select Budget Range'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'budgetRange' && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {BUDGET_RANGES.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors"
+                      onClick={() => {
+                        setFormData({ ...formData, budgetRange: option });
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="md:col-span-2 space-y-1">
+            <div className="md:col-span-2 space-y-1 relative">
               <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Flight Options</label>
-              <select
-                required
-                className={`w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
-                value={formData.flightOptions}
-                onChange={e => setFormData({ ...formData, flightOptions: e.target.value })}
+              <button
+                type="button"
+                onClick={() => setOpenDropdown(openDropdown === 'flightOptions' ? null : 'flightOptions')}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
               >
-                <option value="" disabled>Select Flight Options</option>
-                <option value="With Flight">With Flight</option>
-                <option value="Without Flight">Without Flight</option>
-                <option value="We Have Book the Flight">We Have Booked the</option>
-              </select>
+                <span>{formData.flightOptions || 'Select Flight Options'}</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'flightOptions' && (
+                <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-40 overflow-y-auto ring-1 ring-black/5">
+                  {FLIGHT_OPTIONS.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="w-full text-left px-5 py-3 hover:bg-orange-50 border-b border-slate-50 last:border-0 font-bold text-black text-xs transition-colors"
+                      onClick={() => {
+                        setFormData({ ...formData, flightOptions: option });
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
