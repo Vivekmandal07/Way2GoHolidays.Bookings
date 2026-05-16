@@ -93,7 +93,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-xl font-black text-slate-900 mb-2">Itinerary Saved!</h3>
+          <h3 className="text-xl font-black text-slate-900 mb-2">Itinerary Saved! -  Our Expert Will Connect You Soon</h3>
           <button onClick={onClose} className="w-full bg-orange-500 text-white py-3 rounded-xl font-bold transition-all shadow-xl">Close</button>
         </div>
       </div>
@@ -108,7 +108,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
         {/* Header Section */}
         <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0">
           <div>
-            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way - Raise!</h3>
+            <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way - Plan it Your Way!</h3>
             <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Write the Details & Plan Every Detail of Your Journey</p>
           </div>
           <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
