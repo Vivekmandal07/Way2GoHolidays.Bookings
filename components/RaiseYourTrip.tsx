@@ -263,7 +263,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'tripType' ? null : 'tripType')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.tripType ? 'text-black' : 'text-slate-400'}`}
               >
                 <span>{formData.tripType || 'Select Trip Type'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,7 +294,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'hotelCategory' ? null : 'hotelCategory')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.hotelCategory ? 'text-black' : 'text-slate-400'}`}
               >
                 <span>{formData.hotelCategory || 'Select Hotel Category'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -325,7 +325,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'noOfNights' ? null : 'noOfNights')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.noOfNights ? 'text-black' : 'text-slate-400'}`}
               >
                 <span>{formData.noOfNights || 'Select Number of Nights'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -356,7 +356,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'budgetRange' ? null : 'budgetRange')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.budgetRange ? 'text-black' : 'text-slate-400'}`}
               >
                 <span>{formData.budgetRange || 'Select Budget Range'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'flightOptions' ? null : 'flightOptions')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-xs transition-all flex items-center justify-between ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.flightOptions ? 'text-black' : 'text-slate-400'}`}
               >
                 <span>{formData.flightOptions || 'Select Flight Options'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
