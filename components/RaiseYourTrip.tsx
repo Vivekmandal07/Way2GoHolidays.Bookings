@@ -21,7 +21,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     pax: '1',
     children: '0',
     childAges: [],
-    travelDate: ''
+    travelDate: '',
+    tripType: '',
+    hotelCategory: '',
+    noOfNights: '',
+    budgetRange: '',
+    flightOptions: ''
   });
   const [clientPhone, setClientPhone] = useState('');
 
@@ -76,7 +81,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
       `*To:* ${formData.destination}\n` +
       `*Date:* ${formData.travelDate}\n` +
       `*Adults:* ${formData.pax}\n` +
-      `*Children:* ${formData.children}${childAgesInfo}\n`;
+      `*Children:* ${formData.children}${childAgesInfo}\n` +
+      `*Trip Type:* ${formData.tripType}\n` +
+      `*Hotel Category:* ${formData.hotelCategory}\n` +
+      `*Nights:* ${formData.noOfNights}\n` +
+      `*Budget:* ${formData.budgetRange}\n` +
+      `*Flight Options:* ${formData.flightOptions}\n\n`;
 
     const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(rawMsg)}`;
     window.open(whatsappUrl, '_blank');
@@ -236,12 +246,113 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             )}
           </div>
 
+  <div className="space-y-1">
+  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Trip Type</label>
+  <select
+    required
+    className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all"
+    value={formData.tripType}
+    onChange={e => setFormData({ ...formData, tripType: e.target.value })}
+  >
+    <option value="">Select Trip Type</option>
+    <option value="Solo Trip">Solo Trip</option>
+    <option value="Honeymoon Trip">Honeymoon Trip</option>
+    <option value="Adventure Trip">Adventure Trip</option>
+    <option value="Group Tour">Group Tour</option>
+    <option value="Customized Package">Customized Package</option>
+  </select>
+</div>
+
+<div className="space-y-1">
+  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Hotel Catogery</label>
+  <select
+    required
+    className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all"
+    value={formData.hotelCategory}
+    onChange={e => setFormData({ ...formData, hotelCategory: e.target.value })}
+  >
+    <option value="">Select Hotel Catogery</option>
+    <option value="3 Star">3 Star</option>
+    <option value="4 Star">4 Star</option>
+    <option value="5 Star">5 Star</option>
+  </select>
+</div>
+
+<div className="space-y-1">
+  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">No of Night</label>
+  <select
+    required
+    className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all"
+    value={formData.noOfNights}
+    onChange={e => setFormData({ ...formData, noOfNights: e.target.value })}
+  >
+    <option value="">Select No of N/D</option>
+    <option value="1N/2D">1N/</option>
+    <option value="2N/3D">2N/3D</option>
+    <option value="3N/4D">3N/4D</option>
+    <option value="4N/5D">4N/5D</option>
+    <option value="5N/6D">5N/6D</option>
+    <option value="6N/7D">6N/7D</option>
+    <option value="7N/8D">7N/8D</option>
+    <option value="8N/9D">8N/9D</option>
+    <option value="9N/10D">9N/10D</option>
+    <option value="10N/11D">10N/11D</option>
+    <option value="11N/12D">11N/12D</option>
+    <option value="12N/13D">12N/13D</option>
+    <option value="13N/14D">13N/14D</option>
+    <option value="14N/15D">14N/15D</option>
+  </select>
+</div>
+
+<div className="space-y-1">
+  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Budget Range</label>
+  <select
+    required
+    className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all"
+    value={formData.budgetRange}
+    onChange={e => setFormData({ ...formData, budgetRange: e.target.value })}
+  >
+    <option value="">Select Under Budget</option>
+    <option value="₹15K - ₹25K">₹15K - ₹25K</option>
+    <option value="₹25K - ₹35K">₹25K - ₹35K</option>
+    <option value="₹35K - ₹40K">₹35K - ₹45K</option>
+    <option value="₹45K - ₹50K">₹45K - ₹50K</option>
+    <option value="₹50K - ₹60K">₹50K - ₹60K</option>
+    <option value="₹60K - ₹75K">₹60K - ₹75K</option>
+    <option value="₹75K - ₹1L">₹75K - ₹1L</option>
+    <option value="Above ₹1L">Above ₹1L</option>
+    <option value="₹1L - ₹1.5L">₹1L - ₹1.5L</option>
+    <option value="₹1.5L - ₹2L">₹1.5L - ₹2L</option>
+      <option value="₹2L - ₹3L">₹2L - ₹3L</option>
+      <option value="₹3L - ₹5L">₹3L - ₹5L</option>
+      <option value="Above ₹5L">Above ₹5L</option>
+
+  </select>
+</div>
+
+
+<div className="space-y-1">
+  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Flight Options</label>
+  <select
+    required
+    className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all"
+    value={formData.flightOptions}
+    onChange={e => setFormData({ ...formData, flightOptions: e.target.value })}
+  >
+    <option value="">Select Flight Options</option>
+    <option value="With Flight">With Flight</option>
+    <option value="Without Flight">Without Flight</option>
+    <option value="We Have Book the Flight">We Have Booked the</option>
+  </select>
+</div>
+
+
           <div className="pt-2 sticky bottom-0 bg-white pb-2">
             <button 
               type="submit"
               className="w-full bg-[#F97316] text-white py-4 rounded-full font-black text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-orange-100/50 flex items-center justify-center space-x-3 uppercase tracking-widest"
             >
-              <span>Raise Trip Via WHATSAPP</span>
+              <span>Get Customize Package on WhatsApp</span>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.12.552 4.189 1.598 6.04L0 24l6.135-1.61a11.802 11.802 0 005.912 1.569h.005c6.638 0 12.039-5.404 12.042-12.041a11.79 11.79 0 00-3.483-8.498z"/></svg>
             </button>
           </div>

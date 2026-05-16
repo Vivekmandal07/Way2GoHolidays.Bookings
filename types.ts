@@ -47,6 +47,11 @@ export interface PackageFormData {
   children: number;
   childAges: string[];
   travelDate: string;
+  tripType: string;
+  hotelCategory: string;
+  noOfNights: string;
+  budgetRange: string;
+  flightOptions: string;
 }
 
 // Fix: Augmenting the React.JSX namespace directly within the global scope.
