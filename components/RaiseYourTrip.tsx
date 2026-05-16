@@ -254,7 +254,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     value={formData.tripType}
     onChange={e => setFormData({ ...formData, tripType: e.target.value })}
   >
-    <option value="">Select Trip Type</option>
+    <option value="" disabled hidden>Select Trip Type</option>
     <option value="Solo Trip">Solo Trip</option>
     <option value="Honeymoon Trip">Honeymoon Trip</option>
     <option value="Adventure Trip">Adventure Trip</option>
@@ -271,7 +271,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     value={formData.hotelCategory}
     onChange={e => setFormData({ ...formData, hotelCategory: e.target.value })}
   >
-    <option value="">Select Hotel Catogery</option>
+    <option value="" disabled hidden>Select Hotel Category</option>
     <option value="3 Star">3 Star</option>
     <option value="4 Star">4 Star</option>
     <option value="5 Star">5 Star</option>
@@ -286,8 +286,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     value={formData.noOfNights}
     onChange={e => setFormData({ ...formData, noOfNights: e.target.value })}
   >
-    <option value="">Select No of N/D</option>
-    <option value="1N/2D">1N/</option>
+    <option value="" disabled hidden>Select Number of Nights</option>
+    <option value="1N/2D">1N/2D</option>
     <option value="2N/3D">2N/3D</option>
     <option value="3N/4D">3N/4D</option>
     <option value="4N/5D">4N/5D</option>
@@ -312,7 +312,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     value={formData.budgetRange}
     onChange={e => setFormData({ ...formData, budgetRange: e.target.value })}
   >
-    <option value="">Select Under Budget</option>
+    <option value="" disabled hidden>Select Budget Range</option>
     <option value="₹15K - ₹25K">₹15K - ₹25K</option>
     <option value="₹25K - ₹35K">₹25K - ₹35K</option>
     <option value="₹35K - ₹40K">₹35K - ₹45K</option>
@@ -339,7 +339,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     value={formData.flightOptions}
     onChange={e => setFormData({ ...formData, flightOptions: e.target.value })}
   >
-    <option value="">Select Flight Options</option>
+    <option value="" disabled hidden>Select Flight Options</option>
     <option value="With Flight">With Flight</option>
     <option value="Without Flight">Without Flight</option>
     <option value="We Have Book the Flight">We Have Booked the</option>
