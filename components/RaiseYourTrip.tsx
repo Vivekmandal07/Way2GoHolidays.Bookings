@@ -270,7 +270,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                         type="button"
                         onClick={() => {
                           const prev = new Date(calendarDate);
-                          prev.setMonth(calendarDate.getMonth() - 1);
+                          prev.setMonth(calendarDate.getMonth());
                           setCalendarDate(prev);
                         }}
                         className="h-10 w-10 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-100 transition"
