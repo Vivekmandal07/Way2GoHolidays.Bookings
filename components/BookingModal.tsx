@@ -157,7 +157,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
       <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-700 my-auto max-h-[92vh] flex flex-col">
         
         {/* Header - More Compact */}
-        <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-blue-50/30 to-white border-b border-blue-100 shrink-0">
+        <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-blue-50/30 to-white border-b border-blue-100 shrink-0 rounded-t-3xl">
           <div>
             <h3 className="text-lg sm:text-2xl font-black text-[#0B1D4B] tracking-tight">Book Your Holiday</h3>
             <p className="text-blue-500 font-bold text-[9px] uppercase tracking-wider">Free & easy booking service</p>

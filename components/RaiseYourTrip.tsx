@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { PackageFormData } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
-const TRIP_TYPES = ['Solo Trip', 'Honeymoon Trip', 'Adventure Trip', 'Group Tour', 'Customized Package'];
-const HOTEL_CATEGORIES = ['3 Star', '4 Star', '5 Star'];
+const TRIP_TYPES = ['Solo Trip', 'Honeymoon Trip', 'Family Trip', 'Customized Package', 'Adventure Trip', 'Group Tour', 'Weekend Getaway', 'Luxury Vacation', 'Budget Travel', 'Cultural Exploration', 'Beach Holiday', 'Nature Retreat', 'Road Trip', 'Cruise Vacation', 'Wellness Retreat'];
+const HOTEL_CATEGORIES = ['2 Star', '3 Star', '4 Star', '5 Star'];
 const NIGHT_OPTIONS = ['1N/2D', '2N/3D', '3N/4D', '4N/5D', '5N/6D', '6N/7D', '7N/8D', '8N/9D', '9N/10D', '10N/11D', '11N/12D', '12N/13D', '13N/14D', '14N/15D'];
-const BUDGET_RANGES = ['₹15K - ₹25K', '₹25K - ₹35K', '₹35K - ₹45K', '₹45K - ₹50K', '₹50K - ₹60K', '₹60K - ₹75K', '₹75K - ₹1L', 'Above ₹1L', '₹1L - ₹1.5L', '₹1.5L - ₹2L', '₹2L - ₹3L', '₹3L - ₹5L', 'Above ₹5L'];
+const BUDGET_RANGES = ['₹15K - ₹25K', '₹25K - ₹35K', '₹35K - ₹45K', '₹45K - ₹50K', '₹50K - ₹60K', '₹60K - ₹75K', '₹75K - ₹1L', '₹1L - ₹1.5L', '₹1.5L - ₹2L', '₹2L - ₹3L', '₹3L - ₹5L', '₹5L - ₹7L', '₹7L - ₹10L', '₹10L+', 'Customazation Budget'];
 const FLIGHT_OPTIONS = ['With Flight', 'Without Flight', 'We Have Booked the Flight'];
 
 interface RaiseYourTripProps {
