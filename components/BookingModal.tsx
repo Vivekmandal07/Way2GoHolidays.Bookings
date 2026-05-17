@@ -157,7 +157,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 </select>
                 <input 
                   required type="tel" 
-                  className="flex-grow px-5 py-3 bg-transparent  font-bold text-sm text-black placeholder:text-slate-300"
+                  className="flex-grow px-5 py-3 bg-transparent font-bold text-sm text-black placeholder:text-slate-300 focus:outline-none"
                   placeholder="7303402841"
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
