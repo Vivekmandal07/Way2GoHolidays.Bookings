@@ -18,7 +18,10 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const allDestinations = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
   const [searchQueryDest, setSearchQueryDest] = useState('');
   const [isDropdownOpenDest, setIsDropdownOpenDest] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [calendarDate, setCalendarDate] = useState(new Date());
   const dropdownRefDest = React.useRef<HTMLDivElement>(null);
+  const datePickerRef = React.useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -69,10 +72,40 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
       }
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+        setIsDatePickerOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const formatDateString = (date: Date) => date.toISOString().split('T')[0];
+  const formatDisplayDate = (dateString: string) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: '2-digit' });
+  };
+
+  const getMonthGrid = (year: number, month: number) => {
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const prevMonthTotalDays = new Date(year, month, 0).getDate();
+    const grid: Array<{ day: number; inMonth: boolean; monthOffset: number }> = [];
+
+    for (let offset = 0; offset < firstDay; offset += 1) {
+      grid.push({ day: prevMonthTotalDays - firstDay + offset + 1, inMonth: false, monthOffset: -1 });
+    }
+
+    for (let day = 1; day <= totalDays; day += 1) {
+      grid.push({ day, inMonth: true, monthOffset: 0 });
+    }
+
+    while (grid.length < 42) {
+      grid.push({ day: grid.length - firstDay - totalDays + 1, inMonth: false, monthOffset: 1 });
+    }
+
+    return grid;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,14 +244,113 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             </div>
 
             <div className="md:col-span-2 grid grid-cols-3 gap-3">
-              <div className="space-y-1">
+              <div className="space-y-1 relative" ref={datePickerRef}>
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Travel Date</label>
-                <input 
-                  required type="date" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all" 
-                  value={formData.travelDate} 
-                  onChange={e => setFormData({...formData, travelDate: e.target.value})} 
-                />
+                <div className="relative">
+                  <input
+                    required
+                    type="text"
+                    readOnly
+                    className="w-full px-2 py-3 pr-12 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all cursor-pointer"
+                    placeholder="DD/MM/YYYY"
+                    value={formatDisplayDate(formData.travelDate)}
+                    onFocus={() => setIsDatePickerOpen(true)}
+                    onClick={() => setIsDatePickerOpen(true)}
+                  />
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </span>
+                </div>
+                {isDatePickerOpen && (
+                  <div className="absolute left-0 right-0 z-[110] mt-3 bg-white border border-slate-200 rounded-3xl shadow-2xl p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const prev = new Date(calendarDate);
+                          prev.setMonth(calendarDate.getMonth() - 1);
+                          setCalendarDate(prev);
+                        }}
+                        className="h-10 w-10 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-100 transition"
+                      >
+                        ‹
+                      </button>
+                      <div className="text-sm font-black uppercase tracking-[0.22em] text-slate-700">Today</div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = new Date(calendarDate);
+                          next.setMonth(calendarDate.getMonth() + 1);
+                          setCalendarDate(next);
+                        }}
+                        className="h-10 w-10 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-100 transition"
+                      >
+                        ›
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      {(() => {
+                        const nextMonth = new Date(calendarDate);
+                        nextMonth.setMonth(calendarDate.getMonth() + 1);
+                        const daysFirst = getMonthGrid(calendarDate.getFullYear(), calendarDate.getMonth());
+                        const daysNext = getMonthGrid(nextMonth.getFullYear(), nextMonth.getMonth());
+                        const selectedDate = formData.travelDate ? new Date(formData.travelDate) : null;
+
+                        const renderMonth = (monthDate: Date, days: Array<{ day: number; inMonth: boolean; monthOffset: number }>) => (
+                          <div className="space-y-3">
+                            <div className="text-center text-sm font-bold text-slate-900">
+                              {monthDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                            </div>
+                            <div className="grid grid-cols-7 gap-1 text-[10px] uppercase text-slate-400">
+                              {['Su','Mo','Tu','We','Th','Fr','Sa'].map(day => (
+                                <div key={day} className="text-center font-semibold">{day}</div>
+                              ))}
+                            </div>
+                            <div className="grid grid-cols-7 gap-1">
+                              {days.map((cell, index) => {
+                                const cellDate = new Date(monthDate.getFullYear(), monthDate.getMonth() + cell.monthOffset, cell.day);
+                                const isSelected = selectedDate && selectedDate.toDateString() === cellDate.toDateString();
+                                return (
+                                  <button
+                                    key={`${monthDate.getMonth()}-${index}`}
+                                    type="button"
+                                    onClick={() => {
+                                      setFormData({ ...formData, travelDate: formatDateString(cellDate) });
+                                      setIsDatePickerOpen(false);
+                                    }}
+                                    className={`h-10 rounded-2xl text-xs font-bold transition ${cell.inMonth ? 'cursor-pointer' : 'cursor-default'} ${isSelected ? 'bg-orange-500 text-white' : cell.inMonth ? 'text-slate-700 hover:bg-orange-50' : 'text-slate-300'} ${cell.inMonth ? '' : 'bg-slate-50'}`}
+                                  >
+                                    {cell.day}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+
+                        return (
+                          <>
+                            {renderMonth(calendarDate, daysFirst)}
+                            {renderMonth(nextMonth, daysNext)}
+                          </>
+                        );
+                      })()}
+                    </div>
+
+                    <div className="flex justify-end mt-4">
+                      <button
+                        type="button"
+                        onClick={() => setIsDatePickerOpen(false)}
+                        className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-200 transition"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="space-y-1">
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
