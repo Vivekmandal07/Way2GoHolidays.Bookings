@@ -166,7 +166,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
       <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-visible animate-in zoom-in duration-700 my-auto max-h-[92vh] flex flex-col">
         
         {/* Header Section */}
-        <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0">
+        <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0 rounded-t-3xl">
           <div>
             <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way - Plan it Your Way!</h3>
             <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Write the Details & Plan Every Detail of Your Journey</p>
