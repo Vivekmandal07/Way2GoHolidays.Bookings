@@ -48,7 +48,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
   const formatDateString = (date: Date) => date.toISOString().split('T')[0];
   const formatDisplayDate = (dateString: string) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
+    return new Date(dateString).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: '2-digit' });
   };
 
   const getMonthGrid = (year: number, month: number) => {
