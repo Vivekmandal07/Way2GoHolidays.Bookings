@@ -302,7 +302,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                       const renderMonth = (monthDate: Date, days: Array<{ day: number; inMonth: boolean; monthOffset: number }>) => (
                         <div className="space-y-3">
                           <div className="text-center text-sm font-bold text-slate-900">
-                            {monthDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                            {monthDate.toLocaleDateString('default', { month: 'short', year: 'numeric' })}
                           </div>
                           <div className="grid grid-cols-7 gap-1 text-[10px] uppercase text-slate-400">
                             {['Su','Mo','Tu','We','Th','Fr','Sa'].map(day => (
