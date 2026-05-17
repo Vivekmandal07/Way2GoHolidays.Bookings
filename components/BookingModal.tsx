@@ -234,22 +234,29 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
 
             <div className="space-y-1 relative" ref={datePickerRef}>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Travel Date</label>
-              <input
-                required
-                type="text"
-                readOnly
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black cursor-pointer"
-                placeholder="DD/MM/YYYY"
-                value={formatDisplayDate(formData.travelDate)}
-                onFocus={() => {
-                  setIsDatePickerOpen(true);
-                  setIsDropdownOpen(false);
-                }}
-                onClick={() => {
-                  setIsDatePickerOpen(true);
-                  setIsDropdownOpen(false);
-                }}
-              />
+              <div className="relative">
+                <input
+                  required
+                  type="text"
+                  readOnly
+                  className="w-full px-5 py-3 pr-14 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black cursor-pointer"
+                  placeholder="DD/MM/YYYY"
+                  value={formatDisplayDate(formData.travelDate)}
+                  onFocus={() => {
+                    setIsDatePickerOpen(true);
+                    setIsDropdownOpen(false);
+                  }}
+                  onClick={() => {
+                    setIsDatePickerOpen(true);
+                    setIsDropdownOpen(false);
+                  }}
+                />
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </span>
+              </div>
               {isDatePickerOpen && (
                 <div className="absolute left-0 right-0 z-[110] mt-3 bg-white border border-slate-200 rounded-3xl shadow-2xl p-4">
                   <div className="flex items-center justify-between mb-4">
