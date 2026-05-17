@@ -185,7 +185,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Your Full Name</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
+                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-400" 
                 placeholder="Ex: John Doe" 
                 value={formData.name} 
                 onChange={e => setFormData({...formData, name: e.target.value})} 
