@@ -11,8 +11,11 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [calendarDate, setCalendarDate] = useState(new Date());
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const datePickerRef = useRef<HTMLDivElement>(null);
   
   const [formData, setFormData] = useState<Omit<BookingFormData, 'pax' | 'children' | 'rooms'> & { pax: string, children: string, rooms: string }>({
     name: '',
@@ -29,13 +32,37 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const isInsideDropdown = dropdownRef.current?.contains(target);
+      const isInsideDatePicker = datePickerRef.current?.contains(target);
+
+      if (!isInsideDropdown && !isInsideDatePicker) {
         setIsDropdownOpen(false);
+        setIsDatePickerOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const formatDateString = (date: Date) => date.toISOString().split('T')[0];
+  const formatDisplayDate = (dateString: string) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
+  };
+
+  const getMonthGrid = (year: number, month: number) => {
+    const days: Array<number | null> = [];
+    const firstDay = new Date(year, month, 1).getDay();
+    for (let i = 0; i < firstDay; i += 1) {
+      days.push(null);
+    }
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    for (let day = 1; day <= totalDays; day += 1) {
+      days.push(day);
+    }
+    return days;
+  };
 
   const filteredDestinations = allDestinations.filter(dest =>
     dest.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -197,9 +224,104 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               )}
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 relative" ref={datePickerRef}>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Travel Date</label>
-              <input required type="date" className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500  font-bold text-sm text-black" value={formData.travelDate} onChange={e => setFormData({...formData, travelDate: e.target.value})} />
+              <input
+                required
+                type="text"
+                readOnly
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black cursor-pointer"
+                placeholder="Select travel date"
+                value={formatDisplayDate(formData.travelDate)}
+                onFocus={() => {
+                  setIsDatePickerOpen(true);
+                  setIsDropdownOpen(false);
+                }}
+                onClick={() => {
+                  setIsDatePickerOpen(true);
+                  setIsDropdownOpen(false);
+                }}
+              />
+              {isDatePickerOpen && (
+                <div className="absolute left-0 right-0 z-[110] mt-3 bg-white border border-slate-200 rounded-3xl shadow-2xl p-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  {(() => {
+                    const nextMonth = new Date(calendarDate);
+                    nextMonth.setMonth(calendarDate.getMonth() + 1);
+                    const daysFirst = getMonthGrid(calendarDate.getFullYear(), calendarDate.getMonth());
+                    const daysNext = getMonthGrid(nextMonth.getFullYear(), nextMonth.getMonth());
+                    const selectedDate = formData.travelDate ? new Date(formData.travelDate) : null;
+
+                    const renderMonth = (monthDate: Date, days: Array<number | null>, showControls: boolean) => (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          {showControls ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = new Date(calendarDate);
+                                next.setMonth(calendarDate.getMonth() - 1);
+                                setCalendarDate(next);
+                              }}
+                              className="text-xs font-bold text-slate-500 hover:text-slate-900"
+                            >
+                              Prev
+                            </button>
+                          ) : <div className="w-14" />}
+                          <div className="text-sm font-bold text-slate-700">
+                            {monthDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                          </div>
+                          {showControls ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = new Date(calendarDate);
+                                next.setMonth(calendarDate.getMonth() + 1);
+                                setCalendarDate(next);
+                              }}
+                              className="text-xs font-bold text-slate-500 hover:text-slate-900"
+                            >
+                              Next
+                            </button>
+                          ) : <div className="w-14" />}
+                        </div>
+                        <div className="grid grid-cols-7 gap-1 text-[10px] uppercase text-slate-400">
+                          {['Su','Mo','Tu','We','Th','Fr','Sa'].map(day => (
+                            <div key={day} className="text-center font-semibold">{day}</div>
+                          ))}
+                        </div>
+                        <div className="grid grid-cols-7 gap-1">
+                          {days.map((day, index) => {
+                            const isSelected = day && selectedDate && selectedDate.getFullYear() === monthDate.getFullYear() && selectedDate.getMonth() === monthDate.getMonth() && selectedDate.getDate() === day;
+                            return (
+                              <button
+                                key={`${monthDate.getMonth()}-${index}`}
+                                type="button"
+                                disabled={!day}
+                                onClick={() => {
+                                  if (!day) return;
+                                  const selected = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+                                  setFormData({ ...formData, travelDate: formatDateString(selected) });
+                                  setIsDatePickerOpen(false);
+                                }}
+                                className={`h-9 rounded-2xl text-xs font-bold ${day ? 'text-slate-700 hover:bg-blue-50' : 'text-transparent'} ${isSelected ? 'bg-blue-500 text-white' : ''}`}
+                              >
+                                {day || '0'}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+
+                    return (
+                      <>
+                        {renderMonth(calendarDate, daysFirst, true)}
+                        {renderMonth(nextMonth, daysNext, false)}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
 
             <div className="md:col-span-2 grid grid-cols-4 gap-3">
