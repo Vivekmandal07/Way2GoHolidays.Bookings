@@ -264,7 +264,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   </span>
                 </div>
                 {isDatePickerOpen && (
-                  <div className=" top-full z-[110] mt-3 w-[min(46rem,calc(100vw-1.5rem))] -translate-x-1/8 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5">
+                  <div className=" top-full z-[100] mt-3 w-[min(46rem,calc(100vw-1.5rem))] -translate-x-1/6 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5">
                     <div className="flex items-center justify-between mb-5">
                       <button
                         type="button"
