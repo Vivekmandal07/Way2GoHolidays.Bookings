@@ -239,7 +239,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                 type="text"
                 readOnly
                 className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 font-bold text-sm text-black cursor-pointer"
-                placeholder="Select travel date"
+                placeholder="DD/MM/YYYY"
                 value={formatDisplayDate(formData.travelDate)}
                 onFocus={() => {
                   setIsDatePickerOpen(true);
