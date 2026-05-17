@@ -264,8 +264,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   </span>
                 </div>
                 {isDatePickerOpen && (
-                  <div className="absolute left-0 right-0 z-[110] mt-3 bg-white border border-slate-200 rounded-3xl shadow-2xl p-4">
-                    <div className="flex items-center justify-between mb-4">
+                  <div className="absolute left-1/2 top-full z-[110] mt-3 w-[min(46rem,calc(100vw-1.5rem))] -translate-x-1/2 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5">
+                    <div className="flex items-center justify-between mb-5">
                       <button
                         type="button"
                         onClick={() => {
@@ -291,7 +291,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       {(() => {
                         const nextMonth = new Date(calendarDate);
                         nextMonth.setMonth(calendarDate.getMonth() + 1);
@@ -300,16 +300,16 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                         const selectedDate = formData.travelDate ? new Date(formData.travelDate) : null;
 
                         const renderMonth = (monthDate: Date, days: Array<{ day: number; inMonth: boolean; monthOffset: number }>) => (
-                          <div className="space-y-3">
-                            <div className="text-center text-sm font-bold text-slate-900">
+                          <div className="space-y-4 rounded-3xl border border-slate-100 p-4">
+                            <div className="text-center text-base font-extrabold text-slate-900">
                               {monthDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
                             </div>
-                            <div className="grid grid-cols-7 gap-1 text-[10px] uppercase text-slate-400">
+                            <div className="grid grid-cols-7 gap-2 text-[11px] uppercase text-slate-500">
                               {['Su','Mo','Tu','We','Th','Fr','Sa'].map(day => (
                                 <div key={day} className="text-center font-semibold">{day}</div>
                               ))}
                             </div>
-                            <div className="grid grid-cols-7 gap-1">
+                            <div className="grid grid-cols-7 gap-2">
                               {days.map((cell, index) => {
                                 const cellDate = new Date(monthDate.getFullYear(), monthDate.getMonth() + cell.monthOffset, cell.day);
                                 const isSelected = selectedDate && selectedDate.toDateString() === cellDate.toDateString();
@@ -321,7 +321,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                                       setFormData({ ...formData, travelDate: formatDateString(cellDate) });
                                       setIsDatePickerOpen(false);
                                     }}
-                                    className={`h-10 rounded-2xl text-xs font-bold transition ${cell.inMonth ? 'cursor-pointer' : 'cursor-default'} ${isSelected ? 'bg-orange-500 text-white' : cell.inMonth ? 'text-slate-700 hover:bg-orange-50' : 'text-slate-300'} ${cell.inMonth ? '' : 'bg-slate-50'}`}
+                                    className={`h-12 rounded-3xl text-sm font-semibold transition ${cell.inMonth ? 'cursor-pointer' : 'cursor-default'} ${isSelected ? 'bg-orange-500 text-white' : cell.inMonth ? 'text-slate-700 hover:bg-orange-50' : 'text-slate-300'} ${cell.inMonth ? 'bg-white' : 'bg-slate-50'}`}
                                   >
                                     {cell.day}
                                   </button>
