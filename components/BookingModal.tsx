@@ -142,17 +142,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-              <input 
-                required type="email" 
-                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20  transition-all font-bold text-sm text-black placeholder:text-slate-300"
-                placeholder="way2goholidays.bookings@gmail.com"
-                value={formData.email}
-                onChange={e => setFormData({...formData, email: e.target.value})}
-              />
-            </div>
-
             <div className="md:col-span-2 space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">WhatsApp Number</label>
               <div className="flex items-stretch border-2 border-slate-200 rounded-xl focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm">
@@ -174,6 +163,17 @@ const BookingModal: React.FC<BookingModalProps> = ({ onClose }) => {
                   onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
                 />
               </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+              <input 
+                required type="email" 
+                className="w-full px-5 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50/20  transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                placeholder="way2goholidays.bookings@gmail.com"
+                value={formData.email}
+                onChange={e => setFormData({...formData, email: e.target.value})}
+              />
             </div>
 
             <div className="relative space-y-1" ref={dropdownRef}>
