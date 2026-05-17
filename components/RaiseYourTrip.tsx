@@ -157,7 +157,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-700 my-auto max-h-[92vh] flex flex-col">
+      <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-visible animate-in zoom-in duration-700 my-auto max-h-[92vh] flex flex-col">
         
         {/* Header Section */}
         <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0">
