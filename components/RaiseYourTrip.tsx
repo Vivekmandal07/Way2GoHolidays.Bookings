@@ -35,6 +35,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const [viewMode, setViewMode] = useState<'form' | 'queries'>('form');
   const [raisedQueries, setRaisedQueries] = useState<RaisedQuery[]>([]);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const allDestinations = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
   const [searchQueryDest, setSearchQueryDest] = useState('');
   const [isDropdownOpenDest, setIsDropdownOpenDest] = useState(false);
@@ -75,6 +76,52 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
 
   const saveQueriesToStorage = (queries: RaisedQuery[]) => {
     localStorage.setItem('raisedQueries', JSON.stringify(queries));
+  };
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!clientPhone.trim()) errors.phone = 'Phone number is required';
+    if (!formData.leavingFrom.trim()) errors.leavingFrom = 'Departure city is required';
+    if (!formData.destination.trim()) errors.destination = 'Destination is required';
+    if (!formData.travelDate) errors.travelDate = 'Travel date is required';
+    if (!formData.pax || parseInt(formData.pax) < 1) errors.pax = 'At least 1 adult is required';
+    if (!formData.tripType) errors.tripType = 'Trip type is required';
+    if (!formData.hotelCategory) errors.hotelCategory = 'Hotel category is required';
+    if (!formData.noOfNights) errors.noOfNights = 'Number of nights is required';
+    if (!formData.budgetRange) errors.budgetRange = 'Budget range is required';
+    if (!formData.flightOptions) errors.flightOptions = 'Flight options is required';
+
+    // Validate child ages if children count > 0
+    if (parseInt(formData.children) > 0) {
+      const childrenCount = parseInt(formData.children);
+      for (let i = 0; i < childrenCount; i++) {
+        if (!formData.childAges[i] || formData.childAges[i].trim() === '') {
+          errors[`childAge${i}`] = `Child ${i + 1} age is required`;
+        }
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const isFormValid = (): boolean => {
+    return (
+      formData.name.trim() !== '' &&
+      clientPhone.trim() !== '' &&
+      formData.leavingFrom.trim() !== '' &&
+      formData.destination.trim() !== '' &&
+      formData.travelDate !== '' &&
+      parseInt(formData.pax) >= 1 &&
+      formData.tripType !== '' &&
+      formData.hotelCategory !== '' &&
+      formData.noOfNights !== '' &&
+      formData.budgetRange !== '' &&
+      formData.flightOptions !== '' &&
+      (parseInt(formData.children) === 0 || formData.childAges.every(age => age.trim() !== ''))
+    );
   };
 
   const deleteQuery = (id: string) => {
@@ -157,10 +204,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.destination) {
-      alert('Please select a destination from the list.');
+    
+    // Validate all fields
+    if (!validateForm()) {
       return;
     }
+
     const fullPhoneNumber = `${selectedCountry.code}${clientPhone}`;
     const childAgesInfo = formData.childAges.length > 0 
       ? `\n*Child Ages:* ${formData.childAges.join(', ')}` 
@@ -436,16 +485,20 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Your Full Name</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-400" 
+                className={`w-full px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-400 ${validationErrors.name ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                 placeholder="Ex: John Doe" 
                 value={formData.name} 
-                onChange={e => setFormData({...formData, name: e.target.value})} 
+                onChange={e => {
+                  setFormData({...formData, name: e.target.value});
+                  if (validationErrors.name) setValidationErrors({...validationErrors, name: ''});
+                }} 
               />
+              {validationErrors.name && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.name}</p>}
             </div>
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">WhatsApp Number</label>
-              <div className="flex items-stretch w-full border-2 border-slate-200 rounded-xl focus-within:border-orange-500 focus-within:ring-4 focus-within:ring-orange-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm">
+              <div className={`flex items-stretch w-full border-2 rounded-xl focus-within:ring-4 focus-within:ring-orange-50/20 transition-all overflow-hidden bg-slate-50/50 shadow-sm ${validationErrors.phone ? 'border-red-500 focus-within:border-red-500' : 'border-slate-200 focus-within:border-orange-500'}`}>
                 <select 
                   className="bg-slate-100/50 border-r border-slate-200 px-2 py-3 font-bold text-black outline-none cursor-pointer text-xs" 
                   value={selectedCountry.code} 
@@ -461,20 +514,28 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   className="flex-grow px-5 py-3 bg-transparent outline-none font-bold text-sm text-black placeholder:text-slate-300 min-w-0" 
                   placeholder="7303402841" 
                   value={clientPhone} 
-                  onChange={e => setClientPhone(e.target.value.replace(/\D/g, ''))} 
+                  onChange={e => {
+                    setClientPhone(e.target.value.replace(/\D/g, ''));
+                    if (validationErrors.phone) setValidationErrors({...validationErrors, phone: ''});
+                  }}
                 />
               </div>
+              {validationErrors.phone && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.phone}</p>}
             </div>
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Departure City</label>
               <input 
                 required type="text" 
-                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300" 
+                className={`w-full px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300 ${validationErrors.leavingFrom ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                 placeholder="Leaving from..." 
                 value={formData.leavingFrom} 
-                onChange={e => setFormData({...formData, leavingFrom: e.target.value})} 
+                onChange={e => {
+                  setFormData({...formData, leavingFrom: e.target.value});
+                  if (validationErrors.leavingFrom) setValidationErrors({...validationErrors, leavingFrom: ''});
+                }} 
               />
+              {validationErrors.leavingFrom && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.leavingFrom}</p>}
             </div>
 
             <div className="relative space-y-1" ref={dropdownRefDest}>
@@ -482,11 +543,15 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <input
                 required
                 type="text"
-                className="w-full px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300"
+                className={`w-full px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none transition-all font-bold text-sm text-black placeholder:text-slate-300 ${validationErrors.destination ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                 placeholder="Going to..."
                 value={searchQueryDest}
                 onFocus={() => setIsDropdownOpenDest(true)}
-                onChange={e => { setSearchQueryDest(e.target.value); setIsDropdownOpenDest(true); }}
+                onChange={e => { 
+                  setSearchQueryDest(e.target.value); 
+                  setIsDropdownOpenDest(true);
+                  if (validationErrors.destination) setValidationErrors({...validationErrors, destination: ''});
+                }}
               />
 
               {isDropdownOpenDest && (
@@ -498,6 +563,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.destination && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.destination}</p>}
             </div>
 
             <div className="md:col-span-2 grid grid-cols-3 gap-3">
@@ -508,7 +574,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                     required
                     type="text"
                     readOnly
-                    className="w-full px-2 py-3 pr-12 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all cursor-pointer"
+                    className={`w-full px-2 py-3 pr-12 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-black text-xs transition-all cursor-pointer ${validationErrors.travelDate ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                     placeholder="DD/MM/YYYY"
                     value={formatDisplayDate(formData.travelDate)}
                     onFocus={() => setIsDatePickerOpen(true)}
@@ -520,6 +586,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                     </svg>
                   </span>
                 </div>
+                {validationErrors.travelDate && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.travelDate}</p>}
                 {isDatePickerOpen && (
                   <div className="  mt-3 w-[min(46rem,calc(100vw-1.5rem))] -translate-x-1/6 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5">
                     <div className="flex items-center justify-between mb-5">
@@ -613,10 +680,14 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Adults</label>
                 <input 
                   required type="number" min="1" 
-                  className="w-full px-2 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 focus:outline-none text-center font-bold text-black text-sm transition-all" 
+                  className={`w-full px-2 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 focus:outline-none text-center font-bold text-black text-sm transition-all ${validationErrors.pax ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                   value={formData.pax} 
-                  onChange={e => setFormData({...formData, pax: e.target.value})} 
+                  onChange={e => {
+                    setFormData({...formData, pax: e.target.value});
+                    if (validationErrors.pax) setValidationErrors({...validationErrors, pax: ''});
+                  }} 
                 />
+                {validationErrors.pax && <p className="text-xs text-red-500 font-bold text-center">{validationErrors.pax}</p>}
               </div>
               <div className="space-y-1">
                 <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center block">Children</label>
@@ -633,13 +704,17 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <div className="md:col-span-2 bg-orange-50/10 p-3 rounded-2xl border border-orange-100 flex flex-wrap gap-3 animate-in fade-in duration-300 shadow-inner">
                 {formData.childAges.map((age, i) => (
                   <div key={i} className="flex flex-col space-y-1">
-                    <span className="text-[8px] font-bold text-orange-500 uppercase ml-1 tracking-wider">Child {i+1}</span>
+                    <span className={`text-[8px] font-bold uppercase ml-1 tracking-wider ${validationErrors[`childAge${i}`] ? 'text-red-500' : 'text-orange-500'}`}>Child {i+1}</span>
                     <input 
                       required type="number" min="0" max="17" 
-                      className="w-14 px-2 py-2 border border-slate-200 rounded-lg text-center font-bold text-xs text-black focus:border-orange-500 outline-none bg-white shadow-sm" 
+                      className={`w-14 px-2 py-2 border rounded-lg text-center font-bold text-xs text-black outline-none bg-white shadow-sm ${validationErrors[`childAge${i}`] ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-orange-500'}`}
                       value={age} 
-                      onChange={e => handleChildAgeChange(i, e.target.value)} 
+                      onChange={e => {
+                        handleChildAgeChange(i, e.target.value);
+                        if (validationErrors[`childAge${i}`]) setValidationErrors({...validationErrors, [`childAge${i}`]: ''});
+                      }}
                     />
+                    {validationErrors[`childAge${i}`] && <p className="text-[9px] text-red-500 font-bold text-center">{validationErrors[`childAge${i}`]}</p>}
                   </div>
                 ))}
               </div>
@@ -652,7 +727,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'tripType' ? null : 'tripType')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.tripType ? 'text-black' : 'text-slate-300'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${validationErrors.tripType ? 'border-red-500 focus:border-red-500 text-red-700' : `border-slate-200 focus:border-orange-500 ${formData.tripType ? 'text-black' : 'text-slate-300'}`}`}
               >
                 <span>{formData.tripType || 'Select Trip Type'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -669,6 +744,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       onClick={() => {
                         setFormData({ ...formData, tripType: option });
                         setOpenDropdown(null);
+                        if (validationErrors.tripType) setValidationErrors({...validationErrors, tripType: ''});
                       }}
                     >
                       {option}
@@ -676,6 +752,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.tripType && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.tripType}</p>}
             </div>
 
             <div className="space-y-1 relative">
@@ -683,7 +760,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'hotelCategory' ? null : 'hotelCategory')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.hotelCategory ? 'text-black' : 'text-slate-300'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${validationErrors.hotelCategory ? 'border-red-500 focus:border-red-500 text-red-700' : `border-slate-200 focus:border-orange-500 ${formData.hotelCategory ? 'text-black' : 'text-slate-300'}`}`}
               >
                 <span>{formData.hotelCategory || 'Select Hotel Category'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -700,6 +777,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       onClick={() => {
                         setFormData({ ...formData, hotelCategory: option });
                         setOpenDropdown(null);
+                        if (validationErrors.hotelCategory) setValidationErrors({...validationErrors, hotelCategory: ''});
                       }}
                     >
                       {option}
@@ -707,6 +785,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.hotelCategory && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.hotelCategory}</p>}
             </div>
 
             <div className="space-y-1 relative">
@@ -714,7 +793,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'noOfNights' ? null : 'noOfNights')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.noOfNights ? 'text-black' : 'text-slate-300'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${validationErrors.noOfNights ? 'border-red-500 focus:border-red-500 text-red-700' : `border-slate-200 focus:border-orange-500 ${formData.noOfNights ? 'text-black' : 'text-slate-300'}`}`}
               >
                 <span>{formData.noOfNights || 'Select Number of Nights'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,6 +810,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       onClick={() => {
                         setFormData({ ...formData, noOfNights: option });
                         setOpenDropdown(null);
+                        if (validationErrors.noOfNights) setValidationErrors({...validationErrors, noOfNights: ''});
                       }}
                     >
                       {option}
@@ -738,6 +818,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.noOfNights && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.noOfNights}</p>}
             </div>
 
             <div className="space-y-1 relative">
@@ -745,7 +826,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'budgetRange' ? null : 'budgetRange')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.budgetRange ? 'text-black' : 'text-slate-300'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${validationErrors.budgetRange ? 'border-red-500 focus:border-red-500 text-red-700' : `border-slate-200 focus:border-orange-500 ${formData.budgetRange ? 'text-black' : 'text-slate-300'}`}`}
               >
                 <span>{formData.budgetRange || 'Select Budget Range'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -762,6 +843,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       onClick={() => {
                         setFormData({ ...formData, budgetRange: option });
                         setOpenDropdown(null);
+                        if (validationErrors.budgetRange) setValidationErrors({...validationErrors, budgetRange: ''});
                       }}
                     >
                       {option}
@@ -769,6 +851,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.budgetRange && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.budgetRange}</p>}
             </div>
 
             <div className="md:col-span-2 space-y-1 relative">
@@ -776,7 +859,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'flightOptions' ? null : 'flightOptions')}
-                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 border-slate-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${formData.flightOptions ? 'text-black' : 'text-slate-300'}`}
+                className={`w-full text-left px-5 py-3 bg-slate-50/50 border-2 rounded-xl focus:ring-4 focus:ring-orange-50/20 outline-none font-bold text-sm transition-all flex items-center justify-between ${validationErrors.flightOptions ? 'border-red-500 focus:border-red-500 text-red-700' : `border-slate-200 focus:border-orange-500 ${formData.flightOptions ? 'text-black' : 'text-slate-300'}`}`}
               >
                 <span>{formData.flightOptions || 'Select Flight Options'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -793,6 +876,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                       onClick={() => {
                         setFormData({ ...formData, flightOptions: option });
                         setOpenDropdown(null);
+                        if (validationErrors.flightOptions) setValidationErrors({...validationErrors, flightOptions: ''});
                       }}
                     >
                       {option}
@@ -800,6 +884,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                   ))}
                 </div>
               )}
+              {validationErrors.flightOptions && <p className="text-xs text-red-500 font-bold ml-1">{validationErrors.flightOptions}</p>}
             </div>
           </div>
 
@@ -807,7 +892,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
           <div className="pt-2 sticky bottom-0 bg-white pb-2">
             <button 
               type="submit"
-              className="w-full bg-[#F97316] text-white py-4 rounded-full font-black text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-orange-100/50 flex items-center justify-center space-x-3  tracking-widest"
+              disabled={!isFormValid()}
+              className={`w-full text-white py-4 rounded-full font-black text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center space-x-3 tracking-widest ${isFormValid() ? 'bg-[#F97316] shadow-orange-100/50 cursor-pointer' : 'bg-slate-300 shadow-slate-100/50 cursor-not-allowed opacity-60'}`}
             >
               <span>Get Customize Package on WhatsApp</span>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.12.552 4.189 1.598 6.04L0 24l6.135-1.61a11.802 11.802 0 005.912 1.569h.005c6.638 0 12.039-5.404 12.042-12.041a11.79 11.79 0 00-3.483-8.498z"/></svg>
