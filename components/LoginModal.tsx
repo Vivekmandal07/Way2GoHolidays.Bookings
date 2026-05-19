@@ -18,6 +18,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
   const [otpCode, setOtpCode] = useState('123456');
   const [loginError, setLoginError] = useState('');
   const [users, setUsers] = useState<AuthUser[]>([]);
+  const [loginRole, setLoginRole] = useState<'admin' | 'staff' | 'customer'>('customer');
   const [lastLoginIdentifier, setLastLoginIdentifier] = useState('');
   const [lastLoginMethod, setLastLoginMethod] = useState<'email' | 'phone'>('email');
 
@@ -77,6 +78,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
       }
     }
   }, []);
+  }, []);
 
   const saveUsers = (updated: AuthUser[]) => {
     localStorage.setItem('authUsers', JSON.stringify(updated));
@@ -133,9 +135,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
     }
 
     const allUsers = [...DEFAULT_USERS, ...users];
-    const matched = allUsers.find(user => user.identifier === contactIdentifier);
+    const matched = allUsers.find(user => user.identifier === contactIdentifier && user.role === loginRole);
     if (!matched) {
-      setLoginError('No matching account found.');
+      setLoginError(`No matching ${loginRole} account found for this ${method === 'email' ? 'email' : 'phone number'}.`);
       return;
     }
 
@@ -206,7 +208,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
           </button>
           <button 
             onClick={() => { setMethod('phone'); setPhoneMode('password'); setLoginError(''); }}
-            className={`flex-1 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all ${method === 'phone' ? 'bg-white text-blue-700 shadow-sm border border-slate-200' : 'text-slate-400'}`}
+            disabled={loginRole !== 'customer'}
+            className={`flex-1 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all ${method === 'phone' ? 'bg-white text-blue-700 shadow-sm border border-slate-200' : 'text-slate-400'} ${loginRole !== 'customer' ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Mobile
           </button>
@@ -214,6 +217,30 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
 
         <form onSubmit={handleSubmit} className="p-10 space-y-8">
           <div className="space-y-6">
+            {!isRegister && (
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest ml-1">Login Role</label>
+                <select
+                  className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 font-bold text-slate-900"
+                  value={loginRole}
+                  onChange={(e) => {
+                    const value = e.target.value as 'admin' | 'staff' | 'customer';
+                    setLoginRole(value);
+                    if (value !== 'customer') {
+                      setMethod('email');
+                    }
+                    setLoginError('');
+                  }}
+                >
+                  <option value="customer">Customer Login</option>
+                  <option value="staff">Staff Login</option>
+                  <option value="admin">Admin Login</option>
+                </select>
+                <p className="text-[11px] text-slate-500">
+                  Select the type of account you are signing in with. Admin/staff login uses predefined credentials.
+                </p>
+              </div>
+            )}
             {isRegister && (
                <div className="space-y-2">
                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
