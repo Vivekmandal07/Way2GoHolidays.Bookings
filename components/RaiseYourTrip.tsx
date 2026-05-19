@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PackageFormData } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
@@ -12,9 +12,29 @@ interface RaiseYourTripProps {
   onClose: () => void;
 }
 
+interface RaisedQuery {
+  id: string;
+  name: string;
+  phone: string;
+  leavingFrom: string;
+  destination: string;
+  pax: string;
+  children: string;
+  childAges: string[];
+  travelDate: string;
+  tripType: string;
+  hotelCategory: string;
+  noOfNights: string;
+  budgetRange: string;
+  flightOptions: string;
+  submittedAt: string;
+}
+
 const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
+  const [viewMode, setViewMode] = useState<'form' | 'queries'>('form');
+  const [raisedQueries, setRaisedQueries] = useState<RaisedQuery[]>([]);
   const allDestinations = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
   const [searchQueryDest, setSearchQueryDest] = useState('');
   const [isDropdownOpenDest, setIsDropdownOpenDest] = useState(false);
@@ -40,6 +60,33 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     flightOptions: ''
   });
   const [clientPhone, setClientPhone] = useState('');
+
+  // Load queries from localStorage
+  useEffect(() => {
+    const savedQueries = localStorage.getItem('raisedQueries');
+    if (savedQueries) {
+      try {
+        setRaisedQueries(JSON.parse(savedQueries));
+      } catch (error) {
+        console.error('Error loading queries:', error);
+      }
+    }
+  }, []);
+
+  const saveQueriesToStorage = (queries: RaisedQuery[]) => {
+    localStorage.setItem('raisedQueries', JSON.stringify(queries));
+  };
+
+  const deleteQuery = (id: string) => {
+    const updatedQueries = raisedQueries.filter(q => q.id !== id);
+    setRaisedQueries(updatedQueries);
+    saveQueriesToStorage(updatedQueries);
+  };
+
+  const formatDisplayDate = (dateString: string) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+  };
 
   const handleChildCountChange = (val: string) => {
     const count = Math.max(0, parseInt(val) || 0);
@@ -85,11 +132,6 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  };
-
-  const formatDisplayDate = (dateString: string) => {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: '2-digit' });
   };
 
   const getMonthGrid = (year: number, month: number) => {
@@ -138,6 +180,29 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
       `*Budget:* ${formData.budgetRange}\n` +
       `*Flight Options:* ${formData.flightOptions}\n\n`;
 
+    // Save query to localStorage
+    const newQuery: RaisedQuery = {
+      id: Date.now().toString(),
+      name: formData.name,
+      phone: fullPhoneNumber,
+      leavingFrom: formData.leavingFrom,
+      destination: formData.destination,
+      pax: formData.pax,
+      children: formData.children,
+      childAges: formData.childAges,
+      travelDate: formData.travelDate,
+      tripType: formData.tripType,
+      hotelCategory: formData.hotelCategory,
+      noOfNights: formData.noOfNights,
+      budgetRange: formData.budgetRange,
+      flightOptions: formData.flightOptions,
+      submittedAt: new Date().toLocaleString('en-GB'),
+    };
+
+    const updatedQueries = [newQuery, ...raisedQueries];
+    setRaisedQueries(updatedQueries);
+    saveQueriesToStorage(updatedQueries);
+
     const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(rawMsg)}`;
     window.open(whatsappUrl, '_blank');
     setSubmitted(true);
@@ -154,7 +219,141 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             </svg>
           </div>
           <h3 className="text-xl font-black text-slate-900 mb-2">Itinerary Saved! -  Our Expert Will Connect You Soon</h3>
-          <button onClick={onClose} className="w-full bg-orange-500 text-white py-3 rounded-xl font-bold transition-all shadow-xl">Close</button>
+          <div className="flex gap-3 mt-6">
+            <button onClick={onClose} className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-xl font-bold transition-all">Close</button>
+            <button onClick={() => { setSubmitted(false); setViewMode('queries'); }} className="flex-1 bg-orange-500 text-white py-3 rounded-xl font-bold transition-all shadow-xl">View All Queries</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Queries View
+  if (viewMode === 'queries') {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+        <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}></div>
+        <div className="relative bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-visible animate-in zoom-in duration-700 my-auto max-h-[92vh] flex flex-col">
+          
+          {/* Header Section */}
+          <div className="flex justify-between items-center px-6 sm:px-10 py-5 bg-gradient-to-r from-orange-50/30 to-white border-b border-orange-100 shrink-0 rounded-t-3xl">
+            <div>
+              <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Raised Queries</h3>
+              <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">View all your submitted trip requests</p>
+            </div>
+            <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="px-6 sm:px-10 py-6 overflow-y-auto flex-1">
+            {raisedQueries.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                </div>
+                <p className="text-slate-500 font-bold">No queries yet. Raise your first trip request!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {raisedQueries.map((query, index) => (
+                  <div key={query.id} className="bg-gradient-to-br from-orange-50/50 to-white border-2 border-orange-100 rounded-2xl p-6 hover:shadow-lg transition-all">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-black text-slate-900 text-lg">{query.name}</p>
+                          <p className="text-slate-500 text-xs font-bold">Submitted: {query.submittedAt}</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => deleteQuery(query.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">From</p>
+                        <p className="font-bold text-slate-900 text-sm">{query.leavingFrom}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">To</p>
+                        <p className="font-bold text-slate-900 text-sm">{query.destination}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
+                        <p className="font-bold text-slate-900 text-sm">{formatDisplayDate(query.travelDate)}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trip Type</p>
+                        <p className="font-bold text-slate-900 text-sm">{query.tripType}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Travelers</p>
+                        <p className="font-bold text-slate-900 text-sm">{query.pax} Adults {parseInt(query.children) > 0 ? `+ ${query.children} Kids` : ''}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-orange-100">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Budget</p>
+                        <p className="font-bold text-slate-900 text-sm">{query.budgetRange}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="text-sm">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</p>
+                        <p className="font-bold text-slate-900">{query.phone}</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nights</p>
+                        <p className="font-bold text-slate-900">{query.noOfNights}</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hotel Category</p>
+                        <p className="font-bold text-slate-900">{query.hotelCategory}</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Flight</p>
+                        <p className="font-bold text-slate-900">{query.flightOptions}</p>
+                      </div>
+                    </div>
+
+                    {query.childAges.length > 0 && (
+                      <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                        <p className="text-[9px] font-bold text-orange-600 uppercase tracking-widest mb-2">Children Ages</p>
+                        <p className="font-bold text-slate-900">{query.childAges.join(', ')} years</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="px-6 sm:px-10 py-4 bg-gradient-to-r from-orange-50/30 to-white border-t border-orange-100 shrink-0 flex gap-3 rounded-b-3xl">
+            <button 
+              onClick={() => { setViewMode('form'); setSubmitted(false); }}
+              className="flex-1 bg-orange-500 text-white py-3 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-orange-100/50"
+            >
+              Raise New Query
+            </button>
+            <button 
+              onClick={onClose}
+              className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -171,11 +370,24 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">Your Trip, Your Way - Plan it Your Way!</h3>
             <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Write the Details & Plan Every Detail of Your Journey</p>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="flex gap-2">
+            {raisedQueries.length > 0 && (
+              <button 
+                onClick={() => setViewMode('queries')}
+                className="p-2 text-orange-500 hover:bg-orange-50 transition-colors bg-orange-50/50 rounded-full relative"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                <span className="absolute top-1 right-1 w-4 h-4 bg-orange-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">{raisedQueries.length}</span>
+              </button>
+            )}
+            <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-900 transition-colors bg-slate-50 rounded-full">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
         
         <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 space-y-5 overflow-y-auto">
