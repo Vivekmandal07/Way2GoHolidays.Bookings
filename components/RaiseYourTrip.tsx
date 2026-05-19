@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PackageFormData } from '../types';
+import { PackageFormData, AuthUser } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
 const TRIP_TYPES = ['Solo Trip', 'Honeymoon Trip', 'Family Trip', 'Customized Package', 'Adventure Trip', 'Group Tour', 'Weekend Getaway', 'Luxury Vacation', 'Budget Travel', 'Cultural Exploration', 'Beach Holiday', 'Nature Retreat', 'Road Trip', 'Cruise Vacation', 'Wellness Retreat'];
@@ -10,6 +10,7 @@ const FLIGHT_OPTIONS = ['With Flight', 'Without Flight', 'We Have Booked the Fli
 
 interface RaiseYourTripProps {
   onClose: () => void;
+  currentUser: AuthUser | null;
 }
 
 interface RaisedQuery {
@@ -30,7 +31,7 @@ interface RaisedQuery {
   submittedAt: string;
 }
 
-const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
+const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const [viewMode, setViewMode] = useState<'form' | 'queries'>('form');
@@ -77,6 +78,16 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
   const saveQueriesToStorage = (queries: RaisedQuery[]) => {
     localStorage.setItem('raisedQueries', JSON.stringify(queries));
   };
+
+  const getVisibleQueries = () => {
+    if (currentUser?.role === 'customer') {
+      const userPhone = currentUser.phone || currentUser.identifier;
+      return raisedQueries.filter(query => query.phone === userPhone);
+    }
+    return raisedQueries;
+  };
+
+  const visibleQueries = getVisibleQueries();
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -298,7 +309,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
           </div>
 
           <div className="px-6 sm:px-10 py-6 overflow-y-auto flex-1">
-            {raisedQueries.length === 0 ? (
+            {visibleQueries.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,7 +322,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
               <div className="space-y-6">
                 {(() => {
                   // Group queries by phone number
-                  const groupedByPhone = raisedQueries.reduce((acc, query) => {
+                  const groupedByPhone = visibleQueries.reduce((acc, query) => {
                     const phone = query.phone;
                     if (!acc[phone]) {
                       acc[phone] = [];
@@ -459,7 +470,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
             <p className="text-orange-500 font-bold text-[9px] uppercase tracking-wider">Write the Details & Plan Every Detail of Your Journey</p>
           </div>
           <div className="flex gap-2">
-            {raisedQueries.length > 0 && (
+            {visibleQueries.length > 0 && (
               <button 
                 onClick={() => setViewMode('queries')}
                 className="p-2 text-orange-500 hover:bg-orange-50 transition-colors bg-orange-50/50 rounded-full relative"

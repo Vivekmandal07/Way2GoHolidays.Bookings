@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
+import { AuthUser } from '../types';
+
 interface NavbarProps {
   scrollTo: (id: string) => void;
   onLogin: () => void;
+  onLogout: () => void;
+  currentUser: AuthUser | null;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
+const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin, onLogout, currentUser }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
@@ -53,12 +57,24 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
 
           {/* Vertical Separator Line as seen in screenshot */}
           <div className="flex items-center border-l border-gray-200 pl-8 h-8">
-            <button 
-              onClick={onLogin}
-              className="bg-[#1D4ED8] text-white px-8 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg transition-all hover:brightness-110 active:scale-95 animate-wave-out"
-            >
-              SIGN IN
-            </button>
+            {currentUser ? (
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-bold text-slate-700">Hi, {currentUser.name}</span>
+                <button 
+                  onClick={onLogout}
+                  className="bg-[#1D4ED8] text-white px-5 py-2 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg transition-all hover:brightness-110 active:scale-95"
+                >
+                  SIGN OUT
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={onLogin}
+                className="bg-[#1D4ED8] text-white px-8 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg transition-all hover:brightness-110 active:scale-95 animate-wave-out"
+              >
+                SIGN IN
+              </button>
+            )}
           </div>
         </div>
 
@@ -90,12 +106,21 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin }) => {
             </button>
           ))}
           <div className="mt-4 pt-6">
-            <button 
-              onClick={() => { onLogin(); setIsMenuOpen(false); }}
-              className="w-full bg-[#1D4ED8] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest shadow-xl"
-            >
-              SIGN IN
-            </button>
+            {currentUser ? (
+              <button 
+                onClick={() => { onLogout(); setIsMenuOpen(false); }}
+                className="w-full bg-[#1D4ED8] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest shadow-xl"
+              >
+                SIGN OUT
+              </button>
+            ) : (
+              <button 
+                onClick={() => { onLogin(); setIsMenuOpen(false); }}
+                className="w-full bg-[#1D4ED8] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest shadow-xl"
+              >
+                SIGN IN
+              </button>
+            )}
           </div>
         </div>
       )}

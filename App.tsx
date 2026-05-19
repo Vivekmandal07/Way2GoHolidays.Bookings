@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BookingModal from './components/BookingModal';
@@ -17,11 +17,12 @@ import AiTravelAssistant from './components/AiTravelAssistant';
 import ChippestDeal from './components/ChippestDeal';
 import TravelersReview from './components/TravelersReview';
 import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './constants';
-import { Package } from './types';
+import { Package, AuthUser } from './types';
 
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | null>(null);
   const [viewingPackage, setViewingPackage] = useState<Package | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   // Check URL for package parameter on load
   useEffect(() => {
@@ -34,6 +35,15 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Unable to parse saved user:', error);
+      }
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -73,6 +83,17 @@ const App: React.FC = () => {
     window.history.pushState({}, '', url.pathname + url.search);
   };
 
+  const handleLoginSuccess = (user: AuthUser) => {
+    setCurrentUser(user);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    setActiveModal(null);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('currentUser');
+  };
+
   const handleExploreDestination = (destName: string) => {
     // 1. Try to find an exact match first
     let found = PACKAGES.find(p => 
@@ -101,6 +122,8 @@ const App: React.FC = () => {
       <Navbar 
         scrollTo={scrollTo} 
         onLogin={() => setActiveModal('login')} 
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
       
       <main className="flex-grow pt-20">
@@ -163,9 +186,9 @@ const App: React.FC = () => {
 
       {/* Modals */}
       {activeModal === 'booking' && <BookingModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} />}
+      {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} currentUser={currentUser} />}
       {activeModal === 'expert' && <ContactExpertModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'login' && <LoginModal onClose={() => setActiveModal(null)} />}
+      {activeModal === 'login' && <LoginModal onClose={() => setActiveModal(null)} onLoginSuccess={handleLoginSuccess} />}
       
       {/* FULL SCREEN POP UP PAGE */}
       {viewingPackage && (

@@ -54,6 +54,18 @@ export interface PackageFormData {
   flightOptions: string;
 }
 
+export type AuthRole = 'admin' | 'staff' | 'customer';
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  password: string;
+  role: AuthRole;
+  identifier: string;
+}
+
 // Fix: Augmenting the React.JSX namespace directly within the global scope.
 // We import and use DetailedHTMLProps, HTMLAttributes, and CSSProperties directly 
 // to avoid the name collision that occurs when using the 'React.' prefix inside 
