@@ -18,6 +18,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
   const [otpCode, setOtpCode] = useState('123456');
   const [loginError, setLoginError] = useState('');
   const [users, setUsers] = useState<AuthUser[]>([]);
+  const [lastLoginIdentifier, setLastLoginIdentifier] = useState('');
+  const [lastLoginMethod, setLastLoginMethod] = useState<'email' | 'phone'>('email');
 
   const [formData, setFormData] = useState({
     email: '',
@@ -48,11 +50,30 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
 
   useEffect(() => {
     const savedUsers = localStorage.getItem('authUsers');
+    const savedLastIdentifier = localStorage.getItem('lastLoginIdentifier');
+    const savedLastMethod = localStorage.getItem('lastLoginMethod') as 'email' | 'phone' | null;
+
     if (savedUsers) {
       try {
         setUsers(JSON.parse(savedUsers));
       } catch (error) {
         console.error('Unable to parse users:', error);
+      }
+    }
+
+    if (savedLastIdentifier) {
+      setLastLoginIdentifier(savedLastIdentifier);
+      if (savedLastMethod) {
+        setLastLoginMethod(savedLastMethod);
+        setMethod(savedLastMethod);
+      }
+      if (savedLastMethod === 'email') {
+        setFormData((prev) => ({ ...prev, email: savedLastIdentifier }));
+      } else if (savedLastMethod === 'phone') {
+        const phoneValue = savedLastIdentifier.startsWith(selectedCountry.code)
+          ? savedLastIdentifier.slice(selectedCountry.code.length)
+          : savedLastIdentifier.replace(/\D/g, '');
+        setFormData((prev) => ({ ...prev, phone: phoneValue }));
       }
     }
   }, []);
@@ -62,13 +83,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
     setUsers(updated);
   };
 
+  const persistLastLogin = (contactIdentifier: string) => {
+    localStorage.setItem('lastLoginIdentifier', contactIdentifier);
+    localStorage.setItem('lastLoginMethod', method);
+    setLastLoginIdentifier(contactIdentifier);
+    setLastLoginMethod(method);
+  };
+
   const normalizePhone = (phone: string) => `${selectedCountry.code}${phone.replace(/\D/g, '')}`;
+
+  const currentIdentifier = method === 'email' ? formData.email.trim().toLowerCase() : normalizePhone(formData.phone);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
 
-    const contactIdentifier = method === 'email' ? formData.email.trim().toLowerCase() : normalizePhone(formData.phone);
+    const contactIdentifier = currentIdentifier;
     if (!contactIdentifier) {
       setLoginError('Please enter email or mobile number.');
       return;
@@ -97,6 +127,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
       };
       const updatedUsers = [...users, newUser];
       saveUsers(updatedUsers);
+      persistLastLogin(contactIdentifier);
       onLoginSuccess(newUser);
       return;
     }
@@ -117,6 +148,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
         setLoginError('Invalid OTP.');
         return;
       }
+      persistLastLogin(contactIdentifier);
       onLoginSuccess(matched);
       return;
     }
@@ -131,6 +163,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
       return;
     }
 
+    persistLastLogin(contactIdentifier);
     onLoginSuccess(matched);
   };
 
@@ -200,40 +233,62 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
                 {method === 'email' ? 'Email ID' : 'Mobile Number'}
               </label>
               {method === 'email' ? (
-                <input 
-                  required
-                  type="email"
-                  className="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-400 shadow-sm"
-                  placeholder="way2goholidays.bookings.com"
-                  value={formData.email}
-                  onChange={e => setFormData({...formData, email: e.target.value})}
-                />
-              ) : (
-                <div className="flex space-x-2">
-                  <div className="relative w-28">
-                    <select 
-                      className="w-full px-3 py-5 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 bg-slate-50 font-black text-[11px] appearance-none cursor-pointer text-center"
-                      value={selectedCountry.code}
-                      onChange={(e) => {
-                        const found = COUNTRY_CODES.find(c => c.code === e.target.value);
-                        if (found) setSelectedCountry(found);
-                      }}
-                    >
-                      {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
-                    </select>
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
-                    </div>
-                  </div>
+                <>
                   <input 
+                    name="email"
+                    autoComplete="username"
                     required
-                    type="tel"
-                    className="flex-grow px-6 py-5 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-400 shadow-sm"
-                    placeholder="7303402841"
-                    value={formData.phone}
-                    onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
+                    type="email"
+                    className="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-400 shadow-sm"
+                    placeholder="way2goholidays.bookings.com"
+                    value={formData.email}
+                    onChange={e => setFormData({...formData, email: e.target.value})}
                   />
-                </div>
+                  {lastLoginIdentifier && (
+                    <p className="text-[11px] mt-2 text-slate-500 font-semibold">
+                      {currentIdentifier && currentIdentifier === lastLoginIdentifier
+                        ? 'Saved login detected. Continue with your password or OTP to sign in with the same account.'
+                        : `Last login used the same email. Use it to log in again or enter a new one for a different account.`}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex space-x-2">
+                    <div className="relative w-28">
+                      <select 
+                        className="w-full px-3 py-5 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 bg-slate-50 font-black text-[11px] appearance-none cursor-pointer text-center"
+                        value={selectedCountry.code}
+                        onChange={(e) => {
+                          const found = COUNTRY_CODES.find(c => c.code === e.target.value);
+                          if (found) setSelectedCountry(found);
+                        }}
+                      >
+                        {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
+                      </select>
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                      </div>
+                    </div>
+                    <input 
+                      name="phone"
+                      autoComplete="tel"
+                      required
+                      type="tel"
+                      className="flex-grow px-6 py-5 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-400 shadow-sm"
+                      placeholder="7303402841"
+                      value={formData.phone}
+                      onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
+                    />
+                  </div>
+                  {lastLoginIdentifier && lastLoginMethod === 'phone' && (
+                    <p className="text-[11px] mt-2 text-slate-500 font-semibold">
+                      {currentIdentifier && currentIdentifier === lastLoginIdentifier
+                        ? 'Same mobile number detected from your previous login. Continue with OTP or password.'
+                        : 'Use the same mobile number to log in again, or change it to start a new login.'}
+                    </p>
+                  )}
+                </>
               )}
             </div>
 
@@ -254,6 +309,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
                 ) : (
                   <>
                     <input 
+                      name="password"
+                      autoComplete={method === 'phone' && phoneMode === 'otp' ? 'new-password' : (isRegister ? 'new-password' : 'current-password')}
                       required
                       type={showPassword ? 'text' : 'password'}
                       className="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-300 shadow-sm"
