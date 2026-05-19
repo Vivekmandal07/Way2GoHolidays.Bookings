@@ -259,83 +259,122 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                 <p className="text-slate-500 font-bold">No queries yet. Raise your first trip request!</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {raisedQueries.map((query, index) => (
-                  <div key={query.id} className="bg-gradient-to-br from-orange-50/50 to-white border-2 border-orange-100 rounded-2xl p-6 hover:shadow-lg transition-all">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold">
-                          {index + 1}
+              <div className="space-y-6">
+                {(() => {
+                  // Group queries by phone number
+                  const groupedByPhone = raisedQueries.reduce((acc, query) => {
+                    const phone = query.phone;
+                    if (!acc[phone]) {
+                      acc[phone] = [];
+                    }
+                    acc[phone].push(query);
+                    return acc;
+                  }, {} as Record<string, RaisedQuery[]>);
+
+                  return Object.entries(groupedByPhone).map(([phone, queries], groupIndex) => (
+                    <div key={phone} className="bg-gradient-to-br from-blue-50/50 to-white border-2 border-blue-200 rounded-3xl overflow-hidden">
+                      {/* Phone Number Header */}
+                      <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                              {groupIndex + 1}
+                            </div>
+                            <div>
+                              <p className="text-white font-black text-lg">Customer #{groupIndex + 1}</p>
+                              <p className="text-blue-100 font-bold text-sm">{phone}</p>
+                            </div>
+                          </div>
+                          <div className="bg-white/20 text-white px-4 py-2 rounded-full font-bold">
+                            {queries.length} {queries.length === 1 ? 'Query' : 'Queries'}
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-black text-slate-900 text-lg">{query.name}</p>
-                          <p className="text-slate-500 text-xs font-bold">Submitted: {query.submittedAt}</p>
-                        </div>
                       </div>
-                      <button 
-                        onClick={() => deleteQuery(query.id)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">From</p>
-                        <p className="font-bold text-slate-900 text-sm">{query.leavingFrom}</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">To</p>
-                        <p className="font-bold text-slate-900 text-sm">{query.destination}</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
-                        <p className="font-bold text-slate-900 text-sm">{formatDisplayDate(query.travelDate)}</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trip Type</p>
-                        <p className="font-bold text-slate-900 text-sm">{query.tripType}</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Travelers</p>
-                        <p className="font-bold text-slate-900 text-sm">{query.pax} Adults {parseInt(query.children) > 0 ? `+ ${query.children} Kids` : ''}</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-3 border border-orange-100">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Budget</p>
-                        <p className="font-bold text-slate-900 text-sm">{query.budgetRange}</p>
+                      {/* Queries for this phone */}
+                      <div className="p-6 space-y-4">
+                        {queries.map((query, queryIndex) => (
+                          <div key={query.id} className="bg-white border border-blue-100 rounded-2xl p-5 hover:shadow-lg transition-all">
+                            <div className="flex justify-between items-start mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">
+                                  {queryIndex + 1}
+                                </div>
+                                <div>
+                                  <p className="font-black text-slate-900">{query.name}</p>
+                                  <p className="text-slate-500 text-xs font-bold">{query.submittedAt}</p>
+                                </div>
+                              </div>
+                              <button 
+                                onClick={() => deleteQuery(query.id)}
+                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                              >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                <p className="text-[8px] font-bold text-blue-600 uppercase tracking-widest mb-1">From</p>
+                                <p className="font-bold text-slate-900 text-xs">{query.leavingFrom}</p>
+                              </div>
+                              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                <p className="text-[8px] font-bold text-blue-600 uppercase tracking-widest mb-1">To</p>
+                                <p className="font-bold text-slate-900 text-xs">{query.destination}</p>
+                              </div>
+                              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                <p className="text-[8px] font-bold text-blue-600 uppercase tracking-widest mb-1">Date</p>
+                                <p className="font-bold text-slate-900 text-xs">{formatDisplayDate(query.travelDate)}</p>
+                              </div>
+                              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                                <p className="text-[8px] font-bold text-blue-600 uppercase tracking-widest mb-1">Trip Type</p>
+                                <p className="font-bold text-slate-900 text-xs">{query.tripType}</p>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                              <div className="text-xs">
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Adults</p>
+                                <p className="font-bold text-slate-900">{query.pax}</p>
+                              </div>
+                              <div className="text-xs">
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Children</p>
+                                <p className="font-bold text-slate-900">{query.children}</p>
+                              </div>
+                              <div className="text-xs">
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nights</p>
+                                <p className="font-bold text-slate-900">{query.noOfNights}</p>
+                              </div>
+                              <div className="text-xs">
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Budget</p>
+                                <p className="font-bold text-slate-900">{query.budgetRange}</p>
+                              </div>
+                            </div>
+
+                            <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                              <div>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hotel</p>
+                                <p className="font-bold text-slate-900">{query.hotelCategory}</p>
+                              </div>
+                              <div>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Flight</p>
+                                <p className="font-bold text-slate-900">{query.flightOptions}</p>
+                              </div>
+                              {query.childAges.length > 0 && (
+                                <div>
+                                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Children Ages</p>
+                                  <p className="font-bold text-slate-900">{query.childAges.join(', ')} yrs</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="text-sm">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</p>
-                        <p className="font-bold text-slate-900">{query.phone}</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nights</p>
-                        <p className="font-bold text-slate-900">{query.noOfNights}</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hotel Category</p>
-                        <p className="font-bold text-slate-900">{query.hotelCategory}</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Flight</p>
-                        <p className="font-bold text-slate-900">{query.flightOptions}</p>
-                      </div>
-                    </div>
-
-                    {query.childAges.length > 0 && (
-                      <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
-                        <p className="text-[9px] font-bold text-orange-600 uppercase tracking-widest mb-2">Children Ages</p>
-                        <p className="font-bold text-slate-900">{query.childAges.join(', ')} years</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
             )}
           </div>
