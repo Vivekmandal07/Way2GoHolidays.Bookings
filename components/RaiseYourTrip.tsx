@@ -644,6 +644,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose }) => {
                                     onClick={() => {
                                       setFormData({ ...formData, travelDate: formatDateString(cellDate) });
                                       setIsDatePickerOpen(false);
+                                      if (validationErrors.travelDate) setValidationErrors({...validationErrors, travelDate: ''});
                                     }}
                                     className={`h-12 rounded-3xl text-sm font-semibold transition ${cell.inMonth ? 'cursor-pointer' : 'cursor-default'} ${isSelected ? 'bg-orange-500 text-white' : cell.inMonth ? 'text-slate-700 hover:bg-orange-50' : 'text-slate-300'} ${cell.inMonth ? 'bg-white' : 'bg-slate-50'}`}
                                   >
