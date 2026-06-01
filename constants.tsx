@@ -93,7 +93,7 @@ export const PACKAGES: Package[] = [
       { day: 2, title: 'Coral Island Day Tour', activities: 'By shared Transfer from hotel. Visit Coral Island by speed boat and enjoy water activities & Evening Alcarza show on shared transfer.', hotel: 'N/A' },
       { day: 3, title: 'Day at Leisure', activities: 'Day at leisure to enjoy at yours.', hotel: 'N/A' },
       { day: 4, title: 'Transfer from Pattaya to Bangkok', activities: 'Transfer from Pattaya hotel to Bangkok hotel on Private. Please note:Hotel Check-IN time is 2:00 PM', hotel: 'Cross Vibe Bangkok Srinakarin or similar' },
-      { day: 5, title: 'Departure', activities: 'Shopping at Bangkok & Private Transfer to bangkok Airport.', hotel: 'N/A' }
+      { day: 5, title: 'Departure', activities: 'Shopping at Bangkok & Private Transfer to Bangkok Airport.', hotel: 'N/A' }
     ]
   },
   { 
