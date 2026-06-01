@@ -89,7 +89,7 @@ export const PACKAGES: Package[] = [
     duration: '4N/5D', 
     destination: 'Thailand',
     itinerary: [
-      { day: 1, title: 'Bangkok Arrival', activities: 'One Way Transfer from Bangkok Airport to Pattaya hotel.', hotel: 'Mountain Beach Resort or similar' },
+      { day: 1, title: 'Bangkok Arrival', activities: 'One Way Transfer from Bangkok Airport to Pattaya hotel & Check-IN Hotel at 2PM - Before 2 PM check-in Please Book Early Check', hotel: 'Mountain Beach Resort or similar' },
       { day: 2, title: 'Coral Island Day Tour', activities: 'By shared Transfer from hotel. Visit Coral Island by speed boat and enjoy water activities & Evening Alcarza show on shared transfer.', hotel: 'N/A' },
       { day: 3, title: 'Day at Leisure', activities: 'Day at leisure to enjoy at yours.', hotel: 'N/A' },
       { day: 4, title: 'Transfer from Pattaya to Bangkok', activities: 'Transfer from Pattaya hotel to Bangkok hotel on Private.', hotel: 'Cross Vibe Bangkok Srinakarin or similar' },
