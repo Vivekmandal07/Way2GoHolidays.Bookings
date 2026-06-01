@@ -20,7 +20,7 @@ export const GALLERY_IMAGES = Object.entries(travellerModules)
 
 
 export const INTERNATIONAL_DESTINATIONS: Destination[] = [
-  { id: '1', name: 'Paris, France', type: 'International', image: PICS.paris, description: 'Experience the city of love and lights.' },
+  { id: '1', name: 'Europe - Paris, France', type: 'International', image: PICS.paris, description: 'Experience the city of love and lights.' },
   { id: '2', name: 'Maldives', type: 'International', image: PICS.maldives, description: 'Luxury water villas and crystal clear oceans.' },
   { id: '3', name: 'Dubai, UAE', type: 'International', image: PICS.dubai, description: 'Modern architecture and desert adventures.' },
   { id: '4', name: 'Bali, Indonesia', type: 'International', image: PICS.bali, description: 'Tropical paradise with rich culture.' },
@@ -84,16 +84,16 @@ export const PACKAGES: Package[] = [
   { 
     id: 'int-2', 
     title: 'Amazing Thailand Getaway', 
-    price: '₹48,000', 
+    price: '₹19,999', 
     image: PICS.thailand, 
     duration: '4N/5D', 
     destination: 'Thailand',
     itinerary: [
-      { day: 1, title: 'Bangkok Arrival', activities: 'Transfer to hotel. Evening Chao Phraya Dinner Cruise.', hotel: 'Anantara Riverside Bangkok' },
-      { day: 2, title: 'Grand Palace & Temples', activities: 'Visit the Grand Palace and Wat Phra Kaew.', hotel: 'Anantara Riverside Bangkok' },
-      { day: 3, title: 'Bangkok to Pattaya', activities: 'Drive to Pattaya. Coral Island tour by speedboat.', hotel: 'Hilton Pattaya' },
-      { day: 4, title: 'Alcazar Show & Leisure', activities: 'Morning at leisure. Evening Alcazar Cabaret Show.', hotel: 'Hilton Pattaya' },
-      { day: 5, title: 'Departure', activities: 'Shopping and airport transfer.', hotel: 'N/A' }
+      { day: 1, title: 'Bangkok Arrival', activities: 'One Way Transfer from Bangkok Airport to Pattaya hotel.', hotel: 'Mountain Beach Resort or similar' },
+      { day: 2, title: 'Coral Island Day Tour', activities: 'By shared Transfer from hotel. Visit Coral Island by speed boat and enjoy water activities & Evening Alcarza show on shared transfer.', hotel: 'N/A' },
+      { day: 3, title: 'Day at Leisure', activities: 'Day at leisure to enjoy at yours.', hotel: 'N/A' },
+      { day: 4, title: 'Transfer from Pattaya to Bangkok', activities: 'Transfer from Pattaya hotel to Bangkok hotel on Private.', hotel: 'Cross Vibe Bangkok Srinakarin or similar' },
+      { day: 5, title: 'Departure', activities: 'Shopping at Bangkok & Private Transfer to bangkok Airport.', hotel: 'N/A' }
     ]
   },
   { 
@@ -114,7 +114,7 @@ export const PACKAGES: Package[] = [
   { 
     id: 'int-4', 
     title: 'Vibrant Vietnam Explorer', 
-    price: '₹74,000', 
+    price: '₹45,000', 
     image: PICS.vietnam, 
     duration: '5N/6D', 
     destination: 'Vietnam',
@@ -130,7 +130,7 @@ export const PACKAGES: Package[] = [
   { 
     id: 'int-5', 
     title: 'Tropical Bali Paradise', 
-    price: '₹55,000', 
+    price: '₹29,999', 
     image: PICS.bali, 
     duration: '5N/6D', 
     destination: 'Bali, Indonesia',
