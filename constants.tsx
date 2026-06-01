@@ -84,7 +84,7 @@ export const PACKAGES: Package[] = [
   { 
     id: 'int-2', 
     title: 'Amazing Thailand Getaway', 
-    price: '₹19,999', 
+    price: '₹20,000', 
     image: PICS.thailand, 
     duration: '4N/5D', 
     destination: 'Thailand',
