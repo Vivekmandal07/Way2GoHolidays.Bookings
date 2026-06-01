@@ -78,7 +78,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLoginSuccess }) => {
       }
     }
   }, []);
-  }, []);
 
   const saveUsers = (updated: AuthUser[]) => {
     localStorage.setItem('authUsers', JSON.stringify(updated));
