@@ -333,12 +333,21 @@ const ServicesSection = () => {
     const outDate = new Date(checkOutDate);
     const diff = Math.ceil((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
     const nights = diff > 0 ? diff : 1;
-    let multiplier = 1;
-    if (mealOption === 'bd') multiplier = 1.3;
-    if (mealOption === 'all') multiplier = 1.6;
+    // allow hotel-specific meal multipliers if provided, otherwise fallback to defaults
+    const defaults = { breakfast: 1, bd: 1.3, all: 1.6 };
+    const hotelMultipliers = (selectedHotel as any).mealMultipliers || {};
+    const multiplier = hotelMultipliers[mealOption] ?? defaults[mealOption];
     const roomsCount = Math.max(1, Number(rooms) || 1);
     const total = Math.round(amount * nights * roomsCount * multiplier);
     return { total, currency };
+  };
+
+  const formatPrice = (value: number, currencyToken: string) => {
+    // add thousand separators
+    const formatted = value.toLocaleString();
+    if (!currencyToken) return formatted;
+    // common case: symbol like ₹, $, £ at start
+    return `${currencyToken} ${formatted}`;
   };
 
   // Blur handlers: parse input buffers, coerce to safe values and update numeric state
@@ -382,6 +391,16 @@ const ServicesSection = () => {
     if (Number.isNaN(n) || n < 0) n = 0;
     updateHotelChildren(n);
     setHotelChildrenInput(String(n));
+  };
+
+  const getNextDateString = (dateStr: string) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    d.setDate(d.getDate() + 1);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   };
 
   return (
@@ -592,11 +611,39 @@ const ServicesSection = () => {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Check-in</label>
-                <input type="date" value={checkInDate} onChange={(e) => setCheckInDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+                <input
+                  type="date"
+                  value={checkInDate}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setCheckInDate(v);
+                    // if no check-out or check-out is before or equal to check-in, set to next day
+                    if (!v) return;
+                    const next = getNextDateString(v);
+                    if (!checkOutDate || new Date(checkOutDate) <= new Date(v)) {
+                      setCheckOutDate(next);
+                    }
+                  }}
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                />
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Check-out</label>
-                <input type="date" value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+                <input
+                  type="date"
+                  value={checkOutDate}
+                  min={checkInDate ? getNextDateString(checkInDate) : undefined}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (checkInDate && new Date(v) <= new Date(checkInDate)) {
+                      // clamp to next day after check-in
+                      setCheckOutDate(getNextDateString(checkInDate));
+                    } else {
+                      setCheckOutDate(v);
+                    }
+                  }}
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                />
               </div>
               <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
@@ -692,48 +739,61 @@ const ServicesSection = () => {
             </form>
           ) : null}
           {showHotelResult && selectedHotel && (
-            <div className="mt-4 p-4 rounded-xl border border-slate-200 bg-white grid md:grid-cols-3 gap-4 items-center">
-              <img src={selectedHotel.image} alt={selectedHotel.name} className="w-full md:w-48 h-36 object-cover rounded-xl" />
-              <div className="md:col-span-2">
-                <h3 className="text-lg font-bold text-slate-800">{selectedHotel.name}</h3>
-                <p className="text-sm text-slate-500">{selectedHotel.city} · {selectedHotel.category}</p>
-                <p className="text-sm text-amber-500">{'★'.repeat(selectedHotel.rating)}{'☆'.repeat(5 - selectedHotel.rating)}</p>
+            <div className="mt-6 p-6 rounded-xl border border-slate-200 bg-white shadow-sm">
+              <div className="grid md:grid-cols-3 gap-6 items-start">
+                <div className="w-full md:w-48">
+                  <img src={selectedHotel.image} alt={selectedHotel.name} className="w-full h-36 object-cover rounded-xl" />
+                </div>
+                <div className="md:col-span-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-2xl font-extrabold text-slate-900">{selectedHotel.name}</h3>
+                      <p className="text-sm text-slate-500 mt-1">{selectedHotel.city} · {selectedHotel.category}</p>
+                      <p className="text-sm text-amber-500 mt-2">{'★'.repeat(selectedHotel.rating)}{'☆'.repeat(5 - selectedHotel.rating)}</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-slate-500">Total price</div>
+                      <div className="text-3xl font-bold text-slate-800">
+                        {(() => {
+                          const { total, currency } = computeTotalPrice();
+                          return formatPrice(total, currency);
+                        })()}
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">{rooms} room(s) · {Math.max(1, Math.ceil((new Date(checkOutDate).getTime() - new Date(checkInDate).getTime())/(1000*60*60*24)))} night(s)</div>
+                    </div>
+                  </div>
 
-                <div className="mt-3 grid grid-cols-2 gap-2 items-center">
-                  <div>
-                    <label className="text-xs text-slate-500">Check-in</label>
-                    <div className="flex gap-2 items-center">
-                      <div className="text-sm">{checkInDate}</div>
-                      <input type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="ml-2 rounded-xl border border-slate-300 px-2 py-1" />
+                  <div className="mt-6 grid grid-cols-3 items-center gap-4">
+                    <div className="col-span-1">
+                      <label className="block text-xs font-semibold text-slate-500">Check-in</label>
+                      <div className="mt-2">
+                        <div className="text-sm text-slate-700">{checkInDate || '—'}</div>
+                        <div className="mt-2">
+                          <input type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-center text-slate-300 text-3xl select-none">|</div>
+
+                    <div className="col-span-1">
+                      <label className="block text-xs font-semibold text-slate-500">Check-out</label>
+                      <div className="mt-2">
+                        <div className="text-sm text-slate-700">{checkOutDate || '—'}</div>
+                        <div className="mt-2">
+                          <input type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="text-xs text-slate-500">Check-out</label>
-                    <div className="flex gap-2 items-center">
-                      <div className="text-sm">{checkOutDate}</div>
-                      <input type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="ml-2 rounded-xl border border-slate-300 px-2 py-1" />
-                    </div>
-                  </div>
-                  <div className="col-span-2">
-                    <label className="text-xs text-slate-500">Meal options</label>
-                    <select value={mealOption} onChange={(e) => setMealOption(e.target.value as any)} className="w-full rounded-xl border border-slate-300 px-3 py-2 mt-1">
+
+                  <div className="mt-6">
+                    <label className="block text-xs font-semibold text-slate-500">Meal options</label>
+                    <select value={mealOption} onChange={(e) => setMealOption(e.target.value as any)} className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3">
                       <option value="breakfast">Breakfast</option>
                       <option value="bd">Breakfast + Dinner</option>
                       <option value="all">All meals</option>
                     </select>
-                  </div>
-                  <div className="col-span-2 flex justify-end items-end">
-                    <div className="text-right">
-                      <div className="text-sm text-slate-500">Total price</div>
-                      <div className="text-2xl font-bold text-slate-800">
-                        {(() => {
-                          const { total, currency } = computeTotalPrice();
-                          const display = currency ? `${currency} ${total}` : `${total}`;
-                          return display;
-                        })()}
-                      </div>
-                      <div className="text-xs text-slate-500">{rooms} room(s) · {Math.max(1, Math.ceil((new Date(checkOutDate).getTime() - new Date(checkInDate).getTime())/(1000*60*60*24)))} night(s)</div>
-                    </div>
                   </div>
                 </div>
               </div>
