@@ -342,6 +342,19 @@ const ServicesSection = () => {
     return { total, currency };
   };
 
+  const getHotelNights = () => {
+    if (!checkInDate || !checkOutDate) return 0;
+    const inDate = new Date(checkInDate);
+    const outDate = new Date(checkOutDate);
+    const diff = Math.ceil((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  };
+
+  const getChildAgesSummary = () => {
+    const ages = hotelChildAges.map((age) => age.trim()).filter(Boolean);
+    return ages.length ? ` (${ages.join(', ')})` : '';
+  };
+
   const formatPrice = (value: number, currencyToken: string) => {
     // add thousand separators
     const formatted = value.toLocaleString();
