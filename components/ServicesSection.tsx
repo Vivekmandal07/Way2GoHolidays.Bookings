@@ -191,6 +191,12 @@ const ServicesSection = () => {
   const [hotelShowSuggestions, setHotelShowSuggestions] = useState(false);
   const [hotelFilteredHotels, setHotelFilteredHotels] = useState<typeof hotels>([] as typeof hotels);
 
+  const [selectedHotel, setSelectedHotel] = useState<typeof hotels[number] | null>(null);
+  const [showHotelResult, setShowHotelResult] = useState(false);
+  const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
+  const [checkInTime, setCheckInTime] = useState('14:00');
+  const [checkOutTime, setCheckOutTime] = useState('12:00');
+
   const filterHotels = (q: string) => {
     const val = q.trim().toLowerCase();
     if (!val) return hotels;
@@ -209,6 +215,7 @@ const ServicesSection = () => {
 
   const selectHotel = (hotel: typeof hotels[number]) => {
     setHotelDestination(`${hotel.city} - ${hotel.name} (${hotel.category})`);
+    setSelectedHotel(hotel);
     setHotelShowSuggestions(false);
   };
 
@@ -282,7 +289,13 @@ const ServicesSection = () => {
         setResult('Please enter all hotel child ages.');
         return;
       }
-      setResult(`Hotel search: ${hotelDestination} from ${checkInDate} to ${checkOutDate} · ${rooms} room(s), ${hotelAdults} adults, ${hotelChildren} children, ${nationality}`);
+      // require selecting a hotel from suggestions
+      if (!selectedHotel) {
+        setResult('Please choose a hotel from suggestions.');
+        return;
+      }
+      setResult('');
+      setShowHotelResult(true);
     } else {
       if (!pickup || !dropoff || !transferDate) {
         setResult('Please fill pickup, dropoff, and transfer date.');
@@ -290,6 +303,42 @@ const ServicesSection = () => {
       }
       setResult(`Transfer request: ${pickup} → ${dropoff} on ${transferDate} · ${vehicleType}`);
     }
+  };
+
+  // Helpers for hotel pricing
+  const extractPrice = (hotel: typeof hotels[number]) => {
+    // Try to extract numeric amount and currency from hotel.price if present
+    const raw: any = (hotel as any).price;
+    if (raw) {
+      const s = String(raw);
+      const match = s.replace(/[,]/g, '').match(/([£€₹$RM฿S\s]*)([0-9]+(\.[0-9]+)?)/);
+      if (match) {
+        const amount = Number(match[2]);
+        const currency = (match[1] || '').trim() || (hotel as any).currency || '';
+        return { amount, currency: currency || (hotel as any).currency || '' };
+      }
+    }
+    // fallback: if basePrice exists
+    if ((hotel as any).basePrice) {
+      return { amount: Number((hotel as any).basePrice), currency: (hotel as any).currency || '' };
+    }
+    return { amount: 0, currency: '' };
+  };
+
+  const computeTotalPrice = () => {
+    if (!selectedHotel) return { total: 0, currency: '' };
+    const { amount, currency } = extractPrice(selectedHotel);
+    // nights
+    const inDate = new Date(checkInDate);
+    const outDate = new Date(checkOutDate);
+    const diff = Math.ceil((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+    const nights = diff > 0 ? diff : 1;
+    let multiplier = 1;
+    if (mealOption === 'bd') multiplier = 1.3;
+    if (mealOption === 'all') multiplier = 1.6;
+    const roomsCount = Math.max(1, Number(rooms) || 1);
+    const total = Math.round(amount * nights * roomsCount * multiplier);
+    return { total, currency };
   };
 
   // Blur handlers: parse input buffers, coerce to safe values and update numeric state
@@ -532,7 +581,7 @@ const ServicesSection = () => {
                           <img src={hotel.image} alt={hotel.name} className="h-16 w-24 rounded-2xl object-cover" />
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-semibold text-slate-800 truncate">{hotel.name}</p>
-                            <p className="text-xs text-slate-500 truncate">{hotel.city} · {hotel.category} · {hotel.price}</p>
+                            <p className="text-xs text-slate-500 truncate">{hotel.city} · {hotel.category}</p>
                             <p className="text-xs text-amber-500">{'★'.repeat(hotel.rating)}{'☆'.repeat(5 - hotel.rating)}</p>
                           </div>
                         </li>
@@ -614,6 +663,7 @@ const ServicesSection = () => {
                 <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Hotels</button>
               </div>
             </form>
+            
           ) : selectedService === 'Transfers' ? (
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
@@ -641,6 +691,54 @@ const ServicesSection = () => {
               </div>
             </form>
           ) : null}
+          {showHotelResult && selectedHotel && (
+            <div className="mt-4 p-4 rounded-xl border border-slate-200 bg-white grid md:grid-cols-3 gap-4 items-center">
+              <img src={selectedHotel.image} alt={selectedHotel.name} className="w-full md:w-48 h-36 object-cover rounded-xl" />
+              <div className="md:col-span-2">
+                <h3 className="text-lg font-bold text-slate-800">{selectedHotel.name}</h3>
+                <p className="text-sm text-slate-500">{selectedHotel.city} · {selectedHotel.category}</p>
+                <p className="text-sm text-amber-500">{'★'.repeat(selectedHotel.rating)}{'☆'.repeat(5 - selectedHotel.rating)}</p>
+
+                <div className="mt-3 grid grid-cols-2 gap-2 items-center">
+                  <div>
+                    <label className="text-xs text-slate-500">Check-in</label>
+                    <div className="flex gap-2 items-center">
+                      <div className="text-sm">{checkInDate}</div>
+                      <input type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="ml-2 rounded-xl border border-slate-300 px-2 py-1" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-500">Check-out</label>
+                    <div className="flex gap-2 items-center">
+                      <div className="text-sm">{checkOutDate}</div>
+                      <input type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="ml-2 rounded-xl border border-slate-300 px-2 py-1" />
+                    </div>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-xs text-slate-500">Meal options</label>
+                    <select value={mealOption} onChange={(e) => setMealOption(e.target.value as any)} className="w-full rounded-xl border border-slate-300 px-3 py-2 mt-1">
+                      <option value="breakfast">Breakfast</option>
+                      <option value="bd">Breakfast + Dinner</option>
+                      <option value="all">All meals</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2 flex justify-end items-end">
+                    <div className="text-right">
+                      <div className="text-sm text-slate-500">Total price</div>
+                      <div className="text-2xl font-bold text-slate-800">
+                        {(() => {
+                          const { total, currency } = computeTotalPrice();
+                          const display = currency ? `${currency} ${total}` : `${total}`;
+                          return display;
+                        })()}
+                      </div>
+                      <div className="text-xs text-slate-500">{rooms} room(s) · {Math.max(1, Math.ceil((new Date(checkOutDate).getTime() - new Date(checkInDate).getTime())/(1000*60*60*24)))} night(s)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {result && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
         </div>
       </div>
