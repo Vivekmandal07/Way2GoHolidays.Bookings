@@ -758,7 +758,6 @@ const ServicesSection = () => {
                     <div className="font-semibold text-slate-800">Room specification</div>
                     <div className="mt-2 text-slate-500">Comfortable room with premium bedding, free WiFi, private bathroom, and daily housekeeping.</div>
                   </div>
-                  <button type="button" className="mt-4 w-full rounded-2xl bg-blue-600 text-white font-semibold px-4 py-3 hover:bg-blue-700 transition">Book Now</button>
                 </div>
                 <div className="md:col-span-2">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -819,13 +818,16 @@ const ServicesSection = () => {
                     </div>
                   </div>
 
-                  <div className="mt-6">
-                    <label className="block text-xs font-semibold text-slate-500">Meal options</label>
-                    <select value={mealOption} onChange={(e) => setMealOption(e.target.value as any)} className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3">
-                      <option value="breakfast">Breakfast</option>
-                      <option value="bd">Breakfast + Dinner</option>
-                      <option value="all">All meals</option>
-                    </select>
+                  <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="grow">
+                      <label className="block text-xs font-semibold text-slate-500">Meal options</label>
+                      <select value={mealOption} onChange={(e) => setMealOption(e.target.value as any)} className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3">
+                        <option value="breakfast">Breakfast</option>
+                        <option value="bd">Breakfast + Dinner</option>
+                        <option value="all">All meals</option>
+                      </select>
+                    </div>
+                    <button type="button" className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition">Book Now</button>
                   </div>
                 </div>
               </div>
