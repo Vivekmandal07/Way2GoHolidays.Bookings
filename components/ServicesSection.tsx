@@ -46,6 +46,11 @@ const ServicesSection = () => {
   const [infants, setInfants] = useState(0);
   const [childAges, setChildAges] = useState<string[]>([]);
 
+  // Input buffers to allow free typing (prevent jumpy coercion while typing)
+  const [adultsInput, setAdultsInput] = useState(String(adults));
+  const [childrenInput, setChildrenInput] = useState(String(children));
+  const [infantsInput, setInfantsInput] = useState(String(infants));
+
   const [hotelDestination, setHotelDestination] = useState('');
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
@@ -86,6 +91,11 @@ const ServicesSection = () => {
     });
   };
 
+  // Input buffers for hotel numeric fields
+  const [roomsInput, setRoomsInput] = useState(String(rooms));
+  const [hotelAdultsInput, setHotelAdultsInput] = useState(String(hotelAdults));
+  const [hotelChildrenInput, setHotelChildrenInput] = useState(String(hotelChildren));
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedService === 'Flights') {
@@ -115,6 +125,49 @@ const ServicesSection = () => {
       }
       setResult(`Transfer request: ${pickup} → ${dropoff} on ${transferDate} · ${vehicleType}`);
     }
+  };
+
+  // Blur handlers: parse input buffers, coerce to safe values and update numeric state
+  const commitAdults = () => {
+    let n = parseInt(adultsInput, 10);
+    if (Number.isNaN(n) || n < 1) n = 1;
+    setAdults(n);
+    setAdultsInput(String(n));
+  };
+
+  const commitChildren = () => {
+    let n = parseInt(childrenInput, 10);
+    if (Number.isNaN(n) || n < 0) n = 0;
+    updateChildren(n);
+    setChildrenInput(String(n));
+  };
+
+  const commitInfants = () => {
+    let n = parseInt(infantsInput, 10);
+    if (Number.isNaN(n) || n < 0) n = 0;
+    setInfants(n);
+    setInfantsInput(String(n));
+  };
+
+  const commitRooms = () => {
+    let n = parseInt(roomsInput, 10);
+    if (Number.isNaN(n) || n < 1) n = 1;
+    setRooms(n);
+    setRoomsInput(String(n));
+  };
+
+  const commitHotelAdults = () => {
+    let n = parseInt(hotelAdultsInput, 10);
+    if (Number.isNaN(n) || n < 1) n = 1;
+    setHotelAdults(n);
+    setHotelAdultsInput(String(n));
+  };
+
+  const commitHotelChildren = () => {
+    let n = parseInt(hotelChildrenInput, 10);
+    if (Number.isNaN(n) || n < 0) n = 0;
+    updateHotelChildren(n);
+    setHotelChildrenInput(String(n));
   };
 
   return (
@@ -193,15 +246,39 @@ const ServicesSection = () => {
               <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Adults (12+)</label>
-                  <input type="number" min={1} max={9} value={adults} onChange={(e) => setAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={1}
+                    max={9}
+                    value={adultsInput}
+                    onChange={(e) => setAdultsInput(e.target.value)}
+                    onBlur={commitAdults}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Children (2-11)</label>
-                  <input type="number" min={0} max={9} value={children} onChange={(e) => updateChildren(Number(e.target.value) || 0)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={0}
+                    max={9}
+                    value={childrenInput}
+                    onChange={(e) => setChildrenInput(e.target.value)}
+                    onBlur={commitChildren}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Infants (&lt;2)</label>
-                  <input type="number" min={0} max={5} value={infants} onChange={(e) => setInfants(Math.max(0, Number(e.target.value) || 0))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={0}
+                    max={5}
+                    value={infantsInput}
+                    onChange={(e) => setInfantsInput(e.target.value)}
+                    onBlur={commitInfants}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
               </div>
 
@@ -241,15 +318,39 @@ const ServicesSection = () => {
               <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Rooms</label>
-                  <input type="number" min={1} max={10} value={rooms} onChange={(e) => setRooms(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={1}
+                    max={10}
+                    value={roomsInput}
+                    onChange={(e) => setRoomsInput(e.target.value)}
+                    onBlur={commitRooms}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
-                  <input type="number" min={1} max={9} value={hotelAdults} onChange={(e) => setHotelAdults(Math.max(1, Number(e.target.value) || 1))} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={1}
+                    max={9}
+                    value={hotelAdultsInput}
+                    onChange={(e) => setHotelAdultsInput(e.target.value)}
+                    onBlur={commitHotelAdults}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Children</label>
-                  <input type="number" min={0} max={9} value={hotelChildren} onChange={(e) => updateHotelChildren(Number(e.target.value) || 0)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none" />
+                  <input
+                    type="number"
+                    min={0}
+                    max={9}
+                    value={hotelChildrenInput}
+                    onChange={(e) => setHotelChildrenInput(e.target.value)}
+                    onBlur={commitHotelChildren}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                  />
                 </div>
               </div>
               {hotelChildren > 0 && (
