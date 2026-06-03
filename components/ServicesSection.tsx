@@ -67,6 +67,106 @@ const ServicesSection = () => {
 
   const [result, setResult] = useState('');
 
+  // Airport data (small curated set for dropdown suggestions)
+  const airports = [
+    // India
+    { code: 'DEL', name: 'Indira Gandhi Intl', country: 'India' },
+    { code: 'BOM', name: 'Chhatrapati Shivaji Maharaj Intl', country: 'India' },
+    { code: 'BLR', name: 'Kempegowda Intl', country: 'India' },
+    { code: 'CCU', name: 'Netaji Subhas Chandra Bose Intl', country: 'India' },
+    { code: 'MAA', name: 'Chennai Intl', country: 'India' },
+    { code: 'HYD', name: 'Rajiv Gandhi Intl', country: 'India' },
+    { code: 'AMD', name: 'Sardar Vallabhbhai Patel Intl', country: 'India' },
+
+    // Thailand
+    { code: 'BKK', name: 'Suvarnabhumi', country: 'Thailand' },
+    { code: 'DMK', name: 'Don Mueang Intl', country: 'Thailand' },
+    { code: 'HKT', name: 'Phuket Intl', country: 'Thailand' },
+    { code: 'USM', name: 'Samui', country: 'Thailand' },
+
+    // Vietnam
+    { code: 'SGN', name: 'Tan Son Nhat Intl', country: 'Vietnam' },
+    { code: 'HAN', name: 'Noi Bai Intl', country: 'Vietnam' },
+    { code: 'DAD', name: 'Da Nang Intl', country: 'Vietnam' },
+
+    // Singapore
+    { code: 'SIN', name: 'Changi', country: 'Singapore' },
+
+    // Malaysia
+    { code: 'KUL', name: 'Kuala Lumpur Intl', country: 'Malaysia' },
+    { code: 'PEN', name: 'Penang Intl', country: 'Malaysia' },
+    { code: 'LGK', name: 'Langkawi Intl', country: 'Malaysia' },
+    { code: 'BKI', name: 'Kota Kinabalu Intl', country: 'Malaysia' },
+
+    // UAE / Dubai
+    { code: 'DXB', name: 'Dubai Intl', country: 'UAE' },
+    { code: 'DWC', name: 'Al Maktoum Intl', country: 'UAE' },
+
+    // Bali / Indonesia
+    { code: 'DPS', name: 'Ngurah Rai (Bali)', country: 'Indonesia' },
+
+    // Hong Kong
+    { code: 'HKG', name: 'Hong Kong Intl', country: 'Hong Kong' },
+
+    // Sri Lanka
+    { code: 'CMB', name: 'Bandaranaike Intl', country: 'Sri Lanka' },
+    { code: 'HRI', name: 'Mattala Rajapaksa Intl', country: 'Sri Lanka' },
+
+    // Maldives
+    { code: 'MLE', name: 'Velana Intl', country: 'Maldives' },
+    { code: 'VRM', name: 'VR Mall International', country: 'Maldives' },
+
+    // Australia
+    { code: 'SYD', name: 'Kingsford Smith', country: 'Australia' },
+    { code: 'MEL', name: 'Melbourne Intl', country: 'Australia' },
+    { code: 'BNE', name: 'Brisbane Intl', country: 'Australia' },
+    { code: 'PER', name: 'Perth Intl', country: 'Australia' },
+
+    // Cambodia
+    { code: 'PNH', name: 'Phnom Penh Intl', country: 'Cambodia' },
+    { code: 'KOS', name: 'Sihanouk Intl', country: 'Cambodia' },
+
+    // Azerbaijan / Baku
+    { code: 'GYD', name: 'Heydar Aliyev Intl', country: 'Azerbaijan' },
+
+    // Kazakhstan / Almaty
+    { code: 'ALA', name: 'Almaty Intl', country: 'Kazakhstan' },
+    { code: 'NQZ', name: 'Nursultan Nazarbayev Intl', country: 'Kazakhstan' },
+
+    // Europe example
+    { code: 'LHR', name: 'Heathrow', country: 'United Kingdom' },
+    { code: 'LGW', name: 'Gatwick', country: 'United Kingdom' },
+    { code: 'CDG', name: 'Charles de Gaulle', country: 'France' },
+    { code: 'ORY', name: 'Orly', country: 'France' },
+    { code: 'FRA', name: 'Frankfurt', country: 'Germany' },
+    { code: 'MAD', name: 'Adolfo Suárez Madrid–Barajas', country: 'Spain' },
+  ];
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeField, setActiveField] = useState<'from' | 'to' | null>(null);
+  const [filteredAirports, setFilteredAirports] = useState<typeof airports>([] as typeof airports);
+
+  const filterAirports = (q: string) => {
+    const val = q.trim().toLowerCase();
+    if (!val) return airports; // show full curated list on focus
+    return airports.filter((a) => a.code.toLowerCase().includes(val) || a.name.toLowerCase().includes(val) || a.country.toLowerCase().includes(val));
+  };
+
+  const openSuggestions = (field: 'from' | 'to', q = '') => {
+    setActiveField(field);
+    setFilteredAirports(filterAirports(q));
+    setShowSuggestions(true);
+  };
+
+  const selectAirport = (a: { code: string; name: string; country: string }) => {
+    const label = `${a.code} — ${a.name}, ${a.country}`;
+    if (activeField === 'from') setFrom(label);
+    if (activeField === 'to') setTo(label);
+    setShowSuggestions(false);
+    setActiveField(null);
+  };
+
+
   const updateChildren = (value: number) => {
     const safe = Math.max(0, Math.min(9, value));
     setChildren(safe);
@@ -232,11 +332,53 @@ const ServicesSection = () => {
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
-                <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} placeholder="City or airport" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={from}
+                    onChange={(e) => {
+                      setFrom(e.target.value);
+                      if (activeField !== 'from') openSuggestions('from', e.target.value);
+                      else setFilteredAirports(filterAirports(e.target.value));
+                    }}
+                    onFocus={() => openSuggestions('from', from)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                    placeholder="City, airport or IATA code"
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                  />
+                  {showSuggestions && activeField === 'from' && (
+                    <ul className="absolute z-20 left-0 right-0 mt-1 max-h-52 overflow-auto rounded-xl bg-white border border-slate-200 shadow-sm">
+                      {filteredAirports.map((a) => (
+                        <li key={a.code} onMouseDown={() => selectAirport(a)} className="px-3 py-2 hover:bg-slate-100 cursor-pointer">{`${a.code} — ${a.name}, ${a.country}`}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">To</label>
-                <input type="text" value={to} onChange={(e) => setTo(e.target.value)} placeholder="City or airport" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={to}
+                    onChange={(e) => {
+                      setTo(e.target.value);
+                      if (activeField !== 'to') openSuggestions('to', e.target.value);
+                      else setFilteredAirports(filterAirports(e.target.value));
+                    }}
+                    onFocus={() => openSuggestions('to', to)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                    placeholder="City, airport or IATA code"
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                  />
+                  {showSuggestions && activeField === 'to' && (
+                    <ul className="absolute z-20 left-0 right-0 mt-1 max-h-52 overflow-auto rounded-xl bg-white border border-slate-200 shadow-sm">
+                      {filteredAirports.map((a) => (
+                        <li key={a.code} onMouseDown={() => selectAirport(a)} className="px-3 py-2 hover:bg-slate-100 cursor-pointer">{`${a.code} — ${a.name}, ${a.country}`}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Depart on</label>
