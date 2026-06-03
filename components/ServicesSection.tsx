@@ -279,7 +279,7 @@ const ServicesSection = () => {
         setResult('Please enter all child ages.');
         return;
       }
-      setResult(`Flight search: ${from} → ${to} on ${departDate} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
+      setResult(`Flight search: ${from} → ${to} on ${formatDisplayDate(departDate)} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
     } else if (selectedService === 'Hotels') {
       if (!hotelDestination || !checkInDate || !checkOutDate) {
         setResult('Please fill Hotel destination and travel dates.');
@@ -301,7 +301,7 @@ const ServicesSection = () => {
         setResult('Please fill pickup, dropoff, and transfer date.');
         return;
       }
-      setResult(`Transfer request: ${pickup} → ${dropoff} on ${transferDate} · ${vehicleType}`);
+      setResult(`Transfer request: ${pickup} → ${dropoff} on ${formatDisplayDate(transferDate)} · ${vehicleType}`);
     }
   };
 
@@ -414,6 +414,16 @@ const ServicesSection = () => {
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const formatDisplayDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    if (!year || !month || !day) return dateStr;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthIndex = Number(month) - 1;
+    const monthLabel = monthNames[monthIndex] || month;
+    return `${String(day).padStart(2, '0')} ${monthLabel} ${year}`;
   };
 
   return (
@@ -798,7 +808,7 @@ const ServicesSection = () => {
                     <div className="col-span-1">
                       <label className="block text-xs font-semibold text-slate-500">Check-in</label>
                       <div className="mt-2">
-                        <div className="text-sm text-slate-700">{checkInDate || '—'}</div>
+                        <div className="text-sm text-slate-700">{checkInDate ? formatDisplayDate(checkInDate) : '—'}</div>
                         <div className="mt-2">
                           <input type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                         </div>
@@ -810,7 +820,7 @@ const ServicesSection = () => {
                     <div className="col-span-1">
                       <label className="block text-xs font-semibold text-slate-500">Check-out</label>
                       <div className="mt-2">
-                        <div className="text-sm text-slate-700">{checkOutDate || '—'}</div>
+                        <div className="text-sm text-slate-700">{checkOutDate ? formatDisplayDate(checkOutDate) : '—'}</div>
                         <div className="mt-2">
                           <input type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                         </div>
