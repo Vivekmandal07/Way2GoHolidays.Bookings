@@ -758,6 +758,7 @@ const ServicesSection = () => {
                     <div className="font-semibold text-slate-800">Room specification</div>
                     <div className="mt-2 text-slate-500">Comfortable room with premium bedding, free WiFi, private bathroom, and daily housekeeping.</div>
                   </div>
+                  <button type="button" className="mt-4 w-full rounded-2xl bg-blue-600 text-white font-semibold px-4 py-3 hover:bg-blue-700 transition">Book Now</button>
                 </div>
                 <div className="md:col-span-2">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
