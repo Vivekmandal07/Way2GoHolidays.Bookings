@@ -276,8 +276,8 @@ const ServicesSection = () => {
 
   const [selectedHotel, setSelectedHotel] = useState<typeof hotels[number] | null>(null);
   const hotelNationalityOptions = selectedHotel
-    ? hotelNationalityOptionsByCountry[getHotelCountry(selectedHotel.city)] || ['India', 'USA', 'UK', 'UAE']
-    : ['India', 'USA', 'UK', 'UAE'];
+    ? hotelNationalityOptionsByCountry[getHotelCountry(selectedHotel.city)] || ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka']
+    : ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka'];
   const [showHotelResult, setShowHotelResult] = useState(false);
   const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
   const [checkInTime, setCheckInTime] = useState('14:00');
