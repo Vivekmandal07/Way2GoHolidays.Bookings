@@ -230,10 +230,54 @@ const ServicesSection = () => {
     { city: 'Sapa', name: 'Victoria Sapa Resort', category: '4*', rating: 4, price: '$110', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
   ];
 
+  const hotelCityCountryMap: Record<string, string> = {
+    Delhi: 'India',
+    Kolkata: 'India',
+    Rajasthan: 'India',
+    Bangalore: 'India',
+    Uttarakhand: 'India',
+    Rishikesh: 'India',
+    Kochi: 'India',
+    Munnar: 'India',
+    Thekkady: 'India',
+    Alleppey: 'India',
+    Kovalam: 'India',
+    Kanyakumari: 'India',
+    Wayanad: 'India',
+    Vagamon: 'India',
+    Pattaya: 'Thailand',
+    Bangkok: 'Thailand',
+    Phuket: 'Thailand',
+    Krabi: 'Thailand',
+    'Phi Phi Island': 'Thailand',
+    'Ko Samui': 'Thailand',
+    Singapore: 'Singapore',
+    'Kuala Lumpur': 'Malaysia',
+    Penang: 'Malaysia',
+    Hanoi: 'Vietnam',
+    'Da Nang': 'Vietnam',
+    'Ho Chi Minh': 'Vietnam',
+    'Phu Quoc': 'Vietnam',
+    Sapa: 'Vietnam',
+  };
+
+  const hotelNationalityOptionsByCountry: Record<string, string[]> = {
+    India: ['Delhi', 'Goa', 'Rajasthan', 'Kochi', 'Munnar', 'Thekkady', 'Alleppey', 'Varkala', 'Kanyakumari', 'Kovalam', 'Wayanad', 'Vagamon'],
+    Thailand: ['Pattaya', 'Bangkok', 'Phuket', 'Krabi', 'Phi Phi Island', 'Ko Samui'],
+    Singapore: ['Singapore'],
+    Malaysia: ['Malaysia'],
+    Vietnam: ['Hanoi', 'Sapa', 'Da Nang', 'Ho Chi Minh', 'Phu Quoc'],
+  };
+
+  const getHotelCountry = (city: string) => hotelCityCountryMap[city] || '';
+
   const [hotelShowSuggestions, setHotelShowSuggestions] = useState(false);
   const [hotelFilteredHotels, setHotelFilteredHotels] = useState<typeof hotels>([] as typeof hotels);
 
   const [selectedHotel, setSelectedHotel] = useState<typeof hotels[number] | null>(null);
+  const hotelNationalityOptions = selectedHotel
+    ? hotelNationalityOptionsByCountry[getHotelCountry(selectedHotel.city)] || ['India', 'USA', 'UK', 'UAE']
+    : ['India', 'USA', 'UK', 'UAE'];
   const [showHotelResult, setShowHotelResult] = useState(false);
   const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
   const [checkInTime, setCheckInTime] = useState('14:00');
@@ -258,6 +302,11 @@ const ServicesSection = () => {
   const selectHotel = (hotel: typeof hotels[number]) => {
     setHotelDestination(`${hotel.city} - ${hotel.name} (${hotel.category})`);
     setSelectedHotel(hotel);
+    const country = getHotelCountry(hotel.city);
+    const options = hotelNationalityOptionsByCountry[country];
+    if (options && options.length) {
+      setNationality(options[0]);
+    }
     setHotelShowSuggestions(false);
   };
 
@@ -790,6 +839,7 @@ const ServicesSection = () => {
                     value={hotelDestination}
                     onChange={(e) => {
                       setHotelDestination(e.target.value);
+                      setSelectedHotel(null);
                       openHotelSuggestions(e.target.value);
                     }}
                     onFocus={() => openHotelSuggestions(hotelDestination)}
@@ -902,10 +952,9 @@ const ServicesSection = () => {
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
                 <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
-                  <option>India</option>
-                  <option>USA</option>
-                  <option>UK</option>
-                  <option>UAE</option>
+                  {hotelNationalityOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
               </div>
               <div className="lg:col-span-1 flex justify-end">
