@@ -356,11 +356,9 @@ const ServicesSection = () => {
   };
 
   const formatPrice = (value: number, currencyToken: string) => {
-    // add thousand separators
-    const formatted = value.toLocaleString();
-    if (!currencyToken) return formatted;
-    // common case: symbol like ₹, $, £ at start
-    return `${currencyToken} ${formatted}`;
+    // add thousand separators and display currency in Indian rupees
+    const formatted = value.toLocaleString('en-IN');
+    return `₹ ${formatted}`;
   };
 
   // Blur handlers: parse input buffers, coerce to safe values and update numeric state
@@ -784,7 +782,7 @@ const ServicesSection = () => {
                           return formatPrice(total, currency);
                         })()}
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">Price per night: {selectedHotel.price}</div>
+                      <div className="text-xs text-slate-500 mt-1">Price per night: {formatPrice(extractPrice(selectedHotel).amount, '₹')}</div>
                       <div className="text-xs text-slate-500 mt-1">
                         {rooms} room(s) · {getHotelNights()} night(s)
                       </div>
