@@ -754,9 +754,13 @@ const ServicesSection = () => {
               <div className="grid md:grid-cols-3 gap-6 items-start">
                 <div className="w-full md:w-48">
                   <img src={selectedHotel.image} alt={selectedHotel.name} className="w-full h-36 object-cover rounded-xl" />
+                  <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+                    <div className="font-semibold text-slate-800">Room specification</div>
+                    <div className="mt-2 text-slate-500">Comfortable room with premium bedding, free WiFi, private bathroom, and daily housekeeping.</div>
+                  </div>
                 </div>
                 <div className="md:col-span-2">
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                       <h3 className="text-2xl font-extrabold text-slate-900">{selectedHotel.name}</h3>
                       <p className="text-sm text-slate-500 mt-1">{selectedHotel.city} · {selectedHotel.category}</p>
@@ -770,7 +774,23 @@ const ServicesSection = () => {
                           return formatPrice(total, currency);
                         })()}
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">{rooms} room(s) · {Math.max(1, Math.ceil((new Date(checkOutDate).getTime() - new Date(checkInDate).getTime())/(1000*60*60*24)))} night(s)</div>
+                      <div className="text-xs text-slate-500 mt-1">Price per night: {selectedHotel.price}</div>
+                      <div className="text-xs text-slate-500 mt-1">
+                        {rooms} room(s) · {getHotelNights()} night(s)
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 grid gap-3 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Guests</div>
+                      <div className="text-sm text-slate-700">{hotelAdults} adult(s){hotelChildren > 0 ? ` · ${hotelChildren} child(ren)${getChildAgesSummary()}` : ''}</div>
+                      <div className="text-xs text-slate-500">{hotelAdults + hotelChildren} pax total</div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Room & nights</div>
+                      <div className="text-sm text-slate-700">{rooms} room(s) · {getHotelNights()} night(s)</div>
+                      <div className="text-xs text-slate-500">Meal plan: {mealOption === 'breakfast' ? 'Breakfast' : mealOption === 'bd' ? 'Breakfast + Dinner' : 'All meals'}</div>
                     </div>
                   </div>
 
