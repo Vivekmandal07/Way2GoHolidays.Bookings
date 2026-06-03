@@ -279,6 +279,16 @@ const ServicesSection = () => {
     ? hotelNationalityOptionsByCountry[getHotelCountry(selectedHotel.city)] || ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka']
     : ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka'];
   const [showHotelResult, setShowHotelResult] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingTitle, setBookingTitle] = useState<'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Mister'>('Mr');
+  const [guestName, setGuestName] = useState('');
+  const [guestDob, setGuestDob] = useState('');
+  const [mealRequest, setMealRequest] = useState('No preference');
+  const [panNumber, setPanNumber] = useState('');
+  const [passportNumber, setPassportNumber] = useState('');
+  const [passportExpiry, setPassportExpiry] = useState('');
+  const [bookingMessage, setBookingMessage] = useState('');
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
   const [checkInTime, setCheckInTime] = useState('14:00');
   const [checkOutTime, setCheckOutTime] = useState('12:00');
@@ -410,6 +420,53 @@ const ServicesSection = () => {
       }
       setResult(`Transfer request: ${pickup} → ${dropoff} on ${formatDisplayDate(transferDate)} · ${vehicleType}`);
     }
+  };
+
+  const getBookingBody = () => {
+    if (!selectedHotel) return '';
+    const bookingInfo = [
+      `Hotel: ${selectedHotel.name}`,
+      `City: ${selectedHotel.city}`,
+      `Category: ${selectedHotel.category}`,
+      `Check-in: ${checkInDate ? formatDisplayDate(checkInDate) : 'N/A'} ${checkInTime}`,
+      `Check-out: ${checkOutDate ? formatDisplayDate(checkOutDate) : 'N/A'} ${checkOutTime}`,
+      `Rooms: ${rooms}`,
+      `Adults: ${hotelAdults}`,
+      `Children: ${hotelChildren}`,
+      `Meal plan: ${mealOption === 'breakfast' ? 'Breakfast' : mealOption === 'bd' ? 'Breakfast + Dinner' : 'All meals'}`,
+      `Title: ${bookingTitle}`,
+      `Name: ${guestName}`,
+      `Date of Birth: ${guestDob ? formatDisplayDate(guestDob) : 'N/A'}`,
+      `Meal request: ${mealRequest}`,
+      `PAN No: ${panNumber || 'N/A'}`,
+      `Passport No: ${passportNumber || 'N/A'}`,
+      `Passport expiry: ${passportExpiry ? formatDisplayDate(passportExpiry) : 'N/A'}`,
+    ];
+    return bookingInfo.join('\n');
+  };
+
+  const handleBookingSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!guestName.trim()) {
+      setBookingMessage('Please enter guest name.');
+      return;
+    }
+    if (!guestDob) {
+      setBookingMessage('Please enter date of birth.');
+      return;
+    }
+    if (!mealRequest) {
+      setBookingMessage('Please select a meal request.');
+      return;
+    }
+    const body = encodeURIComponent(getBookingBody());
+    const subject = encodeURIComponent('Hotel Booking Request');
+    const emailUrl = `mailto:hello@yourcompany.com?subject=${subject}&body=${body}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Hotel Booking Request:\n' + getBookingBody())}`;
+    window.open(emailUrl, '_blank');
+    window.open(whatsappUrl, '_blank');
+    setBookingMessage('Booking information prepared for email and WhatsApp.');
+    setBookingSubmitted(true);
   };
 
   // Helpers for hotel pricing
@@ -990,7 +1047,8 @@ const ServicesSection = () => {
             </form>
           ) : null}
           {showHotelResult && selectedHotel && (
-            <div className="mt-6 p-6 rounded-xl border border-slate-200 bg-white shadow-sm">
+            <>
+              <div className="mt-6 p-6 rounded-xl border border-slate-200 bg-white shadow-sm">
               <div className="grid md:grid-cols-3 gap-6 items-start">
                 <div className="w-full md:w-48">
                   <img src={selectedHotel.image} alt={selectedHotel.name} className="w-full h-36 object-cover rounded-xl" />
@@ -1067,9 +1125,88 @@ const ServicesSection = () => {
                         <option value="all">All meals</option>
                       </select>
                     </div>
-                    <button type="button" className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition">Book Now</button>
+                    <button type="button" onClick={() => { setShowBookingModal(true); setBookingMessage(''); setBookingSubmitted(false); }} className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition">Book Now</button>
                   </div>
                 </div>
+              </div>
+            </>
+          )}
+          {showBookingModal && selectedHotel && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4">
+              <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Confirm booking details</p>
+                    <p className="text-xs text-slate-500">Complete guest details and send booking info.</p>
+                  </div>
+                  <button type="button" onClick={() => setShowBookingModal(false)} className="text-slate-500 hover:text-slate-800">Close</button>
+                </div>
+                <form onSubmit={handleBookingSubmit} className="space-y-4 px-6 py-5">
+                  {bookingMessage && (
+                    <div className={`rounded-2xl px-4 py-3 text-sm ${bookingSubmitted ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                      {bookingMessage}
+                    </div>
+                  )}
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Title</label>
+                      <select value={bookingTitle} onChange={(e) => setBookingTitle(e.target.value as any)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                        <option>Mr</option>
+                        <option>Mrs</option>
+                        <option>Ms</option>
+                        <option>Miss</option>
+                        <option>Mister</option>
+                      </select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Guest name</label>
+                      <input type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Full name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Date of birth</label>
+                      <input type="date" value={guestDob} onChange={(e) => setGuestDob(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Meal request</label>
+                      <select value={mealRequest} onChange={(e) => setMealRequest(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                        <option>No preference</option>
+                        <option>Vegetarian</option>
+                        <option>Non-vegetarian</option>
+                        <option>Vegan</option>
+                        <option>Gluten-free</option>
+                        <option>Halal</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">PAN No</label>
+                      <input type="text" value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
+                      <input type="text" value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
+                      <input type="date" value={passportExpiry} onChange={(e) => setPassportExpiry(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                    </div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Booking summary</p>
+                    <p className="mt-2 text-sm text-slate-700">{selectedHotel.name}, {selectedHotel.city}</p>
+                    <p className="text-sm text-slate-700">Guests: {hotelAdults} adult(s){hotelChildren > 0 ? ` · ${hotelChildren} child(ren)` : ''}</p>
+                    <p className="text-sm text-slate-700">Stay: {rooms} room(s) · {getHotelNights()} night(s)</p>
+                    <p className="text-sm text-slate-700">Check-in: {checkInDate ? formatDisplayDate(checkInDate) : '—'} {checkInTime}</p>
+                    <p className="text-sm text-slate-700">Check-out: {checkOutDate ? formatDisplayDate(checkOutDate) : '—'} {checkOutTime}</p>
+                  </div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" onClick={() => setShowBookingModal(false)} className="rounded-2xl border border-slate-300 px-5 py-3 text-slate-700 hover:bg-slate-100 transition">Cancel</button>
+                    <button type="submit" className="rounded-2xl bg-blue-600 text-white px-5 py-3 font-semibold hover:bg-blue-700 transition">Make payment</button>
+                  </div>
+                </form>
               </div>
             </div>
           )}
