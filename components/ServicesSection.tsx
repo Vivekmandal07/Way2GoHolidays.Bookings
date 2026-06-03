@@ -67,6 +67,13 @@ const ServicesSection = () => {
 
   const [result, setResult] = useState('');
 
+  const openService = (service: ServiceCard['serviceKey']) => {
+    setSelectedService(service);
+    setResult('');
+    setShowHotelResult(false);
+    setSelectedHotel(null);
+  };
+
   // Airport data (small curated set for dropdown suggestions)
   const airports = [
     // India
@@ -455,7 +462,7 @@ const ServicesSection = () => {
               </div>
               <div className="mt-4">
                 <button
-                  onClick={() => setSelectedService(card.serviceKey)}
+                  onClick={() => openService(card.serviceKey)}
                   className="w-full rounded-xl bg-blue-600 text-white font-bold px-4 py-2 hover:bg-blue-700 transition"
                 >
                   {card.buttonText}
