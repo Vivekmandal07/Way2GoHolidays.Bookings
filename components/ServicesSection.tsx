@@ -36,6 +36,27 @@ const cards: ServiceCard[] = [
   },
 ];
 
+interface FlightOption {
+  id: string;
+  airline: string;
+  flightNumber: string;
+  logo: string;
+  departTime: string;
+  arriveTime: string;
+  duration: string;
+  price: number;
+  stops: string;
+}
+
+const flightOptions: FlightOption[] = [
+  { id: '6E204', airline: 'IndiGo', flightNumber: '6E 204', logo: '🟦', departTime: '07:20', arriveTime: '10:10', duration: '2h 50m', price: 16500, stops: 'Non-stop' },
+  { id: '2P101', airline: 'Akasa Air', flightNumber: 'QP 101', logo: '🟠', departTime: '08:00', arriveTime: '10:50', duration: '2h 50m', price: 16250, stops: 'Non-stop' },
+  { id: 'FD180', airline: 'Thai AirAsia', flightNumber: 'FD 180', logo: '🇹🇭', departTime: '09:15', arriveTime: '12:10', duration: '2h 55m', price: 16800, stops: 'Non-stop' },
+  { id: 'AI101', airline: 'Air India', flightNumber: 'AI 101', logo: '🇮🇳', departTime: '06:00', arriveTime: '08:45', duration: '2h 45m', price: 18000, stops: 'Non-stop' },
+  { id: 'SG301', airline: 'SpiceJet', flightNumber: 'SG 301', logo: '🛫', departTime: '10:30', arriveTime: '13:25', duration: '2h 55m', price: 17200, stops: 'Non-stop' },
+  { id: 'UK502', airline: 'Vistara', flightNumber: 'UK 502', logo: '✈️', departTime: '12:00', arriveTime: '14:50', duration: '2h 50m', price: 17700, stops: 'Non-stop' },
+];
+
 const ServicesSection = () => {
   const [selectedService, setSelectedService] = useState<ServiceCard['serviceKey'] | null>(null);
   const [from, setFrom] = useState('');
@@ -66,12 +87,16 @@ const ServicesSection = () => {
   const [vehicleType, setVehicleType] = useState('Sedan');
 
   const [result, setResult] = useState('');
+  const [showFlightResults, setShowFlightResults] = useState(false);
+  const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null);
 
   const openService = (service: ServiceCard['serviceKey']) => {
     setSelectedService(service);
     setResult('');
     setShowHotelResult(false);
     setSelectedHotel(null);
+    setShowFlightResults(false);
+    setSelectedFlightId(null);
   };
 
   // Airport data (small curated set for dropdown suggestions)
@@ -287,6 +312,8 @@ const ServicesSection = () => {
         return;
       }
       setResult(`Flight search: ${from} → ${to} on ${formatDisplayDate(departDate)} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
+      setShowFlightResults(true);
+      setSelectedFlightId(flightOptions[0]?.id ?? null);
     } else if (selectedService === 'Hotels') {
       if (!hotelDestination || !checkInDate || !checkOutDate) {
         setResult('Please fill Hotel destination and travel dates.');
@@ -490,7 +517,8 @@ const ServicesSection = () => {
             </div>
           )}
           {selectedService === 'Flights' ? (
-            <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
+            <div>
+              <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
                 <div className="relative">
@@ -604,6 +632,64 @@ const ServicesSection = () => {
                 </div>
               )}
             </form>
+            {showFlightResults && (
+              <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Available flights</p>
+                    <p className="text-base font-semibold text-slate-700">Choose a flight from all airlines</p>
+                  </div>
+                  <div className="text-sm text-slate-500">{result}</div>
+                </div>
+                <div className="space-y-4">
+                  {flightOptions.map((flight) => (
+                    <label key={flight.id} className={`flex flex-col gap-4 rounded-3xl border p-4 transition ${selectedFlightId === flight.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-slate-50 hover:border-slate-300'}`}>
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="radio"
+                            name="flightSelection"
+                            checked={selectedFlightId === flight.id}
+                            onChange={() => setSelectedFlightId(flight.id)}
+                            className="h-4 w-4 text-blue-600"
+                          />
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-2xl">{flight.logo}</div>
+                            <div>
+                              <p className="font-semibold text-slate-900">{flight.airline}</p>
+                              <p className="text-sm text-slate-500">{flight.flightNumber}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-slate-900">₹ {flight.price.toLocaleString('en-IN')}</p>
+                          <p className="text-xs text-slate-500">{flight.stops}</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                          <p className="text-xs uppercase text-slate-500">Depart</p>
+                          <p className="font-semibold text-slate-900">{flight.departTime}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                          <p className="text-xs uppercase text-slate-500">Arrive</p>
+                          <p className="font-semibold text-slate-900">{flight.arriveTime}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                          <p className="text-xs uppercase text-slate-500">Duration</p>
+                          <p className="font-semibold text-slate-900">{flight.duration}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                          <p className="text-xs uppercase text-slate-500">Route</p>
+                          <p className="font-semibold text-slate-900">{from} → {to}</p>
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+            </div>
           ) : selectedService === 'Hotels' ? (
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-3">
@@ -848,7 +934,7 @@ const ServicesSection = () => {
               </div>
             </div>
           )}
-          {result && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
+          {result && !showFlightResults && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
         </div>
       </div>
     </section>
