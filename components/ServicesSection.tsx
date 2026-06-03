@@ -617,11 +617,9 @@ const ServicesSection = () => {
                   onChange={(e) => {
                     const v = e.target.value;
                     setCheckInDate(v);
-                    // if no check-out or check-out is before or equal to check-in, set to next day
-                    if (!v) return;
-                    const next = getNextDateString(v);
-                    if (!checkOutDate || new Date(checkOutDate) <= new Date(v)) {
-                      setCheckOutDate(next);
+                    // keep check-out empty so the user can choose it explicitly
+                    if (v && checkOutDate && new Date(checkOutDate) <= new Date(v)) {
+                      setCheckOutDate('');
                     }
                   }}
                   className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
