@@ -146,6 +146,72 @@ const ServicesSection = () => {
   const [activeField, setActiveField] = useState<'from' | 'to' | null>(null);
   const [filteredAirports, setFilteredAirports] = useState<typeof airports>([] as typeof airports);
 
+  const hotels = [
+    // India
+    { city: 'Delhi', name: 'The Oberoi, New Delhi', category: '5*', rating: 5, price: '₹18,000', image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Delhi', name: 'Lemon Tree Premier', category: '4*', rating: 4, price: '₹7,500', image: 'https://images.unsplash.com/photo-1519821172141-b0f9f8d6fe39?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Kolkata', name: 'The Oberoi Grand', category: '5*', rating: 5, price: '₹14,000', image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Kolkata', name: 'Taj Bengal', category: '5*', rating: 5, price: '₹15,000', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Rajasthan', name: 'Taj Rambagh Palace', category: '5*', rating: 5, price: '₹22,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Bangalore', name: 'The Leela Palace', category: '5*', rating: 5, price: '₹13,500', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Bangalore', name: 'JW Marriott', category: '5*', rating: 5, price: '₹12,000', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Uttarakhand', name: 'Ananda in the Himalayas', category: '5*', rating: 5, price: '₹25,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Rishikesh', name: 'Aloha on the Ganges', category: '4*', rating: 4, price: '₹6,000', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Kochi', name: 'Taj Malabar', category: '5*', rating: 5, price: '₹11,000', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Munnar', name: 'Tea County', category: '4*', rating: 4, price: '₹7,500', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Thekkady', name: 'Spice Village', category: '4*', rating: 4, price: '₹8,500', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Alleppey', name: 'Punnamada Resort', category: '5*', rating: 5, price: '₹10,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Kovalam', name: 'Uday Samudra', category: '4*', rating: 4, price: '₹6,800', image: 'https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Kanyakumari', name: 'The Gopinivas Grand', category: '3*', rating: 3, price: '₹4,200', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Wayanad', name: 'Vythiri Village', category: '5*', rating: 5, price: '₹9,500', image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80' },
+
+    // Thailand
+    { city: 'Pattaya', name: 'Amari Pattaya', category: '4*', rating: 4, price: '฿5,500', image: 'https://images.unsplash.com/photo-1519821172141-b0f9f8d6fe39?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Bangkok', name: 'Novotel Bangkok', category: '4*', rating: 4, price: '฿6,200', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Phuket', name: 'Hyatt Regency Phuket', category: '5*', rating: 5, price: '฿12,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Krabi', name: 'Railay Bay Resort', category: '4*', rating: 4, price: '฿7,800', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Phi Phi Island', name: 'Phi Phi Island Village', category: '4*', rating: 4, price: '฿9,200', image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Ko Samui', name: 'Anantara Bophut', category: '5*', rating: 5, price: '฿14,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+
+    // Singapore
+    { city: 'Singapore', name: 'Marina Bay Sands', category: '5*', rating: 5, price: 'S$450', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+
+    // Malaysia
+    { city: 'Kuala Lumpur', name: 'Traders Hotel', category: '5*', rating: 5, price: 'RM 980', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Penang', name: 'Eastern & Oriental Hotel', category: '5*', rating: 5, price: 'RM 760', image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80' },
+
+    // Vietnam
+    { city: 'Hanoi', name: 'Sofitel Legend Metropole', category: '5*', rating: 5, price: '$210', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Da Nang', name: 'Furama Resort', category: '5*', rating: 5, price: '$190', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Ho Chi Minh', name: 'Sheraton Saigon', category: '5*', rating: 5, price: '$185', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Phu Quoc', name: 'Vinpearl Resort', category: '5*', rating: 5, price: '$220', image: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80' },
+    { city: 'Sapa', name: 'Victoria Sapa Resort', category: '4*', rating: 4, price: '$110', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80' },
+  ];
+
+  const [hotelShowSuggestions, setHotelShowSuggestions] = useState(false);
+  const [hotelFilteredHotels, setHotelFilteredHotels] = useState<typeof hotels>([] as typeof hotels);
+
+  const filterHotels = (q: string) => {
+    const val = q.trim().toLowerCase();
+    if (!val) return hotels;
+    return hotels.filter((hotel) =>
+      hotel.city.toLowerCase().includes(val) ||
+      hotel.name.toLowerCase().includes(val) ||
+      hotel.category.toLowerCase().includes(val) ||
+      hotel.price.toLowerCase().includes(val)
+    );
+  };
+
+  const openHotelSuggestions = (q = '') => {
+    setHotelFilteredHotels(filterHotels(q));
+    setHotelShowSuggestions(true);
+  };
+
+  const selectHotel = (hotel: typeof hotels[number]) => {
+    setHotelDestination(`${hotel.city} - ${hotel.name} (${hotel.category})`);
+    setHotelShowSuggestions(false);
+  };
+
   const filterAirports = (q: string) => {
     const val = q.trim().toLowerCase();
     if (!val) return airports; // show full curated list on focus
@@ -165,7 +231,6 @@ const ServicesSection = () => {
     setShowSuggestions(false);
     setActiveField(null);
   };
-
 
   const updateChildren = (value: number) => {
     const safe = Math.max(0, Math.min(9, value));
@@ -447,7 +512,34 @@ const ServicesSection = () => {
             <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
               <div className="lg:col-span-3">
                 <label className="block text-xs font-bold text-slate-500 mb-1">Going to</label>
-                <input type="text" value={hotelDestination} onChange={(e) => setHotelDestination(e.target.value)} placeholder="City or hotel name" className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={hotelDestination}
+                    onChange={(e) => {
+                      setHotelDestination(e.target.value);
+                      openHotelSuggestions(e.target.value);
+                    }}
+                    onFocus={() => openHotelSuggestions(hotelDestination)}
+                    onBlur={() => setTimeout(() => setHotelShowSuggestions(false), 150)}
+                    placeholder="City, hotel or category"
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                  />
+                  {hotelShowSuggestions && (
+                    <ul className="absolute z-20 left-0 right-0 mt-1 max-h-72 overflow-auto rounded-2xl bg-white border border-slate-200 shadow-sm">
+                      {hotelFilteredHotels.map((hotel, index) => (
+                        <li key={`${hotel.city}-${hotel.name}-${index}`} onMouseDown={() => selectHotel(hotel)} className="flex gap-3 px-3 py-3 hover:bg-slate-50 cursor-pointer">
+                          <img src={hotel.image} alt={hotel.name} className="h-16 w-24 rounded-2xl object-cover" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold text-slate-800 truncate">{hotel.name}</p>
+                            <p className="text-xs text-slate-500 truncate">{hotel.city} · {hotel.category} · {hotel.price}</p>
+                            <p className="text-xs text-amber-500">{'★'.repeat(hotel.rating)}{'☆'.repeat(5 - hotel.rating)}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1">Check-in</label>
