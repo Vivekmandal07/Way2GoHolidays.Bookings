@@ -46,15 +46,19 @@ interface FlightOption {
   duration: string;
   price: number;
   stops: string;
+  baggage: {
+    hand: string;
+    checked: string;
+  };
 }
 
 const flightOptions: FlightOption[] = [
-  { id: '6E204', airline: 'IndiGo', flightNumber: '6E 204', logo: '🟦', departTime: '07:20', arriveTime: '10:10', duration: '2h 50m', price: 16500, stops: 'Non-stop' },
-  { id: '2P101', airline: 'Akasa Air', flightNumber: 'QP 101', logo: '🟠', departTime: '08:00', arriveTime: '10:50', duration: '2h 50m', price: 16250, stops: 'Non-stop' },
-  { id: 'FD180', airline: 'Thai AirAsia', flightNumber: 'FD 180', logo: '🇹🇭', departTime: '09:15', arriveTime: '12:10', duration: '2h 55m', price: 16800, stops: 'Non-stop' },
-  { id: 'AI101', airline: 'Air India', flightNumber: 'AI 101', logo: '🇮🇳', departTime: '06:00', arriveTime: '08:45', duration: '2h 45m', price: 18000, stops: 'Non-stop' },
-  { id: 'SG301', airline: 'SpiceJet', flightNumber: 'SG 301', logo: '🛫', departTime: '10:30', arriveTime: '13:25', duration: '2h 55m', price: 17200, stops: 'Non-stop' },
-  { id: 'UK502', airline: 'Vistara', flightNumber: 'UK 502', logo: '✈️', departTime: '12:00', arriveTime: '14:50', duration: '2h 50m', price: 17700, stops: 'Non-stop' },
+  { id: '6E204', airline: 'IndiGo', flightNumber: '6E 204', logo: '🟦', departTime: '07:20', arriveTime: '10:10', duration: '2h 50m', price: 16500, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '15 kg' } },
+  { id: '2P101', airline: 'Akasa Air', flightNumber: 'QP 101', logo: '🟠', departTime: '08:00', arriveTime: '10:50', duration: '2h 50m', price: 16250, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '20 kg' } },
+  { id: 'FD180', airline: 'Thai AirAsia', flightNumber: 'FD 180', logo: '🇹🇭', departTime: '09:15', arriveTime: '12:10', duration: '2h 55m', price: 16800, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '20 kg' } },
+  { id: 'AI101', airline: 'Air India', flightNumber: 'AI 101', logo: '🇮🇳', departTime: '06:00', arriveTime: '08:45', duration: '2h 45m', price: 18000, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '25 kg' } },
+  { id: 'SG301', airline: 'SpiceJet', flightNumber: 'SG 301', logo: '🛫', departTime: '10:30', arriveTime: '13:25', duration: '2h 55m', price: 17200, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '15 kg' } },
+  { id: 'UK502', airline: 'Vistara', flightNumber: 'UK 502', logo: '✈️', departTime: '12:00', arriveTime: '14:50', duration: '2h 50m', price: 17700, stops: 'Non-stop', baggage: { hand: '7 kg', checked: '25 kg' } },
 ];
 
 const ServicesSection = () => {
@@ -62,6 +66,9 @@ const ServicesSection = () => {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [departDate, setDepartDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [tripType, setTripType] = useState<'oneway' | 'roundtrip' | 'multicity'>('oneway');
+  const [multiCitySegment, setMultiCitySegment] = useState({ from: '', to: '', date: '' });
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -97,6 +104,9 @@ const ServicesSection = () => {
     setSelectedHotel(null);
     setShowFlightResults(false);
     setSelectedFlightId(null);
+    setTripType('oneway');
+    setReturnDate('');
+    setMultiCitySegment({ from: '', to: '', date: '' });
   };
 
   // Airport data (small curated set for dropdown suggestions)
@@ -307,11 +317,25 @@ const ServicesSection = () => {
         setResult('Please fill From, To, and Depart date.');
         return;
       }
+      if (tripType === 'roundtrip' && !returnDate) {
+        setResult('Please select a return date for round-trip travel.');
+        return;
+      }
+      if (tripType === 'multicity' && (!multiCitySegment.from || !multiCitySegment.to || !multiCitySegment.date)) {
+        setResult('Please complete the second leg for multi-city travel.');
+        return;
+      }
       if (children > 0 && childAges.some((age) => age.trim() === '')) {
         setResult('Please enter all child ages.');
         return;
       }
-      setResult(`Flight search: ${from} → ${to} on ${formatDisplayDate(departDate)} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
+      const baseMessage = `Flight search: ${from} → ${to} on ${formatDisplayDate(departDate)}`;
+      const tripDetails = tripType === 'roundtrip'
+        ? `, return on ${formatDisplayDate(returnDate)}`
+        : tripType === 'multicity'
+          ? `, second leg: ${multiCitySegment.from} → ${multiCitySegment.to} on ${formatDisplayDate(multiCitySegment.date)}`
+          : '';
+      setResult(`${baseMessage}${tripDetails} · ${adults} adult(s), ${children} child(ren), ${infants} infant(s)`);
       setShowFlightResults(true);
       setSelectedFlightId(flightOptions[0]?.id ?? null);
     } else if (selectedService === 'Hotels') {
@@ -519,6 +543,25 @@ const ServicesSection = () => {
           {selectedService === 'Flights' ? (
             <div>
               <form onSubmit={onSubmit} className="grid gap-3 lg:grid-cols-5 items-end">
+                <div className="lg:col-span-5">
+                  <label className="block text-xs font-bold text-slate-500 mb-2">Trip type</label>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {[
+                      { value: 'oneway', label: 'One Way' },
+                      { value: 'roundtrip', label: 'Round Trip' },
+                      { value: 'multicity', label: 'Multi City' },
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setTripType(option.value as 'oneway' | 'roundtrip' | 'multicity')}
+                        className={`rounded-2xl border px-4 py-2 text-sm font-semibold transition ${tripType === option.value ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'}`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               <div className="lg:col-span-2">
                 <label className="block text-xs font-bold text-slate-500 mb-1">From</label>
                 <div className="relative">
@@ -573,7 +616,51 @@ const ServicesSection = () => {
                 <label className="block text-xs font-bold text-slate-500 mb-1">Depart on</label>
                 <input type="date" value={departDate} onChange={(e) => setDepartDate(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none" />
               </div>
-
+              {tripType === 'roundtrip' && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Return on</label>
+                  <input
+                    type="date"
+                    min={departDate || undefined}
+                    value={returnDate}
+                    onChange={(e) => setReturnDate(e.target.value)}
+                    className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                  />
+                </div>
+              )}
+              {tripType === 'multicity' && (
+                <div className="lg:col-span-5 grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1">Second leg from</label>
+                    <input
+                      type="text"
+                      value={multiCitySegment.from}
+                      onChange={(e) => setMultiCitySegment((prev) => ({ ...prev, from: e.target.value }))}
+                      placeholder="City, airport or IATA code"
+                      className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1">Second leg to</label>
+                    <input
+                      type="text"
+                      value={multiCitySegment.to}
+                      onChange={(e) => setMultiCitySegment((prev) => ({ ...prev, to: e.target.value }))}
+                      placeholder="City, airport or IATA code"
+                      className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1">Second leg date</label>
+                    <input
+                      type="date"
+                      value={multiCitySegment.date}
+                      onChange={(e) => setMultiCitySegment((prev) => ({ ...prev, date: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
+              )}
               <div className="lg:col-span-2 grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1">Adults (12+)</label>
@@ -664,6 +751,8 @@ const ServicesSection = () => {
                         <div className="text-right">
                           <p className="text-sm font-semibold text-slate-900">₹ {flight.price.toLocaleString('en-IN')}</p>
                           <p className="text-xs text-slate-500">{flight.stops}</p>
+                          <p className="mt-2 text-xs text-slate-500">Hand baggage: <span className="font-semibold text-slate-900">{flight.baggage.hand}</span></p>
+                          <p className="text-xs text-slate-500">Checked baggage: <span className="font-semibold text-slate-900">{flight.baggage.checked}</span></p>
                         </div>
                       </div>
                       <div className="grid gap-4 text-sm md:grid-cols-[1fr_auto_1fr] items-center">
