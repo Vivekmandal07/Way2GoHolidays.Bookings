@@ -666,22 +666,23 @@ const ServicesSection = () => {
                           <p className="text-xs text-slate-500">{flight.stops}</p>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
-                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                      <div className="grid gap-4 text-sm md:grid-cols-[1fr_auto_1fr] items-center">
+                        <div className="rounded-2xl bg-white p-4 shadow-sm">
                           <p className="text-xs uppercase text-slate-500">Depart</p>
-                          <p className="font-semibold text-slate-900">{flight.departTime}</p>
+                          <p className="mt-3 text-base font-semibold text-slate-900">{from.split(' — ')[0] || 'From'}</p>
+                          <p className="mt-1 text-xs text-slate-500">{from.split(' — ')[1] || from}</p>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">{flight.departTime}</p>
                         </div>
-                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                        <div className="flex flex-col items-center justify-center gap-2 text-center">
+                          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Duration</p>
+                          <div className="h-px w-24 bg-slate-300" />
+                          <p className="text-sm font-semibold text-slate-900">{flight.duration}</p>
+                        </div>
+                        <div className="rounded-2xl bg-white p-4 shadow-sm">
                           <p className="text-xs uppercase text-slate-500">Arrive</p>
-                          <p className="font-semibold text-slate-900">{flight.arriveTime}</p>
-                        </div>
-                        <div className="rounded-2xl bg-white p-3 shadow-sm">
-                          <p className="text-xs uppercase text-slate-500">Duration</p>
-                          <p className="font-semibold text-slate-900">{flight.duration}</p>
-                        </div>
-                        <div className="rounded-2xl bg-white p-3 shadow-sm">
-                          <p className="text-xs uppercase text-slate-500">Route</p>
-                          <p className="font-semibold text-slate-900">{from} → {to}</p>
+                          <p className="mt-3 text-base font-semibold text-slate-900">{to.split(' — ')[0] || 'To'}</p>
+                          <p className="mt-1 text-xs text-slate-500">{to.split(' — ')[1] || to}</p>
+                          <p className="mt-4 text-3xl font-bold text-slate-900">{flight.arriveTime}</p>
                         </div>
                       </div>
                     </label>
