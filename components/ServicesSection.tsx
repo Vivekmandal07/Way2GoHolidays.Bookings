@@ -1083,7 +1083,7 @@ const ServicesSection = () => {
                         const next = [...prev];
                         next[idx] = e.target.value;
                         return next;
-                      })} className="h-16 w-full rounded-[24px] border border-slate-300 px-3 text-center text-lg outline-none focus:border-blue-500" />
+                      })} className="h-16 w-[120px] rounded-[24px] border border-slate-300 px-3 text-center text-lg outline-none focus:border-blue-500" />
                     </div>
                   ))}
                 </div>
