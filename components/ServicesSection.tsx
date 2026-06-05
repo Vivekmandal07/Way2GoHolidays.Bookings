@@ -1031,7 +1031,7 @@ const ServicesSection = () => {
                     value={roomsInput}
                     onChange={(e) => setRoomsInput(e.target.value)}
                     onBlur={commitRooms}
-                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-16 w-full rounded-xl border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -1043,7 +1043,7 @@ const ServicesSection = () => {
                     value={hotelAdultsInput}
                     onChange={(e) => setHotelAdultsInput(e.target.value)}
                     onBlur={commitHotelAdults}
-                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-16 w-full rounded-xl border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -1055,13 +1055,13 @@ const ServicesSection = () => {
                     value={hotelChildrenInput}
                     onChange={(e) => setHotelChildrenInput(e.target.value)}
                     onBlur={commitHotelChildren}
-                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-16 w-full rounded-xl border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="col-span-5 sm:col-span-6">
                   <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
-                  <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-lg text-slate-900 outline-none bg-white focus:border-blue-500">
+                  <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="h-16 w-full rounded-xl border border-slate-300 px-4 text-lg text-slate-900 outline-none bg-white focus:border-blue-500">
                     {hotelNationalityOptions.map((option) => (
                       <option key={option} value={option}>{option}</option>
                     ))}
