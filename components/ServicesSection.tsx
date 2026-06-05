@@ -417,10 +417,21 @@ const ServicesSection = () => {
         setResult('Please enter all hotel child ages.');
         return;
       }
-      // require selecting a hotel from suggestions
-      if (!selectedHotel) {
+      let hotelToBook = selectedHotel;
+      if (!hotelToBook) {
+        const normalizedDestination = hotelDestination.trim().toLowerCase();
+        hotelToBook = hotels.find((hotel) =>
+          normalizedDestination.includes(hotel.name.toLowerCase()) ||
+          normalizedDestination.includes(hotel.city.toLowerCase()) ||
+          normalizedDestination.includes(hotel.category.toLowerCase())
+        ) || null;
+      }
+      if (!hotelToBook) {
         setResult('Please choose a hotel from suggestions.');
         return;
+      }
+      if (!selectedHotel) {
+        setSelectedHotel(hotelToBook);
       }
       setResult('');
       setShowHotelResult(true);
@@ -1020,7 +1031,7 @@ const ServicesSection = () => {
                     value={roomsInput}
                     onChange={(e) => setRoomsInput(e.target.value)}
                     onBlur={commitRooms}
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -1032,7 +1043,7 @@ const ServicesSection = () => {
                     value={hotelAdultsInput}
                     onChange={(e) => setHotelAdultsInput(e.target.value)}
                     onBlur={commitHotelAdults}
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -1044,21 +1055,23 @@ const ServicesSection = () => {
                     value={hotelChildrenInput}
                     onChange={(e) => setHotelChildrenInput(e.target.value)}
                     onBlur={commitHotelChildren}
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
+                    className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div className="col-span-5 sm:col-span-6">
                   <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
-                  <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
+                  <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="h-16 w-full rounded-[28px] border border-slate-300 px-4 text-lg text-slate-900 outline-none bg-white focus:border-blue-500">
                     {hotelNationalityOptions.map((option) => (
                       <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
                 </div>
 
-                <div className="col-span-1 sm:col-span-2 flex justify-end">
-                  <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-6 py-3 hover:bg-blue-700 transition">Search Hotels</button>
+                <div className="col-span-1 sm:col-span-2 flex items-end justify-end">
+                  <button type="submit" className="inline-flex h-16 min-w-[170px] items-center justify-center rounded-[32px] bg-blue-600 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-700">
+                    Search Hotels
+                  </button>
                 </div>
               </div>
               {hotelChildren > 0 && (
@@ -1070,7 +1083,7 @@ const ServicesSection = () => {
                         const next = [...prev];
                         next[idx] = e.target.value;
                         return next;
-                      })} className="w-full rounded-xl border border-slate-300 px-2 py-2 outline-none" />
+                      })} className="h-16 w-full rounded-[24px] border border-slate-300 px-3 text-center text-lg outline-none focus:border-blue-500" />
                     </div>
                   ))}
                 </div>
