@@ -279,14 +279,20 @@ const ServicesSection = () => {
     ? hotelNationalityOptionsByCountry[getHotelCountry(selectedHotel.city)] || ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka']
     : ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka'];
   const [showHotelResult, setShowHotelResult] = useState(false);
+  type PassengerInfo = {
+    title: 'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Mister';
+    name: string;
+    dob: string;
+    mealRequest: string;
+    panNumber: string;
+    passportNumber: string;
+    passportExpiry: string;
+  };
+
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [bookingTitle, setBookingTitle] = useState<'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Mister'>('Mr');
-  const [guestName, setGuestName] = useState('');
-  const [guestDob, setGuestDob] = useState('');
-  const [mealRequest, setMealRequest] = useState('No preference');
-  const [panNumber, setPanNumber] = useState('');
-  const [passportNumber, setPassportNumber] = useState('');
-  const [passportExpiry, setPassportExpiry] = useState('');
+  const [passengers, setPassengers] = useState<PassengerInfo[]>([
+    { title: 'Mr', name: '', dob: '', mealRequest: 'No preference', panNumber: '', passportNumber: '', passportExpiry: '' },
+  ]);
   const [bookingMessage, setBookingMessage] = useState('');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
@@ -422,6 +428,32 @@ const ServicesSection = () => {
     }
   };
 
+  const defaultPassenger = (): PassengerInfo => ({
+    title: 'Mr',
+    name: '',
+    dob: '',
+    mealRequest: 'No preference',
+    panNumber: '',
+    passportNumber: '',
+    passportExpiry: '',
+  });
+
+  const buildPassengers = (count: number, current: PassengerInfo[] = passengers) => {
+    const next = current.slice(0, count);
+    while (next.length < count) {
+      next.push(defaultPassenger());
+    }
+    return next;
+  };
+
+  const updatePassenger = (index: number, field: keyof PassengerInfo, value: string) => {
+    setPassengers((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
   const getBookingBody = () => {
     if (!selectedHotel) return '';
     const bookingInfo = [
@@ -434,29 +466,24 @@ const ServicesSection = () => {
       `Adults: ${hotelAdults}`,
       `Children: ${hotelChildren}`,
       `Meal plan: ${mealOption === 'breakfast' ? 'Breakfast' : mealOption === 'bd' ? 'Breakfast + Dinner' : 'All meals'}`,
-      `Title: ${bookingTitle}`,
-      `Name: ${guestName}`,
-      `Date of Birth: ${guestDob ? formatDisplayDate(guestDob) : 'N/A'}`,
-      `Meal request: ${mealRequest}`,
-      `PAN No: ${panNumber || 'N/A'}`,
-      `Passport No: ${passportNumber || 'N/A'}`,
-      `Passport expiry: ${passportExpiry ? formatDisplayDate(passportExpiry) : 'N/A'}`,
+      `Passenger details:`,
+      ...passengers.map((passenger, index) => {
+        const passengerType = index < hotelAdults ? `Adult ${index + 1}` : `Child ${index - hotelAdults + 1}`;
+        return `${passengerType}: ${passenger.title} ${passenger.name} | DOB: ${passenger.dob ? formatDisplayDate(passenger.dob) : 'N/A'} | Meal: ${passenger.mealRequest} | PAN: ${passenger.panNumber || 'N/A'} | Passport: ${passenger.passportNumber || 'N/A'} | Expiry: ${passenger.passportExpiry ? formatDisplayDate(passenger.passportExpiry) : 'N/A'}`;
+      }),
     ];
     return bookingInfo.join('\n');
   };
 
   const handleBookingSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!guestName.trim()) {
-      setBookingMessage('Please enter guest name.');
+    if (passengers.length === 0) {
+      setBookingMessage('Please enter passenger details.');
       return;
     }
-    if (!guestDob) {
-      setBookingMessage('Please enter date of birth.');
-      return;
-    }
-    if (!mealRequest) {
-      setBookingMessage('Please select a meal request.');
+    const invalidPassenger = passengers.find((passenger) => !passenger.name.trim() || !passenger.dob);
+    if (invalidPassenger) {
+      setBookingMessage('Please enter a name and date of birth for each passenger.');
       return;
     }
     const body = encodeURIComponent(getBookingBody());
@@ -1125,11 +1152,23 @@ const ServicesSection = () => {
                         <option value="all">All meals</option>
                       </select>
                     </div>
-                    <button type="button" onClick={() => { setShowBookingModal(true); setBookingMessage(''); setBookingSubmitted(false); }} className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition">Book Now</button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const totalPassengers = Math.max(1, hotelAdults + hotelChildren);
+                        setPassengers((prev) => buildPassengers(totalPassengers, prev));
+                        setShowBookingModal(true);
+                        setBookingMessage('');
+                        setBookingSubmitted(false);
+                      }}
+                      className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition"
+                    >
+                      Book Now
+                    </button>
                   </div>
                 </div>
               </div>
+            </div>
             </>
           )}
           {showBookingModal && selectedHotel && (
@@ -1148,52 +1187,67 @@ const ServicesSection = () => {
                       {bookingMessage}
                     </div>
                   )}
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Title</label>
-                      <select value={bookingTitle} onChange={(e) => setBookingTitle(e.target.value as any)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-                        <option>Mr</option>
-                        <option>Mrs</option>
-                        <option>Ms</option>
-                        <option>Miss</option>
-                        <option>Mister</option>
-                      </select>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Guest name</label>
-                      <input type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Full name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                    </div>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Date of birth</label>
-                      <input type="date" value={guestDob} onChange={(e) => setGuestDob(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Meal request</label>
-                      <select value={mealRequest} onChange={(e) => setMealRequest(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-                        <option>No preference</option>
-                        <option>Vegetarian</option>
-                        <option>Non-vegetarian</option>
-                        <option>Vegan</option>
-                        <option>Gluten-free</option>
-                        <option>Halal</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">PAN No</label>
-                      <input type="text" value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
-                      <input type="text" value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
-                      <input type="date" value={passportExpiry} onChange={(e) => setPassportExpiry(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                    </div>
+                  <div className="space-y-4">
+                    {passengers.map((passenger, index) => (
+                      <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {index < hotelAdults ? `Adult ${index + 1}` : `Child ${index - hotelAdults + 1}`}
+                            </p>
+                            <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
+                          </div>
+                          <p className="text-xs text-red-500">* Required</p>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Title <span className="text-red-500">*</span></label>
+                            <select value={passenger.title} onChange={(e) => updatePassenger(index, 'title', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                              <option>Mr</option>
+                              <option>Mrs</option>
+                              <option>Ms</option>
+                              <option>Miss</option>
+                              <option>Mister</option>
+                            </select>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Full name <span className="text-red-500">*</span></label>
+                            <input type="text" value={passenger.name} onChange={(e) => updatePassenger(index, 'name', e.target.value)} placeholder="Full name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Date of birth <span className="text-red-500">*</span></label>
+                            <input type="date" value={passenger.dob} onChange={(e) => updatePassenger(index, 'dob', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Meal request <span className="text-red-500">*</span></label>
+                            <select value={passenger.mealRequest} onChange={(e) => updatePassenger(index, 'mealRequest', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                              <option>No preference</option>
+                              <option>Vegetarian</option>
+                              <option>Non-vegetarian</option>
+                              <option>Vegan</option>
+                              <option>Gluten-free</option>
+                              <option>Halal</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">PAN No</label>
+                            <input type="text" value={passenger.panNumber} onChange={(e) => updatePassenger(index, 'panNumber', e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
+                            <input type="text" value={passenger.passportNumber} onChange={(e) => updatePassenger(index, 'passportNumber', e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
+                            <input type="date" value={passenger.passportExpiry} onChange={(e) => updatePassenger(index, 'passportExpiry', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Booking summary</p>
