@@ -454,6 +454,18 @@ const ServicesSection = () => {
     });
   };
 
+  const movePassenger = (index: number, direction: -1 | 1) => {
+    setPassengers((prev) => {
+      const next = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= next.length) return prev;
+      const tmp = next[target];
+      next[target] = next[index];
+      next[index] = tmp;
+      return next;
+    });
+  };
+
   const getBookingBody = () => {
     if (!selectedHotel) return '';
     const bookingInfo = [
@@ -1172,8 +1184,8 @@ const ServicesSection = () => {
             </>
           )}
           {showBookingModal && selectedHotel && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4">
-              <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+            <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/70 p-4 overflow-y-auto">
+              <div className="w-full max-w-3xl overflow-auto rounded-3xl bg-white shadow-2xl max-h-[85vh]">
                 <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
                   <div>
                     <p className="text-sm font-semibold text-slate-900">Confirm booking details</p>
@@ -1197,7 +1209,13 @@ const ServicesSection = () => {
                             </p>
                             <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
                           </div>
-                          <p className="text-xs text-red-500">* Required</p>
+                          <div className="flex items-center gap-4">
+                            <div className="flex flex-col items-end">
+                              <button type="button" onClick={() => movePassenger(index, -1)} disabled={index === 0} className="text-slate-400 hover:text-slate-700 disabled:opacity-40">▲</button>
+                              <button type="button" onClick={() => movePassenger(index, 1)} disabled={index === passengers.length - 1} className="text-slate-400 hover:text-slate-700 disabled:opacity-40 mt-1">▼</button>
+                            </div>
+                            <p className="text-xs text-red-500">* Required</p>
+                          </div>
                         </div>
                         <div className="grid gap-4 sm:grid-cols-3 mt-4">
                           <div>
