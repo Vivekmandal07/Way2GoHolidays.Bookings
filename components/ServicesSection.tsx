@@ -1031,7 +1031,7 @@ const ServicesSection = () => {
                     value={roomsInput}
                     onChange={(e) => setRoomsInput(e.target.value)}
                     onBlur={commitRooms}
-                    className="h-16 w-[50px] rounded-xl border border-slate-300  text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-10 w-[50px] rounded-xl border border-slate-300  text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
