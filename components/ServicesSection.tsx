@@ -1075,17 +1075,6 @@ const ServicesSection = () => {
                   ))}
                 </div>
               )}
-              <div className="lg:col-span-2">
-                <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
-                <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
-                  {hotelNationalityOptions.map((option) => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="lg:col-span-1 flex justify-end">
-                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Hotels</button>
-              </div>
             </form>
             
           ) : selectedService === 'Transfers' ? (
