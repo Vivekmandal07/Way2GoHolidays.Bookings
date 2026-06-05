@@ -1068,7 +1068,7 @@ const ServicesSection = () => {
                   </select>
                 </div>
 
-                <div className="col-span-1 sm:col-span-2 flex items-end justify-end">
+                <div className="col-span-1 sm:col-span-2 flex items-end justify-end pl-2">
                   <button type="submit" className="inline-flex h-8 min-w-[190px] items-center justify-center rounded-xl bg-blue-600 px-6 py-8 text-lg font-bold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-700">
                     Search Hotels
                   </button>
