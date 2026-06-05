@@ -1060,7 +1060,7 @@ const ServicesSection = () => {
                 </div>
 
                 <div className="col-span-5 sm:col-span-6">
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
+                  <label className="block text-xs font-bold text-slate-500 mb-1">City</label>
                   <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="h-16 w-[360px] rounded-xl border border-slate-300 px-4 text-lg text-slate-900 outline-none bg-white focus:border-blue-500">
                     {hotelNationalityOptions.map((option) => (
                       <option key={option} value={option}>{option}</option>
