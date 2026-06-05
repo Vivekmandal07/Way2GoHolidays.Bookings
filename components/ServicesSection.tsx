@@ -1126,6 +1126,7 @@ const ServicesSection = () => {
                       </select>
                     </div>
                     <button type="button" onClick={() => { setShowBookingModal(true); setBookingMessage(''); setBookingSubmitted(false); }} className="min-w-[150px] rounded-2xl bg-blue-600 text-white font-semibold px-6 py-3 hover:bg-blue-700 transition">Book Now</button>
+                    </div>
                   </div>
                 </div>
               </div>
