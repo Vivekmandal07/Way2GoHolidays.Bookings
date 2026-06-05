@@ -1110,6 +1110,19 @@ const ServicesSection = () => {
                   <option>Sedan</option>
                   <option>SUV</option>
                   <option>Van</option>
+                  <option>Mini Van</option>
+                  <option>Ertiga</option>
+                  <option>Fortuner</option>
+                  <option>Enova</option>
+                  <option>9-Seater Tempo Traveller</option>
+                  <option>12-Seater Tempo Traveller</option>
+                  <option>17-Seater Tempo Traveller</option>
+                  <option>20-Seater Tempo Traveller</option>
+                  <option>26-Seater Tempo Traveller</option>
+                  <option>Mini Coach (20–30 Seater)</option>
+                  <option>Tourist Coach (35–50 Seater)</option>
+                  <option>AC Bus</option>
+                  <option>Luxury Coach Bus</option>
                 </select>
               </div>
               <div className="lg:col-span-1 flex justify-end">
