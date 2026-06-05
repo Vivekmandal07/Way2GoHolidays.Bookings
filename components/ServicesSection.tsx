@@ -528,7 +528,7 @@ const ServicesSection = () => {
     }
     const body = encodeURIComponent(getBookingBody());
     const subject = encodeURIComponent('Hotel Booking Request');
-    const emailUrl = `mailto:hello@yourcompany.com?subject=${subject}&body=${body}`;
+    const emailUrl = `mailto:way2goholidays.bookings@gmail.com?subject=${subject}&body=${body}`;
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Hotel Booking Request:\n' + getBookingBody())}`;
     window.open(emailUrl, '_blank');
     window.open(whatsappUrl, '_blank');
