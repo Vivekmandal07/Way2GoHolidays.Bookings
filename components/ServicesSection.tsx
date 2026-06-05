@@ -47,8 +47,8 @@ interface FlightOption {
   price: number;
   stops: string;
   baggage: {
-    hand: string;
-    checked: string;
+  hand: string;
+  checked: string;
   };
 }
 
