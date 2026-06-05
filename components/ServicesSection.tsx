@@ -1043,7 +1043,7 @@ const ServicesSection = () => {
                     value={hotelAdultsInput}
                     onChange={(e) => setHotelAdultsInput(e.target.value)}
                     onBlur={commitHotelAdults}
-                    className="h-16 w-[60px] rounded-xl border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-16 w-[60px] rounded-xl border border-slate-300  text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -1055,7 +1055,7 @@ const ServicesSection = () => {
                     value={hotelChildrenInput}
                     onChange={(e) => setHotelChildrenInput(e.target.value)}
                     onBlur={commitHotelChildren}
-                    className="h-16 w-[60px] rounded-xl border border-slate-300 px-4 text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
+                    className="h-16 w-[60px] rounded-xl border border-slate-300  text-center text-xl font-semibold text-slate-900 outline-none focus:border-blue-500"
                   />
                 </div>
 
