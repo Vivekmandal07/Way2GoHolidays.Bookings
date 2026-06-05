@@ -507,6 +507,10 @@ const ServicesSection = () => {
       setBookingMessage('Please select title and enter given name, last name, and date of birth for each passenger.');
       return;
     }
+    if (hotelAdults === 1 && passengers[0] && !passengers[0].panNumber.trim()) {
+      setBookingMessage('Please enter PAN number for the adult passenger.');
+      return;
+    }
     if (!contactPhone.trim() || !contactEmail.trim()) {
       setBookingMessage('Please enter phone number and email before making payment.');
       return;
@@ -678,8 +682,7 @@ const ServicesSection = () => {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+                      ))}
 
         <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
           {selectedService === null ? (
@@ -1213,79 +1216,84 @@ const ServicesSection = () => {
                     </div>
                   )}
                   <div className="space-y-4">
-                    {passengers.map((passenger, index) => (
-                      <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <div>
-                            <p className="text-sm font-semibold text-slate-900">
-                              {index < hotelAdults ? `Adult ${index + 1}` : `Child ${index - hotelAdults + 1}`}
-                            </p>
-                            <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
+                    {passengers.map((passenger, index) => {
+                      const showPanRequired = hotelAdults === 1 && index === 0;
+                      return (
+                        <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-slate-900">
+                                {index < hotelAdults ? `Adult ${index + 1}` : `Child ${index - hotelAdults + 1}`}
+                              </p>
+                              <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
+                            </div>
+                            <p className="text-xs text-red-500 self-start">* Required</p>
                           </div>
-                          <p className="text-xs text-red-500 self-start">* Required</p>
+                          <div className="grid gap-4 sm:grid-cols-5 mt-4">
+                            <div className="sm:col-span-1 max-w-[150px]">
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Title <span className="text-red-500">*</span></label>
+                              <select value={passenger.title} onChange={(e) => updatePassenger(index, 'title', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                                <option value="" disabled hidden>Select</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Mister">Mister</option>
+                              </select>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Given name <span className="text-red-500">*</span></label>
+                              <input type="text" value={passenger.givenName} onChange={(e) => updatePassenger(index, 'givenName', e.target.value)} placeholder="Given name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                            <div className="sm:col-span-2">
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Last name <span className="text-red-500">*</span></label>
+                              <input type="text" value={passenger.lastName} onChange={(e) => updatePassenger(index, 'lastName', e.target.value)} placeholder="Last name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                          </div>
+                          <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                            <div>
+                              <label className={showPanRequired ? 'block text-xs font-semibold text-red-500 mb-1' : 'block text-xs font-semibold text-slate-500 mb-1'}>
+                                PAN No {showPanRequired && <span className="text-red-500">*</span>}
+                              </label>
+                              <input type="text" value={passenger.panNumber} onChange={(e) => updatePassenger(index, 'panNumber', e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Meal request <span className="text-red-500">*</span></label>
+                              <select value={passenger.mealRequest} onChange={(e) => updatePassenger(index, 'mealRequest', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
+                                <option>No preference</option>
+                                <option>Vegetarian</option>
+                                <option>Non-vegetarian</option>
+                                <option>Vegan</option>
+                                <option>Gluten-free</option>
+                                <option>Halal</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Date of birth <span className="text-red-500">*</span></label>
+                              <input type="date" value={passenger.dob} onChange={(e) => updatePassenger(index, 'dob', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                          </div>
+                          <div className="grid gap-4 sm:grid-cols-4 mt-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
+                              <input type="text" value={passenger.passportNumber} onChange={(e) => updatePassenger(index, 'passportNumber', e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Issue place</label>
+                              <input type="text" value={passenger.passportIssuePlace} onChange={(e) => updatePassenger(index, 'passportIssuePlace', e.target.value)} placeholder="Passport issue place" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Issue date</label>
+                              <input type="date" value={passenger.passportIssueDate} onChange={(e) => updatePassenger(index, 'passportIssueDate', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
+                              <input type="date" value={passenger.passportExpiry} onChange={(e) => updatePassenger(index, 'passportExpiry', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            </div>
+                          </div>
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-5 mt-4">
-                          <div className="sm:col-span-1 max-w-[150px]">
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Title <span className="text-red-500">*</span></label>
-                            <select value={passenger.title} onChange={(e) => updatePassenger(index, 'title', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-                              <option value="" disabled hidden>Select</option>
-                              <option value="Mr">Mr</option>
-                              <option value="Mrs">Mrs</option>
-                              <option value="Ms">Ms</option>
-                              <option value="Miss">Miss</option>
-                              <option value="Mister">Mister</option>
-                            </select>
-                          </div>
-                          <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Given name <span className="text-red-500">*</span></label>
-                            <input type="text" value={passenger.givenName} onChange={(e) => updatePassenger(index, 'givenName', e.target.value)} placeholder="Given name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                          <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Last name <span className="text-red-500">*</span></label>
-                            <input type="text" value={passenger.lastName} onChange={(e) => updatePassenger(index, 'lastName', e.target.value)} placeholder="Last name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                        </div>
-                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Date of birth <span className="text-red-500">*</span></label>
-                            <input type="date" value={passenger.dob} onChange={(e) => updatePassenger(index, 'dob', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Meal request <span className="text-red-500">*</span></label>
-                            <select value={passenger.mealRequest} onChange={(e) => updatePassenger(index, 'mealRequest', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-                              <option>No preference</option>
-                              <option>Vegetarian</option>
-                              <option>Non-vegetarian</option>
-                              <option>Vegan</option>
-                              <option>Gluten-free</option>
-                              <option>Halal</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">PAN No</label>
-                            <input type="text" value={passenger.panNumber} onChange={(e) => updatePassenger(index, 'panNumber', e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                        </div>
-                        <div className="grid gap-4 sm:grid-cols-4 mt-4">
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
-                            <input type="text" value={passenger.passportNumber} onChange={(e) => updatePassenger(index, 'passportNumber', e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Issue place</label>
-                            <input type="text" value={passenger.passportIssuePlace} onChange={(e) => updatePassenger(index, 'passportIssuePlace', e.target.value)} placeholder="Passport issue place" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Issue date</label>
-                            <input type="date" value={passenger.passportIssueDate} onChange={(e) => updatePassenger(index, 'passportIssueDate', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
-                            <input type="date" value={passenger.passportExpiry} onChange={(e) => updatePassenger(index, 'passportExpiry', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                     <p className="text-sm font-semibold text-slate-900 mb-3">Contact details</p>
@@ -1317,6 +1325,7 @@ const ServicesSection = () => {
             </div>
           )}
           {result && !showFlightResults && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
+        </div>
         </div>
       </div>
     </section>
