@@ -1234,7 +1234,8 @@ const ServicesSection = () => {
                 <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white/95 px-6 py-4 backdrop-blur-sm">
                   <div>
                     <p className="text-sm font-semibold text-slate-900">Enter Traveler details & Conform Hotel Booking</p>
-                    <p className="text-xs text-slate-500">Please fill all boxes as per passport or from valid id proof.</p>
+                    <p className="text-xs text-slate-500">Please fill in the details for each traveler as per passport or from valid id proof</p>
+                  </div>
                   <button type="button" onClick={() => setShowBookingModal(false)} className="text-slate-500 hover:text-slate-800">Close</button>
                 </div>
                 <form onSubmit={handleBookingSubmit} className="space-y-4 px-6 py-5">
