@@ -1181,8 +1181,8 @@ const ServicesSection = () => {
             </>
           )}
           {showBookingModal && selectedHotel && (
-            <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/70 p-4 overflow-y-auto">
-              <div ref={modalContentRef} className="w-full max-w-3xl overflow-auto rounded-3xl bg-white shadow-2xl max-h-[85vh]">
+            <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/70 pt-16 pb-6 px-4 overflow-y-auto">
+              <div ref={modalContentRef} className="w-full max-w-3xl overflow-auto rounded-3xl bg-white shadow-2xl max-h-[80vh] mt-6">
                 <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white/95 px-6 py-4 backdrop-blur-sm">
                   <div>
                     <p className="text-sm font-semibold text-slate-900">Confirm booking details</p>
