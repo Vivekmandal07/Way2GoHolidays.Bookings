@@ -532,7 +532,7 @@ const ServicesSection = () => {
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Hotel Booking Request:\n' + getBookingBody())}`;
     window.open(emailUrl, '_blank');
     window.open(whatsappUrl, '_blank');
-    setBookingMessage('Booking information prepared for email and WhatsApp.');
+    setBookingMessage('Your Hotel Booking Request has been sent via email and WhatsApp.');
     setBookingSubmitted(true);
   };
 
