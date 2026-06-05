@@ -454,18 +454,6 @@ const ServicesSection = () => {
     });
   };
 
-  const movePassenger = (index: number, direction: -1 | 1) => {
-    setPassengers((prev) => {
-      const next = [...prev];
-      const target = index + direction;
-      if (target < 0 || target >= next.length) return prev;
-      const tmp = next[target];
-      next[target] = next[index];
-      next[index] = tmp;
-      return next;
-    });
-  };
-
   const modalContentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -1218,29 +1206,7 @@ const ServicesSection = () => {
                             </p>
                             <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
                           </div>
-                          <div className="flex items-center gap-4">
-                            <div className="flex flex-col items-end gap-2">
-                              <button
-                                type="button"
-                                onClick={() => movePassenger(index, -1)}
-                                disabled={index === 0}
-                                aria-label={`Move ${index + 1} up`}
-                                className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-40"
-                              >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => movePassenger(index, 1)}
-                                disabled={index === passengers.length - 1}
-                                aria-label={`Move ${index + 1} down`}
-                                className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-40"
-                              >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                              </button>
-                            </div>
-                            <p className="text-xs text-red-500">* Required</p>
-                          </div>
+                          <p className="text-xs text-red-500 self-start">* Required</p>
                         </div>
                         <div className="grid gap-4 sm:grid-cols-3 mt-4">
                           <div>
