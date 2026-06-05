@@ -29,7 +29,7 @@ const cards: ServiceCard[] = [
   {
     title: 'Transfers',
     img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
-    buttonText: 'Arrange Transfer',
+    buttonText: 'Book Transfer',
     serviceKey: 'Transfers',
     tagline: 'Airport, city and private transfers in one click',
     features: ['Door-to-door', 'Professional drivers', '24/7 support'],
@@ -682,7 +682,8 @@ const ServicesSection = () => {
                 </button>
               </div>
             </div>
-                      ))}
+          ))}
+        </div>
 
         <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
           {selectedService === null ? (
@@ -1009,8 +1010,8 @@ const ServicesSection = () => {
                   className="w-full rounded-xl border border-slate-300 px-3 py-2 focus:border-blue-500 outline-none"
                 />
               </div>
-              <div className="lg:col-span-2 grid grid-cols-3 gap-2">
-                <div>
+              <div className="lg:col-span-5 grid grid-cols-12 gap-3 items-end">
+                <div className="col-span-2 sm:col-span-1">
                   <label className="block text-xs font-bold text-slate-500 mb-1">Rooms</label>
                   <input
                     type="number"
@@ -1022,7 +1023,7 @@ const ServicesSection = () => {
                     className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
                   />
                 </div>
-                <div>
+                <div className="col-span-2 sm:col-span-1">
                   <label className="block text-xs font-bold text-slate-500 mb-1">Adults</label>
                   <input
                     type="number"
@@ -1034,7 +1035,7 @@ const ServicesSection = () => {
                     className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
                   />
                 </div>
-                <div>
+                <div className="col-span-2 sm:col-span-1">
                   <label className="block text-xs font-bold text-slate-500 mb-1">Children</label>
                   <input
                     type="number"
@@ -1045,6 +1046,19 @@ const ServicesSection = () => {
                     onBlur={commitHotelChildren}
                     className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none"
                   />
+                </div>
+
+                <div className="col-span-5 sm:col-span-6">
+                  <label className="block text-xs font-bold text-slate-500 mb-1">Nationality</label>
+                  <select value={nationality} onChange={(e) => setNationality(e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none bg-white">
+                    {hotelNationalityOptions.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-span-1 sm:col-span-2 flex justify-end">
+                  <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-6 py-3 hover:bg-blue-700 transition">Search Hotels</button>
                 </div>
               </div>
               {hotelChildren > 0 && (
@@ -1325,7 +1339,6 @@ const ServicesSection = () => {
             </div>
           )}
           {result && !showFlightResults && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
-        </div>
         </div>
       </div>
     </section>
