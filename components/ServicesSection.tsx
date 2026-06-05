@@ -280,19 +280,24 @@ const ServicesSection = () => {
     : ['India', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia', 'Sri Lanka'];
   const [showHotelResult, setShowHotelResult] = useState(false);
   type PassengerInfo = {
-    title: 'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Mister';
-    name: string;
+    title: '' | 'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Mister';
+    givenName: string;
+    lastName: string;
     dob: string;
     mealRequest: string;
     panNumber: string;
     passportNumber: string;
+    passportIssuePlace: string;
+    passportIssueDate: string;
     passportExpiry: string;
   };
 
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [passengers, setPassengers] = useState<PassengerInfo[]>([
-    { title: 'Mr', name: '', dob: '', mealRequest: 'No preference', panNumber: '', passportNumber: '', passportExpiry: '' },
+    { title: '', givenName: '', lastName: '', dob: '', mealRequest: 'No preference', panNumber: '', passportNumber: '', passportIssuePlace: '', passportIssueDate: '', passportExpiry: '' },
   ]);
+  const [contactPhone, setContactPhone] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
   const [bookingMessage, setBookingMessage] = useState('');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [mealOption, setMealOption] = useState<'breakfast' | 'bd' | 'all'>('breakfast');
@@ -429,12 +434,15 @@ const ServicesSection = () => {
   };
 
   const defaultPassenger = (): PassengerInfo => ({
-    title: 'Mr',
-    name: '',
+    title: '',
+    givenName: '',
+    lastName: '',
     dob: '',
     mealRequest: 'No preference',
     panNumber: '',
     passportNumber: '',
+    passportIssuePlace: '',
+    passportIssueDate: '',
     passportExpiry: '',
   });
 
@@ -475,10 +483,12 @@ const ServicesSection = () => {
       `Adults: ${hotelAdults}`,
       `Children: ${hotelChildren}`,
       `Meal plan: ${mealOption === 'breakfast' ? 'Breakfast' : mealOption === 'bd' ? 'Breakfast + Dinner' : 'All meals'}`,
+      `Contact phone: ${contactPhone || 'N/A'}`,
+      `Contact email: ${contactEmail || 'N/A'}`,
       `Passenger details:`,
       ...passengers.map((passenger, index) => {
         const passengerType = index < hotelAdults ? `Adult ${index + 1}` : `Child ${index - hotelAdults + 1}`;
-        return `${passengerType}: ${passenger.title} ${passenger.name} | DOB: ${passenger.dob ? formatDisplayDate(passenger.dob) : 'N/A'} | Meal: ${passenger.mealRequest} | PAN: ${passenger.panNumber || 'N/A'} | Passport: ${passenger.passportNumber || 'N/A'} | Expiry: ${passenger.passportExpiry ? formatDisplayDate(passenger.passportExpiry) : 'N/A'}`;
+        return `${passengerType}: ${passenger.title} ${passenger.givenName} ${passenger.lastName} | DOB: ${passenger.dob ? formatDisplayDate(passenger.dob) : 'N/A'} | Meal: ${passenger.mealRequest} | PAN: ${passenger.panNumber || 'N/A'} | Passport No: ${passenger.passportNumber || 'N/A'} | Issue Place: ${passenger.passportIssuePlace || 'N/A'} | Issue Date: ${passenger.passportIssueDate ? formatDisplayDate(passenger.passportIssueDate) : 'N/A'} | Expiry: ${passenger.passportExpiry ? formatDisplayDate(passenger.passportExpiry) : 'N/A'}`;
       }),
     ];
     return bookingInfo.join('\n');
@@ -490,9 +500,15 @@ const ServicesSection = () => {
       setBookingMessage('Please enter passenger details.');
       return;
     }
-    const invalidPassenger = passengers.find((passenger) => !passenger.name.trim() || !passenger.dob);
+    const invalidPassenger = passengers.find(
+      (passenger) => !passenger.title || !passenger.givenName.trim() || !passenger.lastName.trim() || !passenger.dob
+    );
     if (invalidPassenger) {
-      setBookingMessage('Please enter a name and date of birth for each passenger.');
+      setBookingMessage('Please select title and enter given name, last name, and date of birth for each passenger.');
+      return;
+    }
+    if (!contactPhone.trim() || !contactEmail.trim()) {
+      setBookingMessage('Please enter phone number and email before making payment.');
       return;
     }
     const body = encodeURIComponent(getBookingBody());
@@ -1208,20 +1224,25 @@ const ServicesSection = () => {
                           </div>
                           <p className="text-xs text-red-500 self-start">* Required</p>
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
-                          <div>
+                        <div className="grid gap-4 sm:grid-cols-5 mt-4">
+                          <div className="sm:col-span-1 max-w-[150px]">
                             <label className="block text-xs font-semibold text-slate-500 mb-1">Title <span className="text-red-500">*</span></label>
                             <select value={passenger.title} onChange={(e) => updatePassenger(index, 'title', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-                              <option>Mr</option>
-                              <option>Mrs</option>
-                              <option>Ms</option>
-                              <option>Miss</option>
-                              <option>Mister</option>
+                              <option value="" disabled hidden>Select</option>
+                              <option value="Mr">Mr</option>
+                              <option value="Mrs">Mrs</option>
+                              <option value="Ms">Ms</option>
+                              <option value="Miss">Miss</option>
+                              <option value="Mister">Mister</option>
                             </select>
                           </div>
                           <div className="sm:col-span-2">
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">Full name <span className="text-red-500">*</span></label>
-                            <input type="text" value={passenger.name} onChange={(e) => updatePassenger(index, 'name', e.target.value)} placeholder="Full name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Given name <span className="text-red-500">*</span></label>
+                            <input type="text" value={passenger.givenName} onChange={(e) => updatePassenger(index, 'givenName', e.target.value)} placeholder="Given name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Last name <span className="text-red-500">*</span></label>
+                            <input type="text" value={passenger.lastName} onChange={(e) => updatePassenger(index, 'lastName', e.target.value)} placeholder="Last name" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                           </div>
                         </div>
                         <div className="grid gap-4 sm:grid-cols-3 mt-4">
@@ -1245,18 +1266,39 @@ const ServicesSection = () => {
                             <input type="text" value={passenger.panNumber} onChange={(e) => updatePassenger(index, 'panNumber', e.target.value)} placeholder="PAN number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                           </div>
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                        <div className="grid gap-4 sm:grid-cols-4 mt-4">
                           <div>
                             <label className="block text-xs font-semibold text-slate-500 mb-1">Passport No</label>
                             <input type="text" value={passenger.passportNumber} onChange={(e) => updatePassenger(index, 'passportNumber', e.target.value)} placeholder="Passport number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                           </div>
-                          <div className="sm:col-span-2">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Issue place</label>
+                            <input type="text" value={passenger.passportIssuePlace} onChange={(e) => updatePassenger(index, 'passportIssuePlace', e.target.value)} placeholder="Passport issue place" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1">Issue date</label>
+                            <input type="date" value={passenger.passportIssueDate} onChange={(e) => updatePassenger(index, 'passportIssueDate', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                          </div>
+                          <div>
                             <label className="block text-xs font-semibold text-slate-500 mb-1">Passport expiry</label>
                             <input type="date" value={passenger.passportExpiry} onChange={(e) => updatePassenger(index, 'passportExpiry', e.target.value)} className="w-full rounded-xl border border-slate-300 px-3 py-2" />
                           </div>
                         </div>
                       </div>
                     ))}
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-900 mb-3">Contact details</p>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1">Phone <span className="text-red-500">*</span></label>
+                        <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Phone number" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1">Email <span className="text-red-500">*</span></label>
+                        <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Email address" className="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                      </div>
+                    </div>
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Booking summary</p>
