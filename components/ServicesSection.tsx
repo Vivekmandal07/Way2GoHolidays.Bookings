@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useRef, useEffect } from 'react';
 
 interface ServiceCard {
   title: string;
@@ -465,6 +465,15 @@ const ServicesSection = () => {
       return next;
     });
   };
+
+  const modalContentRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (showBookingModal && modalContentRef.current) {
+      // ensure modal header is visible when opened
+      modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [showBookingModal]);
 
   const getBookingBody = () => {
     if (!selectedHotel) return '';
@@ -1185,7 +1194,7 @@ const ServicesSection = () => {
           )}
           {showBookingModal && selectedHotel && (
             <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/70 p-4 overflow-y-auto">
-              <div className="w-full max-w-3xl overflow-auto rounded-3xl bg-white shadow-2xl max-h-[85vh]">
+              <div ref={modalContentRef} className="w-full max-w-3xl overflow-auto rounded-3xl bg-white shadow-2xl max-h-[85vh]">
                 <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
                   <div>
                     <p className="text-sm font-semibold text-slate-900">Confirm booking details</p>
@@ -1210,9 +1219,25 @@ const ServicesSection = () => {
                             <p className="text-xs text-slate-500">Please fill details for every passenger.</p>
                           </div>
                           <div className="flex items-center gap-4">
-                            <div className="flex flex-col items-end">
-                              <button type="button" onClick={() => movePassenger(index, -1)} disabled={index === 0} className="text-slate-400 hover:text-slate-700 disabled:opacity-40">▲</button>
-                              <button type="button" onClick={() => movePassenger(index, 1)} disabled={index === passengers.length - 1} className="text-slate-400 hover:text-slate-700 disabled:opacity-40 mt-1">▼</button>
+                            <div className="flex flex-col items-end gap-2">
+                              <button
+                                type="button"
+                                onClick={() => movePassenger(index, -1)}
+                                disabled={index === 0}
+                                aria-label={`Move ${index + 1} up`}
+                                className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-40"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => movePassenger(index, 1)}
+                                disabled={index === passengers.length - 1}
+                                aria-label={`Move ${index + 1} down`}
+                                className="h-8 w-8 flex items-center justify-center rounded-full bg-white border border-slate-100 text-slate-400 hover:text-slate-700 disabled:opacity-40"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                              </button>
                             </div>
                             <p className="text-xs text-red-500">* Required</p>
                           </div>
