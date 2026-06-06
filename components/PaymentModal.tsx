@@ -6,11 +6,9 @@ interface PaymentModalProps {
   onClose: () => void;
 }
 
-export default function PaymentModal({
-  isOpen,
-  onClose,
-}: PaymentModalProps) {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
+  
 
   const upiId = "way2goholidays@upi";
 

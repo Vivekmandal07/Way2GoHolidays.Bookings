@@ -1,6 +1,8 @@
 
 import { Destination, Package } from './types';
 import { PICS } from './assets/images';
+export const UPI_ID = "way2goholidays@upi";
+import { Copy, ShieldCheck, CheckCircle, Headphones } from 'phosphor-react';
 
 // automatically load all images from assets/image directory
 // Vite's `import.meta.glob` returns an object of paths to modules
