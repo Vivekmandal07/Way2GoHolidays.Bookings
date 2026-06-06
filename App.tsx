@@ -18,6 +18,7 @@ import ChippestDeal from './components/ChippestDeal';
 import TravelersReview from './components/TravelersReview';
 import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './constants';
 import { Package, AuthUser } from './types';
+import PaymentModal from './components/PaymentModal';
 
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | null>(null);
