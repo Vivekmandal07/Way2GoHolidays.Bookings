@@ -8,7 +8,8 @@ interface PaymentModalProps {
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-  
+
+
 
   const upiId = "way2goholidays@upi";
 
@@ -134,4 +135,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
-}
+};
+
+export default PaymentModal;
