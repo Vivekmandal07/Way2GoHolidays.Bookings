@@ -195,7 +195,7 @@ const App: React.FC = () => {
 
 
 
-      {/* FULL SCREEN POP UP PAGE */}
+      {/* FULL SCREEN POP UP PAGE View*/}
       {viewingPackage && (
         <div className="fixed inset-0 z-[150] overflow-y-auto bg-white animate-in slide-in-from-bottom duration-500">
           <FullPageItinerary pkg={viewingPackage} onBack={closePackageOverlay} />
