@@ -96,8 +96,10 @@ const ServicesSection = () => {
   const [result, setResult] = useState('');
   const [showFlightResults, setShowFlightResults] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState<string | null>(null);
+  // const [showPopup, setShowPopup] = useState(false);
 
   const openService = (service: ServiceCard['serviceKey']) => {
+    // setShowPopup(!showPopup);
     setSelectedService(service);
     setResult('');
     setShowHotelResult(false);
@@ -672,7 +674,7 @@ const ServicesSection = () => {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">{card.title}</p>
-                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">{card.buttonText}</h3>
+                  <h3 className={`text-xl font-extrabold text-slate-900 ${card.title === 'Transfers' ? 'mt-9' : 'mt-1'}`}>{card.buttonText}</h3>
                   <p className="mt-1 text-sm text-slate-500 max-w-xs">{card.tagline}</p>
                 </div>
                 <div className="w-14 h-14 rounded-xl overflow-hidden border-2 border-slate-200">
@@ -696,8 +698,10 @@ const ServicesSection = () => {
           ))}
         </div>
 
-        <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
-          {selectedService === null ? (
+      {/* {showPopup &&  */}
+      {/* ( */}
+      <div className="mx-auto max-w-4xl bg-slate-50 rounded-2xl border border-slate-200 p-5 shadow-sm">
+      {selectedService === null ? (
             <div className="text-center p-8 text-slate-500">
               <p className="text-lg font-semibold text-slate-700">Select a service to start booking</p>
               <p className="text-sm mt-1">Click Book Flight, Find Hotels, or Arrange Transfer to open the form.</p>
@@ -1355,8 +1359,9 @@ const ServicesSection = () => {
           )}
           {result && !showFlightResults && <p className="mt-3 text-sm text-green-700 font-semibold">{result}</p>}
         </div>
+        {/* )} */}
       </div>
-    </section>
+    </section>  
   );
 };
 
