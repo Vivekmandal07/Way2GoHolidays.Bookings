@@ -21,7 +21,7 @@ import { Package, AuthUser } from './types';
 import PaymentModal from './components/PaymentModal';
 
 const App: React.FC = () => {
-  const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | null>(null);
+  const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | 'payment' | null>(null);
   const [viewingPackage, setViewingPackage] = useState<Package | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
@@ -182,6 +182,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
+
       <Footer />
       <WhatsAppButton />
 
@@ -190,7 +191,10 @@ const App: React.FC = () => {
       {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} currentUser={currentUser} />}
       {activeModal === 'expert' && <ContactExpertModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'login' && <LoginModal onClose={() => setActiveModal(null)} onLoginSuccess={handleLoginSuccess} />}
-      
+      {activeModal === 'payment' && <PaymentModal isOpen={activeModal === 'payment'} onClose={() => setActiveModal(null)} />}
+
+
+
       {/* FULL SCREEN POP UP PAGE */}
       {viewingPackage && (
         <div className="fixed inset-0 z-[150] overflow-y-auto bg-white animate-in slide-in-from-bottom duration-500">
