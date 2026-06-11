@@ -45,7 +45,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-lg">
             <div className="flex justify-center">
               <img
-                src="/images/payment-qr.png"
+                src="/images/Examplepay.png"
                 alt="UPI QR Code"
                 className="h-64 w-64 rounded-xl border border-slate-200 bg-white p-2 shadow-[0_0_40px_rgba(37,99,235,0.15)]"
               />
