@@ -1240,7 +1240,7 @@ const ServicesSection = () => {
                     <p className="text-sm font-semibold text-slate-900">Enter Each Traveler Details & Conform Hotel Booking</p>
                     <p className="text-xs text-slate-500">Please fill in the details for each traveler as per passport or from valid id proof</p>
                   </div>
-                  <button type="button" onClick={() => setShowBookingModal(false)} className="text-slate-500 hover:text-slate-800">Close</button>
+                  <button type="button" onClick={() => setShowBookingModal(false)} className="text-slate-500 hover:text-slate-800">X</button>
                 </div>
                 <form onSubmit={handleBookingSubmit} className="space-y-4 px-6 py-5">
                   {bookingMessage && (
