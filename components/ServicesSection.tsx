@@ -878,7 +878,7 @@ const ServicesSection = () => {
               </div>
 
               <div className="lg:col-span-1 flex justify-end">
-                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">s</button>
+                <button type="submit" className="rounded-xl bg-blue-600 text-white font-bold px-5 py-2.5 hover:bg-blue-700 transition">Search Flight</button>
               </div>
 
               {children > 0 && (
