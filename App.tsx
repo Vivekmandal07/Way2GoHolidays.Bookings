@@ -176,7 +176,7 @@ const App: React.FC = () => {
                 At Way2GoHolidays, we believe that travel is more than just visiting a new place; it's about creating memories that last a lifetime. Based in the heart of New Delhi, we specialize in crafting bespoke travel experiences tailored to your dreams.
               </p>
               <p><b>Founder & CEO of Way2GoHolidays : Way2Go Holidays</b></p>
-              <p className="text-center">Founded at 01 Jan 2024</p>
+              <p className="text-center">Founded at 01-Jan 2024</p>
             </div>
           </section>
         </div>
