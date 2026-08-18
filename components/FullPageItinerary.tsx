@@ -35,6 +35,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
+  
+
   useEffect(() => {
     if (children === 0) {
       setChildrenAges([]);
@@ -47,6 +49,45 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     });
   }, [children]);
 
+  const createEmptyDay = (dayNumber: number): ItineraryDay => ({
+    day: dayNumber,
+    title: '',
+    activities: '',
+    hotel: 'N/A',
+    rating: 5,
+  });
+
+  useEffect(() => {
+    setEditableItinerary(prev => {
+      // If days are reduced, keep only the required number of days
+      if (numberOfDays < prev.length) {
+        return prev
+          .slice(0, numberOfDays)
+          .map((day, index) => ({
+            ...day,
+            day: index + 1,
+          }));
+      }
+  
+      // If days are increased, copy the last existing day
+      if (numberOfDays > prev.length) {
+        const updated = [...prev];
+  
+        while (updated.length < numberOfDays) {
+          const lastDay = updated[updated.length - 1];
+  
+          updated.push({
+            ...lastDay,
+            day: updated.length + 1,
+          });
+        }
+  
+        return updated;
+      }
+  
+      return prev;
+    });
+  }, [numberOfDays]);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -224,6 +265,68 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     <span className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
                  </div>
               </div>
+             {/* Trip Duration */}
+<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 md:p-6 rounded-3xl border border-blue-100 shadow-sm">
+  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+
+    <div>
+      <h4 className="text-lg md:text-xl font-bold text-slate-900">
+        Trip Duration
+      </h4>
+      <p className="text-sm text-slate-500 mt-1">
+        Select the number of nights for your trip.
+      </p>
+    </div>
+
+    <div className="flex items-end gap-3">
+
+      {/* Nights Input */}
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          Nights
+        </label>
+
+        <input
+          type="number"
+          min={0}
+          max={60}
+          value={numberOfNights}
+          onChange={(e) => {
+            const nights = Math.max(0, Number(e.target.value) || 0);
+
+            setNumberOfNights(nights);
+            setNumberOfDays(nights + 1);
+          }}
+          className="w-32 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+        />
+      </div>
+
+      {/* + */}
+      <div className="pb-2 text-xl font-bold text-slate-400">
+        +
+      </div>
+
+      {/* Days Automatically Calculated */}
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          Days
+        </label>
+
+        <div className="w-32 rounded-xl border border-blue-200 bg-blue-100 px-4 py-3 text-sm font-bold text-blue-700">
+          {numberOfDays}
+        </div>
+      </div>
+
+      {/* Explanation */}
+      <div className="pb-2 hidden md:block">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          {numberOfNights} Night{numberOfNights !== 1 ? 's' : ''} + 1 Day
+        </span>
+      </div>
+
+    </div>
+  </div>
+</div>
 
               {/* Booking Details */}
               <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
@@ -350,66 +453,219 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
               <div className="relative space-y-12 md:space-y-20">
                 <div className="absolute left-6 md:left-12 top-4 bottom-4 w-0.5 bg-slate-100 no-print"></div>
                 
-                {editableItinerary.map((day, idx) => (
-                  <div key={day.day} className="relative pl-14 md:pl-32 group break-inside-avoid">
-                    <div className={`absolute left-0 top-0 w-12 h-12 md:w-24 md:h-24 bg-white border-2 text-slate-900 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center shadow-sm z-10 transition-all duration-500 ${isEditMode ? 'border-orange-400 scale-105 shadow-md' : 'border-slate-100 group-hover:border-blue-500 group-hover:scale-110 group-hover:shadow-lg'}`}>
-                      <span className="text-[7px] md:text-[10px] font-black uppercase tracking-widest">Day</span>
-                      <span className="text-xl md:text-5xl font-bold tracking-tighter leading-none">{day.day}</span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {isEditMode ? (
-                        <input 
-                          value={day.title}
-                          onChange={(e) => handleUpdateDay(idx, 'title', e.target.value)}
-                          className="text-lg md:text-4xl font-bold text-black tracking-tight leading-tight w-full bg-orange-50 border-b-2 border-orange-400 outline-none p-2 rounded-t-lg"
-                        />
-                      ) : (
-                        <h4 className="text-lg md:text-4xl font-bold text-slate-900 tracking-tight leading-tight pt-2 transition-all group-hover:text-blue-600 group-hover:translate-x-2 cursor-default">
-                          {day.title}
-                        </h4>
-                      )}
-                      
-                      <div className={`p-5 md:p-12 rounded-3xl md:rounded-[2.5rem] border transition-all duration-500 ${isEditMode ? 'bg-orange-50/20 border-orange-200' : 'bg-white border-slate-100 group-hover:border-blue-100 group-hover:shadow-2xl group-hover:shadow-blue-50/50'}`}>
-                        {isEditMode ? (
-                          <textarea 
-                            value={day.activities}
-                            rows={3}
-                            onChange={(e) => handleUpdateDay(idx, 'activities', e.target.value)}
-                            className="w-full text-base md:text-xl text-black leading-relaxed font-bold mb-6 bg-white border-2 border-orange-100 rounded-xl p-4 outline-none resize-none"
-                          />
-                        ) : (
-                          <p className="text-sm md:text-xl text-slate-600 leading-relaxed font-medium mb-6">
-                            {day.activities}
-                          </p>
-                        )}
-                        
-                        {day.hotel !== 'N/A' && (
-                          <div className={`flex items-center p-4 md:p-6 rounded-2xl md:rounded-3xl border gap-4 md:gap-6 transition-all duration-300 ${isEditMode ? 'bg-white border-orange-200' : 'bg-slate-50 border-slate-100 group-hover:bg-blue-50/50 group-hover:border-blue-100'}`}>
-                            <div className="w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110">
-                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-7h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                            </div>
-                            <div className="flex-grow min-w-0">
-                              <div className="flex items-center gap-2 md:gap-4 mb-1">
-                                <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">Accommodation</span>
-                                <StarRating rating={day.rating || 5} dayIndex={idx} editable={isEditMode} />
-                              </div>
-                              {isEditMode ? (
-                                <input 
-                                  value={day.hotel}
-                                  onChange={(e) => handleUpdateDay(idx, 'hotel', e.target.value)}
-                                  className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white"
-                                />
-                              ) : (
-                                <span className="text-sm md:text-xl font-bold text-slate-900 block truncate transition-all group-hover:text-blue-700">{day.hotel}</span>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                {editableItinerary.map((day, idx) => {
+  const isEmptyDay = !day.title && !day.activities;
+
+  return (
+    <div
+      key={day.day}
+      className="relative pl-14 md:pl-32 group break-inside-avoid"
+    >
+
+      {/* Day Number */}
+      <div
+        className={`
+          absolute left-0 top-0
+          w-12 h-12 md:w-24 md:h-24
+          bg-white border-2 text-slate-900
+          rounded-2xl md:rounded-3xl
+          flex flex-col items-center justify-center
+          shadow-sm z-10
+          transition-all duration-500
+
+          ${
+            isEditMode
+              ? 'border-orange-400 scale-105 shadow-md'
+              : 'border-slate-100 group-hover:border-blue-500 group-hover:scale-110 group-hover:shadow-lg'
+          }
+        `}
+      >
+        <span className="text-[7px] md:text-[10px] font-black uppercase tracking-widest">
+          Day
+        </span>
+
+        <span className="text-xl md:text-5xl font-bold tracking-tighter leading-none">
+          {day.day}
+        </span>
+      </div>
+
+      <div className="space-y-4">
+
+        {/* DAY TITLE */}
+        {isEditMode ? (
+          <input
+            value={day.title}
+            placeholder={
+              isEmptyDay
+                ? `Enter Day ${day.day} title`
+                : 'Enter day title'
+            }
+            onChange={(e) =>
+              handleUpdateDay(idx, 'title', e.target.value)
+            }
+            className="text-lg md:text-4xl font-bold text-black tracking-tight leading-tight w-full bg-orange-50 border-b-2 border-orange-400 outline-none p-2 rounded-t-lg placeholder:text-orange-300"
+          />
+        ) : (
+          <h4
+            className={`
+              text-lg md:text-4xl font-bold
+              tracking-tight leading-tight pt-2
+              transition-all
+              ${
+                isEmptyDay
+                  ? 'text-slate-300 italic'
+                  : 'text-slate-900 group-hover:text-blue-600 group-hover:translate-x-2'
+              }
+            `}
+          >
+            {isEmptyDay
+              ? `Day ${day.day} — Itinerary not added`
+              : day.title}
+          </h4>
+        )}
+
+        {/* DAY CONTENT */}
+        <div
+          className={`
+            p-5 md:p-12
+            rounded-3xl md:rounded-[2.5rem]
+            border
+            transition-all duration-500
+
+            ${
+              isEmptyDay
+                ? 'bg-slate-50/70 border-dashed border-slate-300'
+                : isEditMode
+                ? 'bg-orange-50/20 border-orange-200'
+                : 'bg-white border-slate-100 group-hover:border-blue-100 group-hover:shadow-2xl group-hover:shadow-blue-50/50'
+            }
+          `}
+        >
+
+          {isEditMode ? (
+            <textarea
+              value={day.activities}
+              placeholder={`Enter activities for Day ${day.day}...`}
+              rows={4}
+              onChange={(e) =>
+                handleUpdateDay(idx, 'activities', e.target.value)
+              }
+              className="w-full text-base md:text-xl text-black leading-relaxed font-bold mb-6 bg-white border-2 border-orange-100 rounded-xl p-4 outline-none resize-none placeholder:text-slate-300"
+            />
+          ) : (
+            <p
+              className={`
+                text-sm md:text-xl
+                leading-relaxed
+                font-medium
+                mb-6
+
+                ${
+                  isEmptyDay
+                    ? 'text-slate-400 italic'
+                    : 'text-slate-600'
+                }
+              `}
+            >
+              {isEmptyDay
+                ? 'This day is available to customize.'
+                : day.activities}
+            </p>
+          )}
+
+          {/* HOTEL */}
+          {!isEmptyDay && day.hotel !== 'N/A' && (
+            <div
+              className={`
+                flex items-center
+                p-4 md:p-6
+                rounded-2xl md:rounded-3xl
+                border gap-4 md:gap-6
+                transition-all duration-300
+
+                ${
+                  isEditMode
+                    ? 'bg-white border-orange-200'
+                    : 'bg-slate-50 border-slate-100 group-hover:bg-blue-50/50 group-hover:border-blue-100'
+                }
+              `}
+            >
+              <div className="w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110">
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-7h1m-1 4h1m-5 10v-5a1 1 0 011 1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+
+              <div className="flex-grow min-w-0">
+                <div className="flex items-center gap-2 md:gap-4 mb-1">
+                  <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">
+                    Accommodation
+                  </span>
+
+                  <StarRating
+                    rating={day.rating || 5}
+                    dayIndex={idx}
+                    editable={isEditMode}
+                  />
+                </div>
+
+                {isEditMode ? (
+                  <input
+                    value={day.hotel}
+                    onChange={(e) =>
+                      handleUpdateDay(idx, 'hotel', e.target.value)
+                    }
+                    className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white"
+                  />
+                ) : (
+                  <span className="text-sm md:text-xl font-bold text-slate-900 block truncate transition-all group-hover:text-blue-700">
+                    {day.hotel}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* EMPTY DAY INDICATOR */}
+          {isEmptyDay && !isEditMode && (
+            <div className="flex items-center gap-3 text-slate-400">
+              <div className="w-10 h-10 rounded-xl bg-white border border-dashed border-slate-300 flex items-center justify-center">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              </div>
+
+              <span className="text-sm font-semibold">
+                Click Edit to add this day's itinerary
+              </span>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+})}
               </div>
             </div>
 
