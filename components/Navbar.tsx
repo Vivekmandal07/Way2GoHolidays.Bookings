@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { AuthUser } from '../types';
+import { FaBeer, FaHome, FaImages, FaInfoCircle, FaMapMarkedAlt, FaRobot, FaSuitcaseRolling } from 'react-icons/fa';
 
 interface NavbarProps {
   scrollTo: (id: string) => void;
@@ -13,12 +14,36 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin, onLogout, currentUse
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Home', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-    { label: 'AI Planner', action: () => scrollTo('ai-planner') },
-    { label: 'Destinations', action: () => scrollTo('destinations') },
-    { label: 'Packages', action: () => scrollTo('packages') },
-    { label: 'Gallery', action: () => scrollTo('gallery') },
-    { label: 'About Us', action: () => scrollTo('about') },
+    {
+      label: 'Home',
+      icon: <FaHome />,
+      action: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+    },
+    {
+      label: 'AI Planner',
+      icon: <FaRobot />,
+      action: () => scrollTo('ai-planner'),
+    },
+    {
+      label: 'Destinations',
+      icon: <FaMapMarkedAlt />,
+      action: () => scrollTo('destinations'),
+    },
+    {
+      label: 'Packages',
+      icon: <FaSuitcaseRolling />,
+      action: () => scrollTo('packages'),
+    },
+    {
+      label: 'Gallery',
+      icon: <FaImages />,
+      action: () => scrollTo('gallery'),
+    },
+    {
+      label: 'About Us',
+      icon: <FaInfoCircle />,
+      action: () => scrollTo('about'),
+    },
   ];
 
   return (
@@ -48,7 +73,30 @@ const Navbar: React.FC<NavbarProps> = ({ scrollTo, onLogin, onLogout, currentUse
                 onClick={link.action}
                 className="text-sm text-gray-700 hover:text-blue-700 font-bold transition-all duration-200 relative group py-1"
               >
-                {link.label}
+               <span
+  className={`
+    mr-2 inline-flex items-center justify-center text-base
+    transition-all duration-300
+    group-hover:scale-125 group-hover:-translate-y-0.8
+    ${
+      link.label === 'Home'
+        ? 'text-orange-500'
+        : link.label === 'AI Planner'
+        ? 'text-purple-500'
+        : link.label === 'Destinations'
+        ? 'text-emerald-500'
+        : link.label === 'Packages'
+        ? 'text-blue-500'
+        : link.label === 'Gallery'
+        ? 'text-pink-500'
+        : 'text-cyan-500'
+    }
+  `}
+>
+  {link.icon}
+</span>
+
+{link.label}
                 {/* Thin Underscore animation for Nav Links */}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#1D4ED8] transition-all duration-500 ease-out group-hover:w-full"></span>
               </button>
