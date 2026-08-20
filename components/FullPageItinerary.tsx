@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Package, ItineraryDay } from '../types';
-import { CONTACT_DETAILS } from '../constants';
+import { CONTACT_DETAILS, INTERNATIONAL_DESTINATIONS } from '../constants';
 
 interface FullPageItineraryProps {
   pkg: Package;
@@ -27,6 +26,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
+
+  const getDestinationSuggestion = (dayNumber: number) => {
+    const suggestions = INTERNATIONAL_DESTINATIONS.map(destination => destination.name);
+    return suggestions[dayNumber - 1] || '';
+  };
 
   const formatTravelDate = (value: string) => {
     if (!value) return '';
@@ -59,35 +63,40 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
 
   useEffect(() => {
     setEditableItinerary(prev => {
-      // If days are reduced, keep only the required number of days
-      if (numberOfDays < prev.length) {
-        return prev
-          .slice(0, numberOfDays)
-          .map((day, index) => ({
-            ...day,
-            day: index + 1,
-          }));
+      const safePrev = prev.map((day, index) => ({
+        ...day,
+        day: index + 1,
+        hotel: day.hotel || 'N/A',
+        rating: day.rating || 5,
+      }));
+
+      if (numberOfDays < safePrev.length) {
+        return safePrev.slice(0, numberOfDays);
       }
-  
-      // If days are increased, copy the last existing day
-      if (numberOfDays > prev.length) {
-        const updated = [...prev];
-  
+
+      if (numberOfDays > safePrev.length) {
+        const updated: ItineraryDay[] = [...safePrev];
+
         while (updated.length < numberOfDays) {
-          const lastDay = updated[updated.length - 1];
-  
-          updated.push({
-            ...lastDay,
-            day: updated.length + 1,
-          });
+          const nextDayNumber = updated.length + 1;
+          const originalDay = pkg.itinerary.find(day => day.day === nextDayNumber);
+
+          if (originalDay) {
+            updated.push({
+              ...originalDay,
+              rating: originalDay.rating || 5,
+            });
+          } else {
+            updated.push(createEmptyDay(nextDayNumber));
+          }
         }
-  
+
         return updated;
       }
-  
-      return prev;
+
+      return safePrev;
     });
-  }, [numberOfDays]);
+  }, [numberOfDays, pkg.itinerary]);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -266,7 +275,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                  </div>
               </div>
              {/* Trip Duration */}
-<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 md:p-6 rounded-3xl border border-blue-100 shadow-sm">
+<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 md:p-6 rounded-3xl border border-blue-100 shadow-sm focus-within:border-blue-400 focus-within:shadow-lg">
   <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
 
     <div>
@@ -281,7 +290,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     <div className="flex items-end gap-3">
 
       {/* Nights Input */}
-      <div className="space-y-2">
+      <div className="space-y-2 md:col-span-2">
         <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
           Nights
         </label>
@@ -290,9 +299,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
           type="number"
           min={0}
           max={60}
-          value={numberOfNights}
+          value={numberOfNights === 0 ? '' : numberOfNights}
           onChange={(e) => {
-            const nights = Math.max(0, Number(e.target.value) || 0);
+            const rawValue = e.target.value;
+            const nights = rawValue === '' ? 0 : Math.max(0, Number(rawValue) || 0);
 
             setNumberOfNights(nights);
             setNumberOfDays(nights + 1);
@@ -329,7 +339,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
 </div>
 
               {/* Booking Details */}
-              <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
+              <div className="bg-gradient-to-r from-orange-100 to-orange-100 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
                 <div className="flex items-center justify-between">
                   <h4 className="text-lg md:text-xl font-bold text-slate-900">Travel Details</h4>
                   <span className="text-sm text-slate-500">Specify your travel preferences</span>
@@ -455,12 +465,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                 
                 {editableItinerary.map((day, idx) => {
   const isEmptyDay = !day.title && !day.activities;
+          const showHotelSection = isEmptyDay || (!isEmptyDay && day.hotel !== 'N/A');
 
-  return (
-    <div
-      key={day.day}
-      className="relative pl-14 md:pl-32 group break-inside-avoid"
-    >
+          return (
+            <div
+              key={day.day}
+              className="relative pl-14 md:pl-32 group break-inside-avoid"
+            >
 
       {/* Day Number */}
       <div
@@ -497,7 +508,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
             value={day.title}
             placeholder={
               isEmptyDay
-                ? `Enter Day ${day.day} title`
+                ? `Enter activity name for Day ${day.day}`
                 : 'Enter day title'
             }
             onChange={(e) =>
@@ -519,7 +530,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
             `}
           >
             {isEmptyDay
-              ? `Day ${day.day} — Itinerary not added`
+              ? `Day ${day.day}`
               : day.title}
           </h4>
         )}
@@ -545,7 +556,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
           {isEditMode ? (
             <textarea
               value={day.activities}
-              placeholder={`Enter activities for Day ${day.day}...`}
+              placeholder={`Type description for Day ${day.day}`}
               rows={4}
               onChange={(e) =>
                 handleUpdateDay(idx, 'activities', e.target.value)
@@ -568,13 +579,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
               `}
             >
               {isEmptyDay
-                ? 'This day is available to customize.'
+                ? `Add your activity and description for Day ${day.day}.`
                 : day.activities}
             </p>
           )}
 
           {/* HOTEL */}
-          {!isEmptyDay && day.hotel !== 'N/A' && (
+          {showHotelSection && (
             <div
               className={`
                 flex items-center
@@ -612,21 +623,28 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     Accommodation
                   </span>
 
-                  <StarRating
-                    rating={day.rating || 5}
-                    dayIndex={idx}
-                    editable={isEditMode}
-                  />
+                  {!isEmptyDay && day.hotel !== 'N/A' && (
+                    <StarRating
+                      rating={day.rating || 5}
+                      dayIndex={idx}
+                      editable={isEditMode}
+                    />
+                  )}
                 </div>
 
                 {isEditMode ? (
                   <input
-                    value={day.hotel}
+                    value={day.hotel === 'N/A' ? '' : day.hotel}
+                    placeholder="Enter hotel name"
                     onChange={(e) =>
                       handleUpdateDay(idx, 'hotel', e.target.value)
                     }
-                    className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white"
+                    className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white placeholder:text-slate-300"
                   />
+                ) : isEmptyDay ? (
+                  <span className="text-sm md:text-xl font-bold text-slate-300 italic block truncate transition-all">
+                    Enter hotel name
+                  </span>
                 ) : (
                   <span className="text-sm md:text-xl font-bold text-slate-900 block truncate transition-all group-hover:text-blue-700">
                     {day.hotel}
@@ -704,7 +722,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
                     </div>
                     <div className="flex justify-between items-center group cursor-default">
                       <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest">Quote</span>
-                      <span className="font-bold text-3xl text-blue-400 transition-all group-hover:text-blue-300 group-hover:scale-110">{editablePrice}</span>
+                      <span className="font-bold text-3xl text-blue-400 transition-all group-hover:text-blue-300 group_hover:scale-110">{editablePrice}</span>
                     </div>
                   </div>
                 </div>
