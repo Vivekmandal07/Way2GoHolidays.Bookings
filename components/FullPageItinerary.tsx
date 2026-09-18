@@ -244,7 +244,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 no-print"></div>
           <div className="absolute top-4 right-4 md:top-8 md:right-12 bg-white rounded-xl p-2 shadow-lg">
             <img
-              src="./assets/image/way2goholiday logo.png"
+              src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnUfOv4EZ8M1fHZ7WSxWepYoP47Ck73y0JjDwPiAtrD9PAFQSco01SP_CUBH8Qav3QiIKONM9q49lYOL1vEExflcUJVUqmmdnnyUERrJrvyRSyy46LJ-_GRzlcnDiyBFUe-sh8pBZxEWvxV=w229-h164-n-k-no-nu"
               alt="Way2Go Holidays"
               className="w-20 md:w-32 h-auto object-contain"
             />
