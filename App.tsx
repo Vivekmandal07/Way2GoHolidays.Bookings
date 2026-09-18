@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BookingModal from './components/BookingModal';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | 'payment' | null>(null);
   const [viewingPackage, setViewingPackage] = useState<Package | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [tripDestination, setTripDestination] = useState('');
 
   // Check URL for package parameter on load
   useEffect(() => {
@@ -90,6 +92,11 @@ const App: React.FC = () => {
     setActiveModal(null);
   };
 
+  const handleOpenRaiseYourTrip = (destination = '') => {
+    setTripDestination(destination);
+    setActiveModal('create');
+  };
+
   const handleLogout = () => {
     setCurrentUser(null);
     localStorage.removeItem('currentUser');
@@ -114,7 +121,7 @@ const App: React.FC = () => {
       handleOpenPackage(found);
     } else {
       // If still nothing, let them design their own
-      setActiveModal('create');
+      handleOpenRaiseYourTrip(destName);
     }
   };
 
@@ -130,7 +137,7 @@ const App: React.FC = () => {
       <main className="flex-grow pt-20">
         <Hero 
           onBookNow={() => setActiveModal('booking')} 
-          onCreatePackage={() => setActiveModal('create')}
+          onCreatePackage={() => handleOpenRaiseYourTrip()}
           onContactExpert={() => setActiveModal('expert')}
         />
 
@@ -188,7 +195,7 @@ const App: React.FC = () => {
 
       {/* Modals */}
       {activeModal === 'booking' && <BookingModal onClose={() => setActiveModal(null)} />}
-      {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} currentUser={currentUser} />}
+      {activeModal === 'create' && <RaiseYourTrip onClose={() => setActiveModal(null)} currentUser={currentUser} initialDestination={tripDestination} />}
       {activeModal === 'expert' && <ContactExpertModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'login' && <LoginModal onClose={() => setActiveModal(null)} onLoginSuccess={handleLoginSuccess} />}
       {activeModal === 'payment' && <PaymentModal isOpen={activeModal === 'payment'} onClose={() => setActiveModal(null)} />}
@@ -196,10 +203,11 @@ const App: React.FC = () => {
 
 
       {/* FULL SCREEN POP UP PAGE View*/}
-      {viewingPackage && (
-        <div className="fixed inset-0 z-[150] overflow-y-auto bg-white animate-in slide-in-from-bottom duration-500">
-          <FullPageItinerary pkg={viewingPackage} onBack={closePackageOverlay} />
-        </div>
+      {viewingPackage && createPortal(
+        <div className="fixed inset-0 z-[150] h-screen overflow-y-auto bg-white animate-in slide-in-from-bottom duration-500">
+          <FullPageItinerary pkg={viewingPackage} onBack={closePackageOverlay} onRaiseYourTrip={handleOpenRaiseYourTrip} />
+        </div>,
+        document.body
       )}
     </div>
   );
