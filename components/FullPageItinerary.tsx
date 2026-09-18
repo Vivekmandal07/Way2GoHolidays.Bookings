@@ -135,37 +135,62 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
   const handleDownloadPDF = async () => {
     if (!contentRef.current) return;
     setIsDownloading(true);
-    
+
     // @ts-ignore
     const html2pdf = window.html2pdf;
-    
+
     if (html2pdf) {
       const element = contentRef.current;
-      
-      // Configuration to ensure full content capture
-      const opt = {
-        margin: [0, 0],
-        filename: `Way2Go_${pkg.title.replace(/\s+/g, '_')}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          letterRendering: true,
-          scrollY: 0,
-          scrollX: 0,
-          windowWidth: element.scrollWidth,
-          height: element.scrollHeight,
-          logging: false
-        },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
-      };
+
+      const originalElementHeight = element.style.height;
+      const originalElementOverflow = element.style.overflow;
+      const originalBodyOverflow = document.body.style.overflow;
 
       try {
+        await document.fonts.ready;
+        await Promise.all(
+          Array.from(element.querySelectorAll('img')).map(image => {
+            if (image.complete) return Promise.resolve();
+            return new Promise<void>(resolve => {
+              image.addEventListener('load', () => resolve(), { once: true });
+              image.addEventListener('error', () => resolve(), { once: true });
+            });
+          })
+        );
+
+        element.style.height = 'auto';
+        element.style.overflow = 'visible';
+        document.body.style.overflow = 'visible';
+
+        const captureHeight = element.scrollHeight;
+        const captureWidth = element.scrollWidth;
+        const opt = {
+          margin: [0, 0],
+          filename: `Way2Go_${pkg.title.replace(/\s+/g, '_')}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+            scrollY: 0,
+            scrollX: 0,
+            windowWidth: captureWidth,
+            windowHeight: captureHeight,
+            height: captureHeight,
+            logging: false
+          },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] }
+        };
+
         await html2pdf().set(opt).from(element).save();
       } catch (err) {
         console.error("PDF Download failed:", err);
         window.print();
+      } finally {
+        element.style.height = originalElementHeight;
+        element.style.overflow = originalElementOverflow;
+        document.body.style.overflow = originalBodyOverflow;
       }
     } else {
       window.print();
