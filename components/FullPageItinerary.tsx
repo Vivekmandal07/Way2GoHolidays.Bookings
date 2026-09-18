@@ -180,7 +180,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
             logging: false
           },
           jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css', 'legacy'] }
+          pagebreak: {
+            mode: ['css', 'legacy'],
+            before: '.pdf-day'
+          }
         };
 
         await html2pdf().set(opt).from(element).save();
@@ -502,7 +505,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
           return (
             <div
               key={day.day}
-              className="relative pl-14 md:pl-32 group break-inside-avoid"
+              className="pdf-day relative pl-14 md:pl-32 group break-inside-avoid"
             >
 
       {/* Day Number */}
@@ -765,6 +768,16 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
       </div>
 
       <style>{`
+        .pdf-day {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .pdf-day + .pdf-day {
+          break-before: page;
+          page-break-before: always;
+        }
+
         @media print {
           .no-print { display: none !important; }
           #pdf-content { width: 100% !important; padding: 0 !important; margin: 0 !important; }
