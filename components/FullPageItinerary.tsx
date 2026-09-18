@@ -242,6 +242,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 no-print"></div>
+          <div className="absolute top-4 right-4 md:top-8 md:right-12 bg-white rounded-xl p-2 shadow-lg">
+            <img
+              src="/assets/image/way2goholiday logo.png"
+              alt="Way2Go Holidays"
+              className="w-20 md:w-32 h-auto object-contain"
+            />
+          </div>
           <div className="absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
             <div className="max-w-4xl space-y-2">
                <div className="inline-block bg-blue-600 text-white px-3 py-1 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest shadow-lg no-print animate-pulse">
