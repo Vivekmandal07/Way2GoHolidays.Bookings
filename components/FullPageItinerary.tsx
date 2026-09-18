@@ -8,6 +8,11 @@ interface FullPageItineraryProps {
 }
 
 const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) => {
+  const durationDays = Number(pkg.duration.match(/\/\s*(\d+)\s*D/i)?.[1]) || Math.max(
+    pkg.itinerary.reduce((maxDay, item) => Math.max(maxDay, item.day), 0),
+    pkg.itinerary.length,
+    1
+  );
   const [isEditMode, setIsEditMode] = useState(false);
   const [editablePrice, setEditablePrice] = useState(pkg.price);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -16,8 +21,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
     pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 }))
   );
   
-  const [numberOfDays, setNumberOfDays] = useState<number>(pkg.itinerary.length);
-  const [numberOfNights, setNumberOfNights] = useState<number>(Math.max(0, pkg.itinerary.length - 1));
+  const [numberOfDays, setNumberOfDays] = useState<number>(durationDays);
+  const [numberOfNights, setNumberOfNights] = useState<number>(Math.max(0, durationDays - 1));
   const [travelName, setTravelName] = useState<string>('');
   const [travelEmail, setTravelEmail] = useState<string>('');
   const [travelPhone, setTravelPhone] = useState<string>('');
@@ -63,38 +68,19 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack }) =>
 
   useEffect(() => {
     setEditableItinerary(prev => {
-      const safePrev = prev.map((day, index) => ({
-        ...day,
-        day: index + 1,
-        hotel: day.hotel || 'N/A',
-        rating: day.rating || 5,
-      }));
+      return Array.from({ length: numberOfDays }, (_, index) => {
+        const dayNumber = index + 1;
+        const currentDay = prev.find(day => day.day === dayNumber);
+        const originalDay = pkg.itinerary.find(day => day.day === dayNumber);
+        const day = currentDay || originalDay || createEmptyDay(dayNumber);
 
-      if (numberOfDays < safePrev.length) {
-        return safePrev.slice(0, numberOfDays);
-      }
-
-      if (numberOfDays > safePrev.length) {
-        const updated: ItineraryDay[] = [...safePrev];
-
-        while (updated.length < numberOfDays) {
-          const nextDayNumber = updated.length + 1;
-          const originalDay = pkg.itinerary.find(day => day.day === nextDayNumber);
-
-          if (originalDay) {
-            updated.push({
-              ...originalDay,
-              rating: originalDay.rating || 5,
-            });
-          } else {
-            updated.push(createEmptyDay(nextDayNumber));
-          }
-        }
-
-        return updated;
-      }
-
-      return safePrev;
+        return {
+          ...day,
+          day: dayNumber,
+          hotel: day.hotel || 'N/A',
+          rating: day.rating || 5,
+        };
+      });
     });
   }, [numberOfDays, pkg.itinerary]);
   useEffect(() => {
