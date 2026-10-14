@@ -469,13 +469,20 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     {HOTEL_OPTIONS.map(option => {
                       const starCount = Number(option.charAt(0));
                       return (
-                        <OptionButton
+                        <button
                           key={option}
-                          label={`${option} hotels`}
-                          icon={'★'.repeat(starCount)}
-                          selected={form.hotelCategory === option}
+                          type="button"
                           onClick={() => chooseOption('hotelCategory', option)}
-                        />
+                          aria-pressed={form.hotelCategory === option}
+                          className={`flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center font-bold transition-all hover:-translate-y-0.5 ${
+                            form.hotelCategory === option ? 'border-blue-600 bg-blue-50 text-blue-800 shadow-md' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
+                          }`}
+                        >
+                          <span className="mb-2 text-2xl leading-none text-amber-400" aria-label={`${starCount} stars`}>
+                            {'★'.repeat(starCount)}
+                          </span>
+                          <span>{option} hotels</span>
+                        </button>
                       );
                     })}
                   </div>
