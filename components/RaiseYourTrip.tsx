@@ -136,7 +136,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     if (step === 1 && !form.noOfNights) nextErrors.noOfNights = 'Choose your trip duration.';
     if (step === 2 && !form.tripType) nextErrors.tripType = 'Choose who is travelling.';
     if (step === 3) {
-      if (!form.travelDateMode) nextErrors.travelDate = 'Choose fixed or flexible dates.';
+      if (!form.travelDateMode) nextErrors.travelDateMode = 'Choose whether your dates are fixed or flexible.';
       if (form.travelDateMode === 'fixed' && !form.travelDate) nextErrors.travelDate = 'Choose your travel date.';
       if (form.travelDateMode === 'flexible' && !form.flexibleDate) nextErrors.travelDate = 'Choose when you would like to travel.';
       if (!form.bookingWindow) nextErrors.bookingWindow = 'Choose when you are planning to book.';
@@ -423,21 +423,25 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                 <div className="space-y-7">
                   <div>
                     <h3 className="text-lg font-black text-slate-900">When would you like to travel?</h3>
+                    <label className="mt-4 block text-sm font-bold text-slate-700">
+                      Choose a travel date
+                      <input
+                        type="date"
+                        value={form.travelDate}
+                        onChange={event => patchForm({ travelDate: event.target.value })}
+                        className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800"
+                      />
+                    </label>
                     <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                      <OptionButton label="I have fixed dates" selected={form.travelDateMode === 'fixed'} onClick={() => patchForm({ travelDateMode: 'fixed' })} />
+                      <OptionButton label="My date is fixed" selected={form.travelDateMode === 'fixed'} onClick={() => patchForm({ travelDateMode: 'fixed' })} />
                       <OptionButton label="My dates are flexible" selected={form.travelDateMode === 'flexible'} onClick={() => patchForm({ travelDateMode: 'flexible' })} />
                     </div>
-                    {form.travelDateMode === 'fixed' && (
-                      <label className="mt-4 block text-sm font-bold text-slate-700">
-                        Travel date
-                        <input type="date" value={form.travelDate} onChange={event => patchForm({ travelDate: event.target.value })} className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800" />
-                      </label>
-                    )}
                     {form.travelDateMode === 'flexible' && (
                       <div className="mt-4 grid grid-cols-2 gap-3">
                         {FLEXIBLE_DATES.map(option => <OptionButton key={option} label={option} selected={form.flexibleDate === option} onClick={() => patchForm({ flexibleDate: option })} />)}
                       </div>
                     )}
+                    {errors.travelDateMode && <p className="mt-2 text-sm font-semibold text-red-600">{errors.travelDateMode}</p>}
                     {errors.travelDate && <p className="mt-2 text-sm font-semibold text-red-600">{errors.travelDate}</p>}
                   </div>
                   <div>
