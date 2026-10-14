@@ -21,16 +21,19 @@ import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './c
 import { Package, AuthUser } from './types';
 import PaymentModal from './components/PaymentModal';
 
-const TRIP_PROMPT_INTERACTIONS_KEY = 'raiseYourTripPromptInteractions';
-const TRIP_PROMPT_DELAYS = [3000, 7000, 15000];
+const TRIP_PROMPT_DISMISSALS_KEY = 'raiseYourTripPromptDismissals';
+const TRIP_PROMPT_SNOOZE_UNTIL_KEY = 'raiseYourTripPromptSnoozeUntil';
+const TRIP_PROMPT_INTERVAL_MS = 5000;
+const TRIP_PROMPT_DISMISSAL_LIMIT = 3;
+const TRIP_PROMPT_SNOOZE_MS = 2 * 60 * 1000;
 
-const getTripPromptInteractionCount = () => {
-  const savedInteractions = Number(localStorage.getItem(TRIP_PROMPT_INTERACTIONS_KEY) || 0);
-  if (!Number.isFinite(savedInteractions)) {
-    console.error('Invalid Raise Your Trip prompt interaction count in local storage.');
+const getTripPromptDismissalCount = () => {
+  const savedDismissals = Number(sessionStorage.getItem(TRIP_PROMPT_DISMISSALS_KEY) || 0);
+  if (!Number.isFinite(savedDismissals)) {
+    console.error('Invalid Raise Your Trip prompt dismissal count in session storage.');
     return 0;
   }
-  return Math.min(TRIP_PROMPT_DELAYS.length, Math.max(0, Math.floor(savedInteractions)));
+  return Math.max(0, Math.floor(savedDismissals));
 };
 
 const App: React.FC = () => {
@@ -39,6 +42,7 @@ const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [tripDestination, setTripDestination] = useState('');
   const [showHomepageTripPrompt, setShowHomepageTripPrompt] = useState(false);
+  const [tripPromptSchedule, setTripPromptSchedule] = useState(0);
 
   // Check URL for package parameter on load
   useEffect(() => {
@@ -78,15 +82,19 @@ const App: React.FC = () => {
   }, [viewingPackage]);
 
   useEffect(() => {
-    const interactionCount = getTripPromptInteractionCount();
-    if (interactionCount >= TRIP_PROMPT_DELAYS.length) return;
+    if (activeModal || showHomepageTripPrompt) return;
 
-    const promptTimer = window.setTimeout(
-      () => setShowHomepageTripPrompt(true),
-      TRIP_PROMPT_DELAYS[interactionCount]
-    );
+    const snoozeUntil = Number(sessionStorage.getItem(TRIP_PROMPT_SNOOZE_UNTIL_KEY) || 0);
+    const remainingSnooze = Math.max(0, snoozeUntil - Date.now());
+    const promptTimer = window.setTimeout(() => {
+      if (snoozeUntil && remainingSnooze === 0) {
+        sessionStorage.removeItem(TRIP_PROMPT_SNOOZE_UNTIL_KEY);
+        sessionStorage.setItem(TRIP_PROMPT_DISMISSALS_KEY, '0');
+      }
+      setShowHomepageTripPrompt(true);
+    }, remainingSnooze || TRIP_PROMPT_INTERVAL_MS);
     return () => window.clearTimeout(promptTimer);
-  }, []);
+  }, [activeModal, showHomepageTripPrompt, tripPromptSchedule]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -116,22 +124,21 @@ const App: React.FC = () => {
     setActiveModal(null);
   };
 
-  const recordTripPromptInteraction = () => {
-    const previousInteractions = getTripPromptInteractionCount();
-    const nextInteractions = Math.min(TRIP_PROMPT_DELAYS.length, previousInteractions + 1);
-    localStorage.setItem(TRIP_PROMPT_INTERACTIONS_KEY, String(nextInteractions));
-  };
-
-  const handleOpenRaiseYourTrip = (destination = '', fromPrompt = false) => {
-    if (fromPrompt) recordTripPromptInteraction();
+  const handleOpenRaiseYourTrip = (destination = '') => {
     setShowHomepageTripPrompt(false);
     setTripDestination(destination);
     setActiveModal('create');
   };
 
   const dismissHomepageTripPrompt = () => {
-    recordTripPromptInteraction();
+    const dismissals = getTripPromptDismissalCount() + 1;
+    if (dismissals > TRIP_PROMPT_DISMISSAL_LIMIT) {
+      sessionStorage.setItem(TRIP_PROMPT_SNOOZE_UNTIL_KEY, String(Date.now() + TRIP_PROMPT_SNOOZE_MS));
+    } else {
+      sessionStorage.setItem(TRIP_PROMPT_DISMISSALS_KEY, String(dismissals));
+    }
     setShowHomepageTripPrompt(false);
+    setTripPromptSchedule(schedule => schedule + 1);
   };
 
   const handleLogout = () => {
@@ -239,16 +246,14 @@ const App: React.FC = () => {
             </button>
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-3xl" aria-hidden="true">✈️</div>
             <p className="mt-5 text-xs font-black uppercase tracking-[0.2em] text-blue-600">Your trip, your way</p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">Where would you love to go?</h2>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">Where would you love to Travel?</h2>
             <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
               Answer a few quick questions, one step at a time, and we’ll help plan a trip that fits you.
             </p>
-            <button type="button" onClick={() => handleOpenRaiseYourTrip(viewingPackage?.destination || '', true)} className="mt-6 w-full rounded-xl bg-blue-600 px-6 py-4 font-black text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
+            <button type="button" onClick={() => handleOpenRaiseYourTrip(viewingPackage?.destination || '')} className="mt-6 w-full rounded-xl bg-blue-600 px-6 py-4 font-black text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
               Raise Your Trip
             </button>
-            <button type="button" onClick={dismissHomepageTripPrompt} className="mt-3 px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800">
-              Maybe later
-            </button>
+            
           </section>
         </div>
       )}
