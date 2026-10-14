@@ -245,7 +245,11 @@ const App: React.FC = () => {
       {/* FULL SCREEN POP UP PAGE View*/}
       {viewingPackage && createPortal(
         <div className="fixed inset-0 z-[150] h-screen overflow-y-auto bg-white animate-in slide-in-from-bottom duration-500">
+<<<<<<< HEAD
           <FullPageItinerary pkg={viewingPackage} onBack={closePackageOverlay} onRaiseYourTrip={handleOpenRaiseYourTrip} />
+=======
+          <FullPageItinerary pkg={viewingPackage} onBack={closePackageOverlay} />
+>>>>>>> b787ef5f30dcd02ee4a308539f19937c76663140
         </div>,
         document.body
       )}
