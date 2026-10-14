@@ -84,6 +84,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showRequests, setShowRequests] = useState(false);
+  const [viewingRequest, setViewingRequest] = useState<TripRequest | null>(null);
   const [requests, setRequests] = useState<TripRequest[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const [phone, setPhone] = useState(currentUser?.phone?.replace(/\D/g, '') || '');
@@ -305,6 +306,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     setStep(0);
     setErrors({});
     setShowRequests(false);
+    setViewingRequest(null);
     setSubmitted(false);
   };
 
@@ -380,21 +382,75 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
           </div>
         ) : showRequests ? (
-          <div className="space-y-3 overflow-y-auto p-5 sm:p-8">
-            {visibleRequests.length === 0 ? (
-              <p className="py-10 text-center font-medium text-slate-500">No trip requests yet.</p>
-            ) : visibleRequests.map(request => (
-              <article key={request.id} className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 p-4">
-                <div>
-                  <h3 className="font-black text-slate-900">{request.name} · {request.destination}</h3>
-                  <p className="mt-1 text-sm text-slate-600">{request.noOfNights} · {request.tripType} · {request.travelDate}</p>
-                  <p className="mt-1 text-xs text-slate-400">{request.submittedAt}</p>
-                </div>
-                {currentUser?.role !== 'customer' && (
-                  <button type="button" onClick={() => removeRequest(request.id)} className="text-sm font-bold text-red-500 hover:text-red-700">Delete</button>
-                )}
-              </article>
-            ))}
+          <div className="relative min-h-0 flex-1 overflow-y-auto p-5 sm:p-8">
+            <div className="space-y-3">
+              {visibleRequests.length === 0 ? (
+                <p className="py-10 text-center font-medium text-slate-500">No trip requests yet.</p>
+              ) : visibleRequests.map(request => (
+                <article key={request.id} className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 p-4">
+                  <div>
+                    <h3 className="font-black text-slate-900">{request.name} · {request.destination}</h3>
+                    <p className="mt-1 text-sm text-slate-600">{request.noOfNights} · {request.tripType} · {request.travelDate}</p>
+                    <p className="mt-1 text-xs text-slate-400">{request.submittedAt}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <button type="button" onClick={() => setViewingRequest(request)} className="text-sm font-bold text-blue-600 hover:text-blue-800">
+                      View
+                    </button>
+                    {currentUser?.role !== 'customer' && (
+                      <button type="button" onClick={() => removeRequest(request.id)} className="text-sm font-bold text-red-500 hover:text-red-700">Delete</button>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {viewingRequest && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-950/50 p-3 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
+                <section className="flex max-h-full w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+                  <header className="flex items-start justify-between gap-4 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-7">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-wider text-blue-600">Raised trip details</p>
+                      <h3 className="mt-1 text-xl font-black text-slate-900">{viewingRequest.destination}</h3>
+                      <p className="mt-1 text-sm text-slate-500">Requested by {viewingRequest.name}</p>
+                    </div>
+                    <button type="button" onClick={() => setViewingRequest(null)} className="shrink-0 rounded-xl px-3 py-2 text-sm font-bold text-slate-600 hover:bg-white" aria-label="Back to raised trips">
+                      Back
+                    </button>
+                  </header>
+                  <div className="grid gap-3 overflow-y-auto p-5 sm:grid-cols-2 sm:p-7">
+                    {[
+                      ['Destination', viewingRequest.destination],
+                      ['Destination plan', viewingRequest.destinationPreference],
+                      ['Travelling from', viewingRequest.leavingFrom],
+                      ['Travel date / timing', viewingRequest.travelDate],
+                      ['Duration', viewingRequest.noOfNights],
+                      ['Travelling as', viewingRequest.tripType],
+                      ['Hotel category', viewingRequest.hotelCategory],
+                      ['Booking plan', viewingRequest.bookingWindow],
+                      ['Flight / train tickets', viewingRequest.ticketStatus],
+                      ['Adults', viewingRequest.pax],
+                      ['Children', viewingRequest.children],
+                      ['Children’s ages', viewingRequest.childAges?.length ? viewingRequest.childAges.join(', ') : 'None'],
+                      ['Budget', viewingRequest.budgetRange],
+                      ['Phone / WhatsApp', viewingRequest.phone || 'Not provided'],
+                      ['Email', viewingRequest.email || 'Not provided'],
+                      ['Submitted', viewingRequest.submittedAt],
+                    ].map(([label, value]) => (
+                      <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
+                        <p className="mt-1 break-words text-sm font-bold text-slate-800">{value || 'Not provided'}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <footer className="border-t border-slate-100 px-5 py-4 text-right sm:px-7">
+                    <button type="button" onClick={() => setViewingRequest(null)} className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700">
+                      Back to Raised Trips
+                    </button>
+                  </footer>
+                </section>
+              </div>
+            )}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
