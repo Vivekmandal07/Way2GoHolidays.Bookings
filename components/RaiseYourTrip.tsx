@@ -466,7 +466,18 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                   <h3 className="text-lg font-black text-slate-900">What hotel category do you prefer?</h3>
                   <p className="mb-5 mt-1 text-sm text-slate-500">Choose a starting point. You can refine this with our team.</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {HOTEL_OPTIONS.map(option => <OptionButton key={option} label={`${option} hotels`} icon="★" selected={form.hotelCategory === option} onClick={() => chooseOption('hotelCategory', option)} />)}
+                    {HOTEL_OPTIONS.map(option => {
+                      const starCount = Number(option.charAt(0));
+                      return (
+                        <OptionButton
+                          key={option}
+                          label={`${option} hotels`}
+                          icon={'★'.repeat(starCount)}
+                          selected={form.hotelCategory === option}
+                          onClick={() => chooseOption('hotelCategory', option)}
+                        />
+                      );
+                    })}
                   </div>
                   {errors.hotelCategory && <p className="mt-3 text-sm font-semibold text-red-600">{errors.hotelCategory}</p>}
                 </div>
