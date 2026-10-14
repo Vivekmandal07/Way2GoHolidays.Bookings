@@ -466,7 +466,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     {errors.travelDate && <p className="mt-2 text-sm font-semibold text-red-600">{errors.travelDate}</p>}
                   </div>
                   <div>
-                    <h3 className="font-black text-slate-900">When are you planning to book?</h3>
+                    <h3 className="font-black text-slate-900">When are you planning to book? </h3>
                     <div className="mt-3 grid grid-cols-2 gap-3">
                       {BOOKING_WINDOWS.map(option => <OptionButton key={option} label={option} selected={form.bookingWindow === option} onClick={() => chooseOption('bookingWindow', option)} />)}
                     </div>
