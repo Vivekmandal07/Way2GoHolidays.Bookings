@@ -257,11 +257,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-2xl border-2 p-4 text-left font-bold transition-all hover:-translate-y-0.5 ${
-        selected ? 'border-blue-600 bg-blue-50 text-blue-800 shadow-md' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
+      aria-pressed={selected}
+      className={`rounded-2xl border-2 p-4 text-left font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 ${
+        selected ? 'border-blue-600 bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-200' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
       }`}
     >
-      {icon && <span className="mb-2 block text-3xl" aria-hidden="true">{icon}</span>}
+      {icon && <span className={`mb-2 block text-3xl ${selected ? 'scale-105' : ''} transition-transform`} aria-hidden="true">{icon}</span>}
       {label}
     </button>
   );
@@ -273,20 +274,28 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   };
 
   const stepTitles = ['Destination', 'Duration', 'Travellers', 'Travel dates', 'Hotel', 'Guests', 'Budget', 'Destination plans', 'Your details'];
+  const tripSummary = [
+    form.destination && { label: 'Going to', value: form.destination },
+    form.noOfNights && { label: 'Duration', value: form.noOfNights },
+    form.tripType && { label: 'Travelling as', value: form.tripType },
+    form.hotelCategory && { label: 'Hotel', value: form.hotelCategory },
+  ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
     <div className="fixed inset-0 z-[220] flex items-center justify-center overflow-y-auto p-3 sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
-      <section className="relative my-auto flex max-h-[94vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
-        <header className="shrink-0 border-b border-slate-100 bg-gradient-to-r from-blue-50 to-white px-5 py-4 sm:px-8">
+      <section className="relative my-auto flex max-h-[94vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-white/60">
+        <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-8">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600">Raise Your Trip</p>
+              <p className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
+                <span aria-hidden="true">✦</span> Raise Your Trip
+              </p>
               <h2 className="mt-1 text-xl font-black text-slate-900 sm:text-2xl">
                 {submitted ? 'Your trip request is ready' : showRequests ? 'Your trip requests' : 'Let’s plan a trip you’ll love'}
               </h2>
               {!submitted && !showRequests && (
-                <p className="mt-1 text-sm text-slate-500">A few quick choices. You can change your plans later.</p>
+                <p className="mt-1 text-sm text-slate-600">A few fun choices, one step at a time. No pressure — you can change your plans later.</p>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -308,11 +317,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             <div className="mt-4">
               <div className="mb-2 flex justify-between text-xs font-bold text-slate-500">
                 <span>Step {step + 1} of {TOTAL_STEPS}</span>
-                <span>{stepTitles[step]}</span>
+                <span className="rounded-full bg-white/80 px-3 py-1 text-blue-700 shadow-sm">{stepTitles[step]}</span>
               </div>
-              <div className="flex gap-1.5" aria-hidden="true">
+              <div className="flex gap-1.5" role="progressbar" aria-label="Trip planner progress" aria-valuemin={1} aria-valuemax={TOTAL_STEPS} aria-valuenow={step + 1}>
                 {stepTitles.map((title, index) => (
-                  <span key={title} className={`h-1.5 flex-1 rounded-full ${index <= step ? 'bg-blue-600' : 'bg-slate-200'}`} />
+                  <span key={title} className={`h-2 flex-1 rounded-full transition-colors duration-300 ${index <= step ? 'bg-gradient-to-r from-blue-600 to-indigo-500' : 'bg-slate-200'}`} />
                 ))}
               </div>
             </div>
@@ -348,6 +357,18 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
         ) : (
           <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
             <div className="overflow-y-auto p-5 sm:p-8">
+              {tripSummary.length > 0 && step > 0 && (
+                <aside className="mb-6 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-orange-50 p-4">
+                  <p className="mb-2 text-xs font-black uppercase tracking-wider text-indigo-700">Your trip so far</p>
+                  <div className="flex flex-wrap gap-2">
+                    {tripSummary.map(item => (
+                      <span key={item.label} className="rounded-full border border-white bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm">
+                        <span className="text-slate-400">{item.label}:</span> {item.value}
+                      </span>
+                    ))}
+                  </div>
+                </aside>
+              )}
               {step === 0 && (
                 <div>
                   <h3 className="text-lg font-black text-slate-900">Where would you like to go?</h3>
@@ -596,13 +617,16 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               )}
             </div>
 
-            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-4 sm:px-8">
+            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-gradient-to-r from-white to-blue-50/60 px-5 py-4 sm:px-8">
               <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="rounded-xl px-5 py-3 font-bold text-slate-600 hover:bg-slate-100">
                 {step === 0 ? 'Cancel' : 'Back'}
               </button>
-              <button type="submit" className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
-                {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
-              </button>
+              <div className="flex flex-col items-end">
+                <button type="submit" className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200">
+                  {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
+                </button>
+                {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
+              </div>
             </footer>
           </form>
         )}
