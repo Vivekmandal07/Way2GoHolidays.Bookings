@@ -17,7 +17,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const [isEditMode, setIsEditMode] = useState(false);
   const [editablePrice, setEditablePrice] = useState(pkg.price);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [showTripPrompt, setShowTripPrompt] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [editableItinerary, setEditableItinerary] = useState<ItineraryDay[]>(
     pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 }))
@@ -92,11 +91,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     };
   }, []);
 
-  useEffect(() => {
-    const promptTimer = window.setTimeout(() => setShowTripPrompt(true), 2000);
-    return () => window.clearTimeout(promptTimer);
-  }, []);
-
   const handleUpdateDay = (index: number, field: keyof ItineraryDay, value: any) => {
     const newItinerary = [...editableItinerary];
     newItinerary[index] = { ...newItinerary[index], [field]: value };
@@ -104,7 +98,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   };
 
   const handleRaiseYourTrip = () => {
-    setShowTripPrompt(false);
     onRaiseYourTrip(pkg.destination);
   };
 
@@ -268,28 +261,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </button>
         </div>
       </nav>
-
-      {showTripPrompt && (
-        <div className="fixed inset-0 z-[190] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm no-print" role="dialog" aria-modal="true" aria-label={`Plan a trip to ${pkg.destination}`}>
-          <div className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl animate-in zoom-in duration-300">
-            <button type="button" onClick={() => setShowTripPrompt(false)} className="absolute right-3 top-3 z-10 rounded-full bg-black/40 p-2 text-white hover:bg-black/60" aria-label="Dismiss trip suggestion">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" /></svg>
-            </button>
-            <img src={pkg.image} alt="" className="h-40 w-full object-cover" />
-            <div className="p-6 text-center">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Your trip, your way</p>
-              <h3 className="mt-2 text-xl font-black text-slate-900">Planning a trip to {pkg.destination}?</h3>
-              <p className="mt-2 text-sm text-slate-500">Tell us a few details and our travel team will help shape your perfect getaway.</p>
-              <button type="button" onClick={handleRaiseYourTrip} className="mt-5 w-full rounded-xl bg-blue-600 px-5 py-3 font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
-                Raise Your Trip
-              </button>
-              <button type="button" onClick={() => setShowTripPrompt(false)} className="mt-3 w-full py-2 text-sm font-semibold text-slate-500 hover:text-slate-800">
-                Maybe later
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Main Content Area focused on full capture */}
       <div ref={contentRef} id="pdf-content" className="bg-white">
