@@ -575,11 +575,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       <input required value={form.name} onChange={event => patchForm({ name: event.target.value })} placeholder="Full name" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                       {errors.name && <span className="mt-1 block text-xs text-red-600">{errors.name}</span>}
                     </label>
-                    <label className="text-sm font-bold text-slate-700">Email (optional if you add a phone)
+                    <label className="text-sm font-bold text-slate-700">Email Address (optional if you add a phone)
                       <input type="email" value={form.email} onChange={event => patchForm({ email: event.target.value })} placeholder="you@example.com" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                       {errors.email && <span className="mt-1 block text-xs text-red-600">{errors.email}</span>}
                     </label>
-                    <label className="text-sm font-bold text-slate-700">Phone / WhatsApp (optional if you add an email)
+                    <label className="text-sm font-bold text-slate-700">Phone or WhatsApp Number
                       <span className="mt-2 flex overflow-hidden rounded-xl border border-slate-300">
                         <select aria-label="Country calling code" value={selectedCountry.code} onChange={event => {
                           const country = COUNTRY_CODES.find(item => item.code === event.target.value);
