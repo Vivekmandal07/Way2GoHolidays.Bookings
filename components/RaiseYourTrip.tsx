@@ -3,6 +3,23 @@ import { AuthUser } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
+const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
+  const featured = featuredNames.map(name =>
+    destinations.find(destination => destination.name.toLowerCase().includes(name.toLowerCase()))
+  ).filter((destination): destination is typeof DESTINATIONS[number] => Boolean(destination));
+  const featuredIds = new Set(featured.map(destination => destination.id));
+  return [...featured, ...destinations.filter(destination => !featuredIds.has(destination.id))];
+};
+const DESTINATION_GROUPS = [
+  {
+    label: 'Domestic',
+    destinations: prioritizeDestinations(DOMESTIC_DESTINATIONS, ['Kerala', 'Sikkim', 'Goa']),
+  },
+  {
+    label: 'International',
+    destinations: prioritizeDestinations(INTERNATIONAL_DESTINATIONS, ['Europe', 'Thailand', 'Bali', 'Vietnam', 'Singapore', 'Malaysia']),
+  },
+];
 const NIGHT_OPTIONS = Array.from({ length: 10 }, (_, index) => `${index + 1}N/${index + 2}D`);
 const TRAVELLER_OPTIONS = [
   { label: 'Couple', icon: '💑' },
@@ -335,20 +352,27 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                 <div>
                   <h3 className="text-lg font-black text-slate-900">Where would you like to go?</h3>
                   <p className="mb-5 mt-1 text-sm text-slate-500">Tap a destination to select it.</p>
-                  <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
-                    {DESTINATIONS.map(destination => (
-                      <button
-                        key={`${destination.type}-${destination.id}`}
-                        type="button"
-                        onClick={() => patchForm({ destination: destination.name })}
-                        aria-pressed={form.destination === destination.name}
-                        className={`group rounded-2xl border-2 p-2 text-center transition-all ${
-                          form.destination === destination.name ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
-                        }`}
-                      >
-                        <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
-                        <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
-                      </button>
+                  <div className="space-y-6">
+                    {DESTINATION_GROUPS.map(group => (
+                      <section key={group.label} aria-label={`${group.label} destinations`}>
+                        <h4 className="mb-3 text-sm font-black uppercase tracking-wider text-slate-500">{group.label}</h4>
+                        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+                          {group.destinations.map(destination => (
+                            <button
+                              key={`${destination.type}-${destination.id}`}
+                              type="button"
+                              onClick={() => patchForm({ destination: destination.name })}
+                              aria-pressed={form.destination === destination.name}
+                              className={`group rounded-2xl border-2 p-2 text-center transition-all ${
+                                form.destination === destination.name ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
+                              }`}
+                            >
+                              <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
+                              <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </section>
                     ))}
                   </div>
                   {errors.destination && <p className="mt-3 text-sm font-semibold text-red-600">{errors.destination}</p>}
@@ -481,12 +505,19 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                   {form.destinationPreference === 'Exploring options' && (
                     <div className="mt-5">
                       <p className="mb-3 text-sm font-semibold text-slate-600">Choose up to three places you are considering.</p>
-                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-                        {DESTINATIONS.map(destination => (
-                          <button key={`${destination.type}-${destination.id}`} type="button" onClick={() => toggleDestinationOption(destination.name)} className={`rounded-xl border-2 p-2 text-center text-xs font-bold ${form.destinationOptions.includes(destination.name) ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-slate-200 text-slate-700'}`}>
-                            <img src={destination.image} alt="" className="mx-auto mb-2 aspect-square w-14 rounded-full object-cover" loading="lazy" />
-                            {destination.name}
-                          </button>
+                      <div className="space-y-5">
+                        {DESTINATION_GROUPS.map(group => (
+                          <section key={group.label} aria-label={`${group.label} destinations`}>
+                            <h4 className="mb-2 text-xs font-black uppercase tracking-wider text-slate-500">{group.label}</h4>
+                            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                              {group.destinations.map(destination => (
+                                <button key={`${destination.type}-${destination.id}`} type="button" onClick={() => toggleDestinationOption(destination.name)} className={`rounded-xl border-2 p-2 text-center text-xs font-bold ${form.destinationOptions.includes(destination.name) ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-slate-200 text-slate-700'}`}>
+                                  <img src={destination.image} alt="" className="mx-auto mb-2 aspect-square w-14 rounded-full object-cover" loading="lazy" />
+                                  {destination.name}
+                                </button>
+                              ))}
+                            </div>
+                          </section>
                         ))}
                       </div>
                       {errors.destinationOptions && <p className="mt-3 text-sm font-semibold text-red-600">{errors.destinationOptions}</p>}
