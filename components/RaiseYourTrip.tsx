@@ -39,6 +39,13 @@ const BUDGET_OPTIONS = [
 ];
 const TOTAL_STEPS = 9;
 
+const formatTravelDate = (value: string) => {
+  if (!value) return '';
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
 interface RaiseYourTripProps {
   onClose: () => void;
   currentUser: AuthUser | null;
@@ -199,7 +206,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
     const fullPhone = phone ? `${selectedCountry.code}${phone}` : '';
     const travelDate = form.travelDateMode === 'fixed'
-      ? form.travelDate
+      ? formatTravelDate(form.travelDate)
       : form.flexibleDate;
     const destination = form.destinationPreference === 'Exploring options'
       ? form.destinationOptions.join(', ')
@@ -273,6 +280,34 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
   };
 
+  const startNewRequest = () => {
+    setForm({
+      destination: suggestedDestination,
+      noOfNights: '',
+      tripType: '',
+      travelDateMode: '',
+      travelDate: '',
+      flexibleDate: '',
+      bookingWindow: '',
+      ticketStatus: '',
+      hotelCategory: '',
+      pax: '2',
+      children: '0',
+      childAges: [],
+      budgetRange: '',
+      destinationPreference: '',
+      destinationOptions: [],
+      leavingFrom: '',
+      name: currentUser?.name || '',
+      email: currentUser?.email || '',
+    });
+    setPhone(currentUser?.phone?.replace(/\D/g, '') || '');
+    setStep(0);
+    setErrors({});
+    setShowRequests(false);
+    setSubmitted(false);
+  };
+
   const stepTitles = ['Destination', 'Duration', 'Travellers', 'Travel dates', 'Hotel', 'Guests', 'Budget', 'Destination plans', 'Your details'];
   const tripSummary = [
     form.destination && { label: 'Going to', value: form.destination },
@@ -330,12 +365,19 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
         {submitted ? (
           <div className="overflow-y-auto px-6 py-10 text-center sm:px-10">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600">
               <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" /></svg>
             </div>
-            <h3 className="text-2xl font-black text-slate-900">Thanks, {form.name}!</h3>
-            <p className="mx-auto mt-2 max-w-md text-slate-600">Your trip details have been saved. Continue in WhatsApp to send them to our travel team.</p>
-            <button type="button" onClick={onClose} className="mt-7 rounded-xl bg-blue-600 px-8 py-3 font-bold text-white hover:bg-blue-700">Done</button>
+            <h3 className="text-2xl font-black text-slate-900">Trip request raised — thanks, {form.name}!</h3>
+            <p className="mx-auto mt-2 max-w-md text-slate-600">Your details are saved. You can view your raised trips or start another request.</p>
+            <div className="mx-auto mt-7 flex max-w-lg flex-col justify-center gap-3 sm:flex-row">
+              <button type="button" onClick={() => { setSubmitted(false); setShowRequests(true); }} className="rounded-xl border-2 border-blue-200 bg-blue-50 px-6 py-3 font-bold text-blue-700 transition hover:border-blue-400 hover:bg-blue-100">
+                View Raised Trips
+              </button>
+              <button type="button" onClick={startNewRequest} className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl">
+                Raise New Trip Request
+              </button>
+            </div>
           </div>
         ) : showRequests ? (
           <div className="space-y-3 overflow-y-auto p-5 sm:p-8">
@@ -452,6 +494,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                         onChange={event => patchForm({ travelDate: event.target.value })}
                         className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800"
                       />
+                      {form.travelDate && (
+                        <span className="mt-2 block text-sm font-semibold text-blue-700">
+                          Selected date: {formatTravelDate(form.travelDate)}
+                        </span>
+                      )}
                     </label>
                     <div className="mt-4 grid gap-3 sm:grid-cols-2">
                       <OptionButton label="My date is fixed" selected={form.travelDateMode === 'fixed'} onClick={() => patchForm({ travelDateMode: 'fixed' })} />
