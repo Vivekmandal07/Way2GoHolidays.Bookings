@@ -375,6 +375,19 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       </section>
                     ))}
                   </div>
+                  {form.destination && (
+                    <div className="mt-5 flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
+                        </svg>
+                      </span>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Selected destination</p>
+                        <p className="font-black text-slate-900">{form.destination}</p>
+                      </div>
+                    </div>
+                  )}
                   {errors.destination && <p className="mt-3 text-sm font-semibold text-red-600">{errors.destination}</p>}
                 </div>
               )}
