@@ -26,6 +26,8 @@ const App: React.FC = () => {
   const [viewingPackage, setViewingPackage] = useState<Package | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [tripDestination, setTripDestination] = useState('');
+  const [showHomepageTripPrompt, setShowHomepageTripPrompt] = useState(false);
+  const [dismissedHomepageTripPrompt, setDismissedHomepageTripPrompt] = useState(false);
 
   // Check URL for package parameter on load
   useEffect(() => {
@@ -64,6 +66,13 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, [viewingPackage]);
 
+  useEffect(() => {
+    if (viewingPackage || activeModal || dismissedHomepageTripPrompt) return;
+
+    const promptTimer = window.setTimeout(() => setShowHomepageTripPrompt(true), 2000);
+    return () => window.clearTimeout(promptTimer);
+  }, [activeModal, dismissedHomepageTripPrompt, viewingPackage]);
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -72,6 +81,8 @@ const App: React.FC = () => {
   };
 
   const handleOpenPackage = (pkg: Package) => {
+    setShowHomepageTripPrompt(false);
+    setDismissedHomepageTripPrompt(true);
     setViewingPackage(pkg);
     // Update URL without reloading to allow sharing links
     const url = new URL(window.location.href);
@@ -93,8 +104,15 @@ const App: React.FC = () => {
   };
 
   const handleOpenRaiseYourTrip = (destination = '') => {
+    setShowHomepageTripPrompt(false);
+    setDismissedHomepageTripPrompt(true);
     setTripDestination(destination);
     setActiveModal('create');
+  };
+
+  const dismissHomepageTripPrompt = () => {
+    setShowHomepageTripPrompt(false);
+    setDismissedHomepageTripPrompt(true);
   };
 
   const handleLogout = () => {
@@ -192,6 +210,28 @@ const App: React.FC = () => {
 
       <Footer />
       <WhatsAppButton />
+
+      {showHomepageTripPrompt && !viewingPackage && !activeModal && (
+        <div className="fixed inset-0 z-[180] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Plan your next trip">
+          <section className="relative w-full max-w-md rounded-3xl bg-white p-7 text-center shadow-2xl animate-in zoom-in duration-300 sm:p-9">
+            <button type="button" onClick={dismissHomepageTripPrompt} className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800" aria-label="Dismiss trip suggestion">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" /></svg>
+            </button>
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-3xl" aria-hidden="true">✈️</div>
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.2em] text-blue-600">Your trip, your way</p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">Where would you love to go?</h2>
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
+              Answer a few quick questions, one step at a time, and we’ll help plan a trip that fits you.
+            </p>
+            <button type="button" onClick={() => handleOpenRaiseYourTrip()} className="mt-6 w-full rounded-xl bg-blue-600 px-6 py-4 font-black text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
+              Raise Your Trip
+            </button>
+            <button type="button" onClick={dismissHomepageTripPrompt} className="mt-3 px-5 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800">
+              Maybe later
+            </button>
+          </section>
+        </div>
+      )}
 
       {/* Modals */}
       {activeModal === 'booking' && <BookingModal onClose={() => setActiveModal(null)} />}
