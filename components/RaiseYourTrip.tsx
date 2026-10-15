@@ -325,10 +325,10 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
-    <div className="fixed inset-0 z-[220] flex items-center justify-center overflow-y-auto p-3 sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
+    <div className="fixed inset-0 z-[220] flex h-[100dvh] items-center justify-center overflow-hidden p-2 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
-      <section className="trip-planner relative my-auto flex max-h-[94vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-white/60">
-        <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-8">
+      <section className="trip-planner relative my-auto flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-white/60 sm:max-h-[94vh] sm:rounded-3xl">
+        <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 py-3 sm:px-8 sm:py-4">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
@@ -357,7 +357,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
           </div>
           {!submitted && !showRequests && (
-            <div className="mt-4">
+            <div className="mt-3 sm:mt-4">
               <div className="mb-2 flex justify-between text-xs font-bold text-slate-500">
                 <span>Step {step + 1} of {TOTAL_STEPS}</span>
                 <span className="rounded-full bg-white/80 px-3 py-1 text-blue-700 shadow-sm">{stepTitles[step]}</span>
@@ -461,7 +461,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-            <div className="overflow-y-auto p-5 sm:p-8">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-8">
               {tripSummary.length > 0 && step > 0 && (
                 <aside className="mb-6 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-orange-50 p-4">
                   <p className="mb-2 text-xs font-black uppercase tracking-wider text-indigo-700">Your trip so far</p>
@@ -757,12 +757,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               )}
             </div>
 
-            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-gradient-to-r from-white to-blue-50/60 px-5 py-4 sm:px-8">
-              <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="rounded-xl px-5 py-3 font-bold text-slate-600 hover:bg-slate-100">
+            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-gradient-to-r from-white to-blue-50/60 px-4 py-2 sm:px-8 sm:py-4">
+              <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="rounded-xl px-4 py-2 font-bold text-slate-600 hover:bg-slate-100 sm:px-5 sm:py-3">
                 {step === 0 ? 'Cancel' : 'Back'}
               </button>
               <div className="flex flex-col items-end">
-                <button type="submit" className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200">
+                <button type="submit" className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2 font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:px-6 sm:py-3">
                   {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
                 </button>
                 {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
