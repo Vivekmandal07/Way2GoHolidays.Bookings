@@ -502,7 +502,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     ))}
                   </div>
                   {form.destination && (
-                    <div className="mt-5">
+                    <div className="mt-5 grid items-start gap-3 md:grid-cols-[minmax(200px,0.8fr)_minmax(0,2fr)]">
                       <div className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
                           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
@@ -514,9 +514,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                           <p className="font-black text-slate-900">{form.destination}</p>
                         </div>
                       </div>
-                      <fieldset className="mt-3">
+                      <fieldset className="min-w-0">
                         <legend className="text-sm font-bold text-slate-700">Choose cities or places to visit (optional)</legend>
-                        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        <div className="mt-2 grid grid-cols-2 gap-2 lg:grid-cols-3">
                           {(DESTINATION_CITIES[form.destination] || []).map(city => {
                             const selected = form.destinationCities.includes(city);
                             return (
