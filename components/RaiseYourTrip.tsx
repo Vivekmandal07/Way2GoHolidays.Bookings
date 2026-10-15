@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AuthUser } from '../types';
-import { CONTACT_DETAILS, COUNTRY_CODES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
+import { CONTACT_DETAILS, COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
 const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
@@ -59,6 +59,7 @@ interface TripRequest {
   email: string;
   leavingFrom: string;
   destination: string;
+  destinationCities: string[];
   destinationPreference: string;
   destinationOptions: string[];
   pax: string;
@@ -105,6 +106,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     budgetRange: '',
     destinationPreference: '',
     destinationOptions: [] as string[],
+    destinationCities: [] as string[],
     leavingFrom: '',
     name: currentUser?.name || '',
     email: currentUser?.email || '',
@@ -219,6 +221,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       email: form.email,
       leavingFrom: form.leavingFrom,
       destination,
+      destinationCities: form.destinationCities,
       destinationPreference: form.destinationPreference,
       destinationOptions: form.destinationOptions,
       pax: form.pax,
@@ -244,6 +247,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       request.email ? `*Email:* ${request.email}` : '',
       `*Travelling from:* ${request.leavingFrom}`,
       `*Destination:* ${destination}`,
+      form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
       `*Destination status:* ${request.destinationPreference}`,
       `*Duration:* ${request.noOfNights}`,
       `*Travellers:* ${request.tripType}`,
@@ -298,6 +302,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       budgetRange: '',
       destinationPreference: '',
       destinationOptions: [],
+      destinationCities: [],
       leavingFrom: '',
       name: currentUser?.name || '',
       email: currentUser?.email || '',
@@ -313,6 +318,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   const stepTitles = ['Destination', 'Duration', 'Travellers', 'Travel dates', 'Hotel', 'Guests', 'Budget', 'Destination plans', 'Your details'];
   const tripSummary = [
     form.destination && { label: 'Going to', value: form.destination },
+    form.destinationCities.length && { label: 'Places', value: form.destinationCities.join(', ') },
     form.noOfNights && { label: 'Duration', value: form.noOfNights },
     form.tripType && { label: 'Travelling as', value: form.tripType },
     form.hotelCategory && { label: 'Hotel', value: form.hotelCategory },
@@ -421,6 +427,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                   <div className="grid gap-3 overflow-y-auto p-5 sm:grid-cols-2 sm:p-7">
                     {[
                       ['Destination', viewingRequest.destination],
+                      ['Cities / places', viewingRequest.destinationCities?.length ? viewingRequest.destinationCities.join(', ') : 'Not selected'],
                       ['Destination plan', viewingRequest.destinationPreference],
                       ['Travelling from', viewingRequest.leavingFrom],
                       ['Travel date / timing', viewingRequest.travelDate],
@@ -480,7 +487,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                             <button
                               key={`${destination.type}-${destination.id}`}
                               type="button"
-                              onClick={() => patchForm({ destination: destination.name })}
+                              onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
                               aria-pressed={form.destination === destination.name}
                               className={`group rounded-2xl border-2 p-2 text-center transition-all ${
                                 form.destination === destination.name ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
@@ -495,16 +502,43 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     ))}
                   </div>
                   {form.destination && (
-                    <div className="mt-5 flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
-                        </svg>
-                      </span>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Selected destination</p>
-                        <p className="font-black text-slate-900">{form.destination}</p>
+                    <div className="mt-5">
+                      <div className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
+                          </svg>
+                        </span>
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Selected destination</p>
+                          <p className="font-black text-slate-900">{form.destination}</p>
+                        </div>
                       </div>
+                      <fieldset className="mt-4">
+                        <legend className="text-sm font-bold text-slate-700">Choose cities or places to visit (optional)</legend>
+                        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                          {(DESTINATION_CITIES[form.destination] || []).map(city => {
+                            const selected = form.destinationCities.includes(city);
+                            return (
+                              <button
+                                key={city}
+                                type="button"
+                                onClick={() => patchForm({
+                                  destinationCities: selected
+                                    ? form.destinationCities.filter(item => item !== city)
+                                    : [...form.destinationCities, city],
+                                })}
+                                aria-pressed={selected}
+                                className={`rounded-xl border px-3 py-2 text-left text-sm font-semibold transition ${
+                                  selected ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
+                                }`}
+                              >
+                                {city}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </fieldset>
                     </div>
                   )}
                   {errors.destination && <p className="mt-3 text-sm font-semibold text-red-600">{errors.destination}</p>}

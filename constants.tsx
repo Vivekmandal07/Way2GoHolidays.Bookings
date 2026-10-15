@@ -49,6 +49,31 @@ export const DOMESTIC_DESTINATIONS: Destination[] = [
   { id: '14', name: 'Wayanad', type: 'Domestic', image: PICS.wayanad, description: 'The greenest corner of Kerala with lush forests and waterfalls.' }
 ];
 
+export const DESTINATION_CITIES: Record<string, string[]> = {
+  Kerala: ['Kochi (Cochin)', 'Munnar', 'Thekkady', 'Alleppey', 'Kovalam', 'Varkala', 'Wayanad', 'Kanyakumari'],
+  Goa: ['North Goa', 'South Goa', 'Panaji', 'Candolim', 'Calangute', 'Baga', 'Palolem'],
+  Himachal: ['Shimla', 'Manali', 'Dharamshala', 'Dalhousie', 'Kasol', 'Spiti'],
+  Ladakh: ['Leh', 'Nubra Valley', 'Pangong Lake', 'Tso Moriri', 'Kargil'],
+  Rajasthan: ['Jaipur', 'Udaipur', 'Jaisalmer', 'Jodhpur', 'Pushkar', 'Mount Abu'],
+  Kashmir: ['Srinagar', 'Gulmarg', 'Pahalgam', 'Sonamarg', 'Yusmarg'],
+  Srilanka: ['Colombo', 'Kandy', 'Galle', 'Bentota', 'Nuwara Eliya', 'Sigiriya'],
+  'Andaman & Nicobar': ['Port Blair', 'Swaraj Dweep (Havelock)', 'Shaheed Dweep (Neil)', 'Baratang', 'Diglipur'],
+  Sikkim: ['Gangtok', 'Pelling', 'Lachung', 'Lachen', 'Namchi', 'Yuksom'],
+  Wayanad: ['Kalpetta', 'Vythiri', 'Sulthan Bathery', 'Mananthavady', 'Meppadi'],
+  'Europe - Paris, France': ['Paris', 'Rome', 'Swiss Alps', 'Amsterdam', 'London', 'Barcelona'],
+  Maldives: ['Malé', 'Maafushi', 'Baa Atoll', 'Ari Atoll', 'Addu City'],
+  'Dubai, UAE': ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah'],
+  'Bali, Indonesia': ['Ubud', 'Seminyak', 'Kuta', 'Nusa Dua', 'Uluwatu', 'Canggu'],
+  Vietnam: ['Hanoi', 'Da Nang', 'Hoi An', 'Ho Chi Minh City', 'Ha Long Bay', 'Sapa', 'Phu Quoc'],
+  Thailand: ['Bangkok', 'Pattaya', 'Phuket', 'Krabi', 'Chiang Mai', 'Koh Samui'],
+  Malaysia: ['Kuala Lumpur', 'Penang', 'Langkawi', 'Malacca', 'Sabah'],
+  Australia: ['Sydney', 'Melbourne', 'Gold Coast', 'Cairns', 'Brisbane', 'Perth'],
+  'Hong Kong': ['Hong Kong Island', 'Kowloon', 'Lantau Island', 'Tsim Sha Tsui'],
+  Cambodia: ['Phnom Penh', 'Siem Reap', 'Battambang', 'Kampot', 'Sihanoukville'],
+  Azerbaijan: ['Baku', 'Gabala', 'Sheki', 'Shamakhi', 'Quba'],
+  Singapore: ['Marina Bay', 'Sentosa Island', 'Orchard Road', 'Chinatown', 'Little India'],
+};
+
 export const PACKAGES: Package[] = [
   // International
   { 
