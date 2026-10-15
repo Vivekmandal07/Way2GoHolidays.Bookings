@@ -492,16 +492,16 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                   type="button"
                                   onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
                                   aria-pressed={isSelected}
-                                  className={`group w-full rounded-2xl border-2 p-2 text-center transition-all ${
+                                  aria-label={destination.name}
+                                  className={`group mx-auto block rounded-2xl border-2 p-2 text-center transition-all ${
                                     isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
                                   }`}
                                 >
                                   <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
-                                  <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
                                 </button>
                                 {isSelected && cities.length > 0 && (
                                   <fieldset className="mt-2 space-y-1.5">
-                                    <legend className="mb-1 text-left text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
+                                    <legend className="mb-1 text-center text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
                                     {cities.map(city => {
                                       const citySelected = form.destinationCities.includes(city);
                                       return (
@@ -524,6 +524,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                     })}
                                   </fieldset>
                                 )}
+                                <p className="mt-2 text-center text-xs font-bold text-slate-700">{destination.name}</p>
                               </div>
                             );
                           })}
