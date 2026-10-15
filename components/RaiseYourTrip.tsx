@@ -487,44 +487,51 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                             const isSelected = form.destination === destination.name;
                             const cities = DESTINATION_CITIES[destination.name] || [];
                             return (
-                              <div key={`${destination.type}-${destination.id}`} className="min-w-0">
+                              <div
+                                key={`${destination.type}-${destination.id}`}
+                                className={`min-w-0 ${isSelected && cities.length > 0 ? 'col-span-full flex items-start gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-2' : ''}`}
+                              >
                                 <button
                                   type="button"
                                   onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
                                   aria-pressed={isSelected}
                                   aria-label={destination.name}
-                                  className={`group mx-auto block rounded-2xl border-2 p-2 text-center transition-all ${
+                                  className={`group block rounded-2xl border-2 p-2 text-center transition-all ${
+                                    isSelected ? 'w-24 shrink-0' : 'mx-auto'
+                                  } ${
                                     isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
                                   }`}
                                 >
                                   <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
+                                  <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
                                 </button>
                                 {isSelected && cities.length > 0 && (
-                                  <fieldset className="mt-2 space-y-1.5">
-                                    <legend className="mb-1 text-center text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
-                                    {cities.map(city => {
-                                      const citySelected = form.destinationCities.includes(city);
-                                      return (
-                                        <button
-                                          key={city}
-                                          type="button"
-                                          onClick={() => patchForm({
-                                            destinationCities: citySelected
-                                              ? form.destinationCities.filter(item => item !== city)
-                                              : [...form.destinationCities, city],
-                                          })}
-                                          aria-pressed={citySelected}
-                                          className={`w-full rounded-lg border px-2 py-1.5 text-left text-[11px] font-semibold leading-tight transition ${
-                                            citySelected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
-                                          }`}
-                                        >
-                                          {city}
-                                        </button>
-                                      );
-                                    })}
+                                  <fieldset className="min-w-0 flex-1">
+                                    <legend className="mb-1 text-left text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
+                                    <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-4">
+                                      {cities.map(city => {
+                                        const citySelected = form.destinationCities.includes(city);
+                                        return (
+                                          <button
+                                            key={city}
+                                            type="button"
+                                            onClick={() => patchForm({
+                                              destinationCities: citySelected
+                                                ? form.destinationCities.filter(item => item !== city)
+                                                : [...form.destinationCities, city],
+                                            })}
+                                            aria-pressed={citySelected}
+                                            className={`w-full rounded-lg border px-2 py-1.5 text-left text-[11px] font-semibold leading-tight transition ${
+                                              citySelected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
+                                            }`}
+                                          >
+                                            {city}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
                                   </fieldset>
                                 )}
-                                <p className="mt-2 text-center text-xs font-bold text-slate-700">{destination.name}</p>
                               </div>
                             );
                           })}
