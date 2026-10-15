@@ -514,7 +514,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                           <p className="font-black text-slate-900">{form.destination}</p>
                         </div>
                       </div>
-                      <fieldset className="mt-4">
+                      <fieldset className="mt-3">
                         <legend className="text-sm font-bold text-slate-700">Choose cities or places to visit (optional)</legend>
                         <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                           {(DESTINATION_CITIES[form.destination] || []).map(city => {
@@ -530,7 +530,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                 })}
                                 aria-pressed={selected}
                                 className={`rounded-xl border px-3 py-2 text-left text-sm font-semibold transition ${
-                                  selected ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
+                                  selected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
                                 }`}
                               >
                                 {city}
