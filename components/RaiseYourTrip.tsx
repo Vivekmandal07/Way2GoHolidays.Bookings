@@ -321,7 +321,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   return (
     <div className="fixed inset-0 z-[220] flex items-center justify-center overflow-y-auto p-3 sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
-      <section className="relative my-auto flex max-h-[94vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-white/60">
+      <section className="trip-planner relative my-auto flex max-h-[94vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-white/60">
         <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-8">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -548,7 +548,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                         type="date"
                         value={form.travelDate}
                         onChange={event => patchForm({ travelDate: event.target.value })}
-                        className="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800"
+                        onClick={event => {
+                          if (typeof event.currentTarget.showPicker === 'function') {
+                            event.currentTarget.showPicker();
+                          }
+                        }}
+                        className="mt-2 block w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200"
                       />
                       {form.travelDate && (
                         <span className="mt-2 block text-sm font-semibold text-blue-700">

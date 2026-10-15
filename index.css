@@ -22,6 +22,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.trip-planner h2,
+.trip-planner h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.025em;
+}
+
 img, video, svg {
   max-width: 100%;
   display: block;
