@@ -507,8 +507,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                 </button>
                                 {isSelected && cities.length > 0 && (
                                   <fieldset className="min-w-0 flex-1">
-                                    <legend className="mb-1 text-left text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
-                                    <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-4">
+                                    <legend className="mb-2 text-left text-xs font-bold leading-tight text-slate-600">Choose places</legend>
+                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                                       {cities.map(city => {
                                         const citySelected = form.destinationCities.includes(city);
                                         return (
@@ -521,7 +521,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                                 : [...form.destinationCities, city],
                                             })}
                                             aria-pressed={citySelected}
-                                            className={`w-full rounded-lg border px-2 py-1.5 text-left text-[11px] font-semibold leading-tight transition ${
+                                            className={`flex min-h-11 w-full items-center rounded-xl border-2 px-3 py-2 text-left text-sm font-semibold leading-snug shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 ${
                                               citySelected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
                                             }`}
                                           >
