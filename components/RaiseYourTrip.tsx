@@ -489,7 +489,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                             return (
                               <div
                                 key={`${destination.type}-${destination.id}`}
-                                className={`min-w-0 ${isSelected && cities.length > 0 ? 'col-span-full flex items-start gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-2' : ''}`}
+                                className={`min-w-0 ${isSelected && cities.length > 0 ? 'col-span-full flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-3 sm:flex-row sm:items-start sm:gap-3 sm:p-2' : ''}`}
                               >
                                 <button
                                   type="button"
@@ -497,18 +497,18 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                   aria-pressed={isSelected}
                                   aria-label={destination.name}
                                   className={`group block rounded-2xl border-2 p-2 text-center transition-all ${
-                                    isSelected ? 'w-24 shrink-0' : 'mx-auto'
+                                    isSelected ? 'flex w-full items-center gap-3 text-left sm:block sm:w-24 sm:shrink-0 sm:text-center' : 'mx-auto'
                                   } ${
                                     isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
                                   }`}
                                 >
-                                  <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
-                                  <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
+                                  <img src={destination.image} alt="" className={`aspect-square rounded-full object-cover ring-2 ring-white shadow ${isSelected ? 'h-14 w-14 shrink-0 sm:mx-auto sm:h-16 sm:w-16' : 'mx-auto w-16 sm:w-20'}`} loading="lazy" />
+                                  <span className={`block line-clamp-2 text-xs font-bold text-slate-700 ${isSelected ? 'mt-0 sm:mt-2' : 'mt-2'}`}>{destination.name}</span>
                                 </button>
                                 {isSelected && cities.length > 0 && (
                                   <fieldset className="min-w-0 flex-1">
                                     <legend className="mb-2 text-left text-xs font-bold leading-tight text-slate-600">Choose places</legend>
-                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                                       {cities.map(city => {
                                         const citySelected = form.destinationCities.includes(city);
                                         return (
