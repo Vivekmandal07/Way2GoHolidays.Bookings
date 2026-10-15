@@ -483,64 +483,54 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       <section key={group.label} aria-label={`${group.label} destinations`}>
                         <h4 className="mb-3 text-sm font-black uppercase tracking-wider text-slate-500">{group.label}</h4>
                         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
-                          {group.destinations.map(destination => (
-                            <button
-                              key={`${destination.type}-${destination.id}`}
-                              type="button"
-                              onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
-                              aria-pressed={form.destination === destination.name}
-                              className={`group rounded-2xl border-2 p-2 text-center transition-all ${
-                                form.destination === destination.name ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
-                              }`}
-                            >
-                              <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
-                              <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
-                            </button>
-                          ))}
+                          {group.destinations.map(destination => {
+                            const isSelected = form.destination === destination.name;
+                            const cities = DESTINATION_CITIES[destination.name] || [];
+                            return (
+                              <div key={`${destination.type}-${destination.id}`} className="min-w-0">
+                                <button
+                                  type="button"
+                                  onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
+                                  aria-pressed={isSelected}
+                                  className={`group w-full rounded-2xl border-2 p-2 text-center transition-all ${
+                                    isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
+                                  }`}
+                                >
+                                  <img src={destination.image} alt="" className="mx-auto aspect-square w-16 rounded-full object-cover ring-2 ring-white shadow sm:w-20" loading="lazy" />
+                                  <span className="mt-2 block line-clamp-2 text-xs font-bold text-slate-700">{destination.name}</span>
+                                </button>
+                                {isSelected && cities.length > 0 && (
+                                  <fieldset className="mt-2 space-y-1.5">
+                                    <legend className="mb-1 text-left text-[10px] font-bold leading-tight text-slate-600">Choose places</legend>
+                                    {cities.map(city => {
+                                      const citySelected = form.destinationCities.includes(city);
+                                      return (
+                                        <button
+                                          key={city}
+                                          type="button"
+                                          onClick={() => patchForm({
+                                            destinationCities: citySelected
+                                              ? form.destinationCities.filter(item => item !== city)
+                                              : [...form.destinationCities, city],
+                                          })}
+                                          aria-pressed={citySelected}
+                                          className={`w-full rounded-lg border px-2 py-1.5 text-left text-[11px] font-semibold leading-tight transition ${
+                                            citySelected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
+                                          }`}
+                                        >
+                                          {city}
+                                        </button>
+                                      );
+                                    })}
+                                  </fieldset>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       </section>
                     ))}
                   </div>
-                  {form.destination && (
-                    <div className="mt-5 grid items-start gap-3 md:grid-cols-[minmax(200px,0.8fr)_minmax(0,2fr)]">
-                      <div className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
-                          </svg>
-                        </span>
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Selected destination</p>
-                          <p className="font-black text-slate-900">{form.destination}</p>
-                        </div>
-                      </div>
-                      <fieldset className="min-w-0">
-                        <legend className="text-sm font-bold text-slate-700">Choose cities or places to visit (optional)</legend>
-                        <div className="mt-2 grid grid-cols-2 gap-2 lg:grid-cols-3">
-                          {(DESTINATION_CITIES[form.destination] || []).map(city => {
-                            const selected = form.destinationCities.includes(city);
-                            return (
-                              <button
-                                key={city}
-                                type="button"
-                                onClick={() => patchForm({
-                                  destinationCities: selected
-                                    ? form.destinationCities.filter(item => item !== city)
-                                    : [...form.destinationCities, city],
-                                })}
-                                aria-pressed={selected}
-                                className={`rounded-xl border px-3 py-2 text-left text-sm font-semibold transition ${
-                                  selected ? 'border-orange-300 bg-orange-50 text-orange-800' : 'border-slate-200 bg-white text-slate-700 hover:border-orange-200 hover:bg-orange-50/50'
-                                }`}
-                              >
-                                {city}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </fieldset>
-                    </div>
-                  )}
                   {errors.destination && <p className="mt-3 text-sm font-semibold text-red-600">{errors.destination}</p>}
                 </div>
               )}
