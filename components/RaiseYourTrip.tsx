@@ -325,7 +325,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
-    <div className="trip-planner-viewport fixed inset-0 z-[220] flex items-center justify-center overflow-hidden p-1 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
+    <div className="trip-planner-viewport fixed inset-0 z-[220] flex items-end justify-center overflow-hidden sm:items-center sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
       <section className="trip-planner relative my-auto flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-white/60 sm:max-h-[94vh] sm:rounded-3xl">
         <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-3 py-2 sm:px-8 sm:py-4">
@@ -346,12 +346,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                 <button
                   type="button"
                   onClick={() => setShowRequests(value => !value)}
-                  className="rounded-full bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100"
+                  className="min-h-11 rounded-full bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100"
                 >
                   {showRequests ? 'New trip' : `Requests (${visibleRequests.length})`}
                 </button>
               )}
-              <button type="button" onClick={onClose} className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800" aria-label="Close">
+              <button type="button" onClick={onClose} className="min-h-11 min-w-11 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800" aria-label="Close">
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" /></svg>
               </button>
             </div>
@@ -763,8 +763,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="min-h-11 rounded-xl px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 sm:px-5 sm:py-3 sm:text-base">
                 {step === 0 ? 'Cancel' : 'Back'}
               </button>
-              <div className="flex flex-col items-end">
-                <button type="submit" className="min-h-11 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:px-6 sm:py-3 sm:text-base">
+              <div className="flex min-w-0 flex-1 flex-col items-end sm:flex-none">
+                <button type="submit" className="min-h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:w-auto sm:px-6 sm:py-3 sm:text-base">
                   {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
                 </button>
                 {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
