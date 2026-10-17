@@ -325,7 +325,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
-    <div className="fixed inset-0 z-[220] flex h-[100dvh] items-center justify-center overflow-hidden p-2 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
+    <div className="trip-planner-viewport fixed inset-0 z-[220] flex items-center justify-center overflow-hidden p-2 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
       <section className="trip-planner relative my-auto flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-white/60 sm:max-h-[94vh] sm:rounded-3xl">
         <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 py-3 sm:px-8 sm:py-4">
@@ -413,7 +413,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
             {viewingRequest && (
               <div className="fixed inset-0 z-[230] flex items-center justify-center overflow-y-auto bg-slate-950/50 p-2 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
-                <section className="my-auto flex max-h-[calc(100dvh-1rem)] w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl sm:max-h-[calc(100dvh-3rem)]">
+                <section className="trip-request-detail-panel my-auto flex w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
                   <header className="flex items-start justify-between gap-4 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-7">
                     <div>
                       <p className="text-xs font-black uppercase tracking-wider text-blue-600">Raised trip details</p>

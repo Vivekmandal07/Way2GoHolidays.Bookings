@@ -28,6 +28,23 @@ body {
   letter-spacing: -0.025em;
 }
 
+.trip-planner-viewport {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.trip-request-detail-panel {
+  max-height: calc(100vh - 1rem);
+  max-height: calc(100dvh - 1rem);
+}
+
+@media (min-width: 640px) {
+  .trip-request-detail-panel {
+    max-height: calc(100vh - 3rem);
+    max-height: calc(100dvh - 3rem);
+  }
+}
+
 img, video, svg {
   max-width: 100%;
   display: block;
