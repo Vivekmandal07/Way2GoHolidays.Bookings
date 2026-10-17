@@ -412,8 +412,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
 
             {viewingRequest && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-950/50 p-3 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
-                <section className="flex max-h-full w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+              <div className="fixed inset-0 z-[230] flex items-center justify-center overflow-y-auto bg-slate-950/50 p-2 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
+                <section className="my-auto flex max-h-[calc(100dvh-1rem)] w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl sm:max-h-[calc(100dvh-3rem)]">
                   <header className="flex items-start justify-between gap-4 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-7">
                     <div>
                       <p className="text-xs font-black uppercase tracking-wider text-blue-600">Raised trip details</p>
@@ -424,33 +424,35 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       Back
                     </button>
                   </header>
-                  <div className="grid gap-3 overflow-y-auto p-5 sm:grid-cols-2 sm:p-7">
-                    {[
-                      ['Destination', viewingRequest.destination],
-                      ['Cities / places', viewingRequest.destinationCities?.length ? viewingRequest.destinationCities.join(', ') : 'Not selected'],
-                      ['Destination plan', viewingRequest.destinationPreference],
-                      ['Travelling from', viewingRequest.leavingFrom],
-                      ['Travel date / timing', viewingRequest.travelDate],
-                      ['Duration', viewingRequest.noOfNights],
-                      ['Travelling as', viewingRequest.tripType],
-                      ['Hotel category', viewingRequest.hotelCategory],
-                      ['Booking plan', viewingRequest.bookingWindow],
-                      ['Flight / train tickets', viewingRequest.ticketStatus],
-                      ['Adults', viewingRequest.pax],
-                      ['Children', viewingRequest.children],
-                      ['Children’s ages', viewingRequest.childAges?.length ? viewingRequest.childAges.join(', ') : 'None'],
-                      ['Budget', viewingRequest.budgetRange],
-                      ['Phone / WhatsApp', viewingRequest.phone || 'Not provided'],
-                      ['Email', viewingRequest.email || 'Not provided'],
-                      ['Submitted', viewingRequest.submittedAt],
-                    ].map(([label, value]) => (
-                      <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
-                        <p className="mt-1 break-words text-sm font-bold text-slate-800">{value || 'Not provided'}</p>
-                      </div>
-                    ))}
+                  <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-7">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {[
+                        ['Destination', viewingRequest.destination],
+                        ['Cities / places', viewingRequest.destinationCities?.length ? viewingRequest.destinationCities.join(', ') : 'Not selected'],
+                        ['Destination plan', viewingRequest.destinationPreference],
+                        ['Travelling from', viewingRequest.leavingFrom],
+                        ['Travel date / timing', viewingRequest.travelDate],
+                        ['Duration', viewingRequest.noOfNights],
+                        ['Travelling as', viewingRequest.tripType],
+                        ['Hotel category', viewingRequest.hotelCategory],
+                        ['Booking plan', viewingRequest.bookingWindow],
+                        ['Flight / train tickets', viewingRequest.ticketStatus],
+                        ['Adults', viewingRequest.pax],
+                        ['Children', viewingRequest.children],
+                        ['Children’s ages', viewingRequest.childAges?.length ? viewingRequest.childAges.join(', ') : 'None'],
+                        ['Budget', viewingRequest.budgetRange],
+                        ['Phone / WhatsApp', viewingRequest.phone || 'Not provided'],
+                        ['Email', viewingRequest.email || 'Not provided'],
+                        ['Submitted', viewingRequest.submittedAt],
+                      ].map(([label, value]) => (
+                        <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                          <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
+                          <p className="mt-1 break-words text-sm font-bold text-slate-800">{value || 'Not provided'}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <footer className="border-t border-slate-100 px-5 py-4 text-right sm:px-7">
+                  <footer className="shrink-0 border-t border-slate-100 px-5 py-4 text-right sm:px-7">
                     <button type="button" onClick={() => setViewingRequest(null)} className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700">
                       Back to Raised Trips
                     </button>
