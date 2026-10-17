@@ -270,11 +270,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`rounded-2xl border-2 p-4 text-left font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 ${
+      className={`min-h-11 rounded-2xl border-2 p-2.5 text-left text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:p-4 sm:text-base ${
         selected ? 'border-blue-600 bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-200' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
       }`}
     >
-      {icon && <span className={`mb-2 block text-3xl ${selected ? 'scale-105' : ''} transition-transform`} aria-hidden="true">{icon}</span>}
+      {icon && <span className={`mb-1 block text-2xl sm:mb-2 sm:text-3xl ${selected ? 'scale-105' : ''} transition-transform`} aria-hidden="true">{icon}</span>}
       {label}
     </button>
   );
@@ -325,20 +325,20 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
-    <div className="trip-planner-viewport fixed inset-0 z-[220] flex items-center justify-center overflow-hidden p-2 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
+    <div className="trip-planner-viewport fixed inset-0 z-[220] flex items-center justify-center overflow-hidden p-1 sm:overflow-y-auto sm:p-6" role="dialog" aria-modal="true" aria-label="Raise your trip">
       <button type="button" className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close trip planner" />
       <section className="trip-planner relative my-auto flex max-h-full w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-white/60 sm:max-h-[94vh] sm:rounded-3xl">
-        <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 py-3 sm:px-8 sm:py-4">
-          <div className="flex items-start justify-between gap-4">
+        <header className="shrink-0 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-3 py-2 sm:px-8 sm:py-4">
+          <div className="flex items-start justify-between gap-2 sm:gap-4">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
                 <span aria-hidden="true">✦</span> Raise Your Trip
               </p>
-              <h2 className="mt-1 text-xl font-black text-slate-900 sm:text-2xl">
+              <h2 className="mt-1 text-lg font-black text-slate-900 sm:text-2xl">
                 {submitted ? 'Your trip request is ready' : showRequests ? 'Your trip requests' : 'Let’s plan a trip you’ll love'}
               </h2>
               {!submitted && !showRequests && (
-                <p className="mt-1 text-sm text-slate-600">A few fun choices, one step at a time. No pressure — you can change your plans later.</p>
+                <p className="mt-1 text-xs text-slate-600 sm:text-sm">A few fun choices, one step at a time. No pressure — you can change your plans later.</p>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -357,7 +357,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
           </div>
           {!submitted && !showRequests && (
-            <div className="mt-3 sm:mt-4">
+            <div className="mt-2 sm:mt-4">
               <div className="mb-2 flex justify-between text-xs font-bold text-slate-500">
                 <span>Step {step + 1} of {TOTAL_STEPS}</span>
                 <span className="rounded-full bg-white/80 px-3 py-1 text-blue-700 shadow-sm">{stepTitles[step]}</span>
@@ -372,13 +372,13 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
         </header>
 
         {submitted ? (
-          <div className="overflow-y-auto px-6 py-10 text-center sm:px-10">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600">
+          <div className="overflow-y-auto px-4 py-6 text-center sm:px-10 sm:py-10">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600 sm:mb-5 sm:h-16 sm:w-16">
               <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" /></svg>
             </div>
-            <h3 className="text-2xl font-black text-slate-900">Trip request raised — thanks, {form.name}!</h3>
+            <h3 className="text-xl font-black text-slate-900 sm:text-2xl">Trip request raised — thanks, {form.name}!</h3>
             <p className="mx-auto mt-2 max-w-md text-slate-600">Your details are saved. You can view your raised trips or start another request.</p>
-            <div className="mx-auto mt-7 flex max-w-lg flex-col justify-center gap-3 sm:flex-row">
+            <div className="mx-auto mt-5 flex max-w-lg flex-col justify-center gap-2 sm:mt-7 sm:flex-row sm:gap-3">
               <button type="button" onClick={() => { setSubmitted(false); setShowRequests(true); }} className="rounded-xl border-2 border-blue-200 bg-blue-50 px-6 py-3 font-bold text-blue-700 transition hover:border-blue-400 hover:bg-blue-100">
                 View Raised Trips
               </button>
@@ -388,12 +388,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
           </div>
         ) : showRequests ? (
-          <div className="relative min-h-0 flex-1 overflow-y-auto p-5 sm:p-8">
+          <div className="relative min-h-0 flex-1 overflow-y-auto p-3 sm:p-8">
             <div className="space-y-3">
               {visibleRequests.length === 0 ? (
                 <p className="py-10 text-center font-medium text-slate-500">No trip requests yet.</p>
               ) : visibleRequests.map(request => (
-                <article key={request.id} className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 p-4">
+                <article key={request.id} className="flex items-start justify-between gap-3 rounded-2xl border border-slate-200 p-3 sm:gap-4 sm:p-4">
                   <div>
                     <h3 className="font-black text-slate-900">{request.name} · {request.destination}</h3>
                     <p className="mt-1 text-sm text-slate-600">{request.noOfNights} · {request.tripType} · {request.travelDate}</p>
@@ -412,19 +412,19 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
 
             {viewingRequest && (
-              <div className="fixed inset-0 z-[230] flex items-center justify-center overflow-y-auto bg-slate-950/50 p-2 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
+              <div className="fixed inset-0 z-[230] flex items-center justify-center overflow-y-auto bg-slate-950/50 p-1 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
                 <section className="trip-request-detail-panel my-auto flex w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
-                  <header className="flex items-start justify-between gap-4 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-5 py-4 sm:px-7">
+                  <header className="flex items-start justify-between gap-3 border-b border-blue-100 bg-gradient-to-br from-blue-50 via-white to-orange-50 px-3 py-3 sm:gap-4 sm:px-7 sm:py-4">
                     <div>
                       <p className="text-xs font-black uppercase tracking-wider text-blue-600">Raised trip details</p>
-                      <h3 className="mt-1 text-xl font-black text-slate-900">{viewingRequest.destination}</h3>
+                      <h3 className="mt-1 text-lg font-black text-slate-900 sm:text-xl">{viewingRequest.destination}</h3>
                       <p className="mt-1 text-sm text-slate-500">Requested by {viewingRequest.name}</p>
                     </div>
                     <button type="button" onClick={() => setViewingRequest(null)} className="shrink-0 rounded-xl px-3 py-2 text-sm font-bold text-slate-600 hover:bg-white" aria-label="Back to raised trips">
                       Back
                     </button>
                   </header>
-                  <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-7">
+                  <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-7">
                     <div className="grid gap-3 sm:grid-cols-2">
                       {[
                         ['Destination', viewingRequest.destination],
@@ -445,14 +445,14 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                         ['Email', viewingRequest.email || 'Not provided'],
                         ['Submitted', viewingRequest.submittedAt],
                       ].map(([label, value]) => (
-                        <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                        <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 p-2.5 sm:p-3">
                           <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
                           <p className="mt-1 break-words text-sm font-bold text-slate-800">{value || 'Not provided'}</p>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <footer className="shrink-0 border-t border-slate-100 px-5 py-4 text-right sm:px-7">
+                  <footer className="shrink-0 border-t border-slate-100 px-3 py-3 text-right sm:px-7 sm:py-4">
                     <button type="button" onClick={() => setViewingRequest(null)} className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700">
                       Back to Raised Trips
                     </button>
@@ -463,13 +463,13 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-8">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-8">
               {tripSummary.length > 0 && step > 0 && (
-                <aside className="mb-6 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-orange-50 p-4">
+                <aside className="mb-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-orange-50 p-3 sm:mb-6 sm:p-4">
                   <p className="mb-2 text-xs font-black uppercase tracking-wider text-indigo-700">Your trip so far</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {tripSummary.map(item => (
-                      <span key={item.label} className="rounded-full border border-white bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm">
+                      <span key={item.label} className="rounded-full border border-white bg-white/90 px-2.5 py-1.5 text-xs font-bold text-slate-700 shadow-sm sm:px-3">
                         <span className="text-slate-400">{item.label}:</span> {item.value}
                       </span>
                     ))}
@@ -478,13 +478,13 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               )}
               {step === 0 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">Where would you like to go?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">Tap a destination to select it.</p>
-                  <div className="space-y-6">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">Where would you like to go?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">Tap a destination to select it.</p>
+                  <div className="space-y-4 sm:space-y-6">
                     {DESTINATION_GROUPS.map(group => (
                       <section key={group.label} aria-label={`${group.label} destinations`}>
-                        <h4 className="mb-3 text-sm font-black uppercase tracking-wider text-slate-500">{group.label}</h4>
-                        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+                        <h4 className="mb-2 text-xs font-black uppercase tracking-wider text-slate-500 sm:mb-3 sm:text-sm">{group.label}</h4>
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-5">
                           {group.destinations.map(destination => {
                             const isSelected = form.destination === destination.name;
                             const cities = DESTINATION_CITIES[destination.name] || [];
@@ -498,13 +498,13 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                                   onClick={() => patchForm({ destination: destination.name, destinationCities: [] })}
                                   aria-pressed={isSelected}
                                   aria-label={destination.name}
-                                  className={`group block rounded-2xl border-2 p-2 text-center transition-all ${
+                                  className={`group block min-h-11 rounded-2xl border-2 p-1.5 text-center transition-all sm:p-2 ${
                                     isSelected ? 'flex w-full items-center gap-3 text-left sm:block sm:w-24 sm:shrink-0 sm:text-center' : 'mx-auto'
                                   } ${
                                     isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-transparent hover:border-slate-200'
                                   }`}
                                 >
-                                  <img src={destination.image} alt="" className={`aspect-square rounded-full object-cover ring-2 ring-white shadow ${isSelected ? 'h-14 w-14 shrink-0 sm:mx-auto sm:h-16 sm:w-16' : 'mx-auto w-16 sm:w-20'}`} loading="lazy" />
+                                  <img src={destination.image} alt="" className={`aspect-square rounded-full object-cover ring-2 ring-white shadow ${isSelected ? 'h-12 w-12 shrink-0 sm:mx-auto sm:h-16 sm:w-16' : 'mx-auto w-14 sm:w-20'}`} loading="lazy" />
                                   <span className={`block line-clamp-2 text-xs font-bold text-slate-700 ${isSelected ? 'mt-0 sm:mt-2' : 'mt-2'}`}>{destination.name}</span>
                                 </button>
                                 {isSelected && cities.length > 0 && (
@@ -547,9 +547,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 1 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">How long would you like to travel?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">Choose the number of nights. We’ll help with the itinerary.</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">How long would you like to travel?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">Choose the number of nights. We’ll help with the itinerary.</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-3">
                     {NIGHT_OPTIONS.map(option => {
                       const nights = option.split('N')[0];
                       return <OptionButton key={option} label={`${nights} ${nights === '1' ? 'Night' : 'Nights'}`} selected={form.noOfNights === option} onClick={() => chooseOption('noOfNights', option)} />;
@@ -561,9 +561,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 2 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">Who’s travelling?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">Pick the option that best describes your trip.</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">Who’s travelling?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">Pick the option that best describes your trip.</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
                     {TRAVELLER_OPTIONS.map(option => (
                       <OptionButton key={option.label} label={option.label} icon={option.icon} selected={form.tripType === option.label} onClick={() => chooseOption('tripType', option.label)} />
                     ))}
@@ -573,9 +573,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               )}
 
               {step === 3 && (
-                <div className="space-y-7">
+                <div className="space-y-5 sm:space-y-7">
                   <div>
-                    <h3 className="text-lg font-black text-slate-900">When would you like to travel?</h3>
+                    <h3 className="text-base font-black text-slate-900 sm:text-lg">When would you like to travel?</h3>
                     <label className="mt-4 block text-sm font-bold text-slate-700">
                       Choose a travel date
                       <input
@@ -595,12 +595,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                         </span>
                       )}
                     </label>
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="mt-3 grid gap-2 sm:mt-4 sm:grid-cols-2 sm:gap-3">
                       <OptionButton label="My date is fixed" selected={form.travelDateMode === 'fixed'} onClick={() => patchForm({ travelDateMode: 'fixed' })} />
                       <OptionButton label="My dates are flexible" selected={form.travelDateMode === 'flexible'} onClick={() => patchForm({ travelDateMode: 'flexible' })} />
                     </div>
                     {form.travelDateMode === 'flexible' && (
-                      <div className="mt-4 grid grid-cols-2 gap-3">
+                      <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3">
                         {FLEXIBLE_DATES.map(option => <OptionButton key={option} label={option} selected={form.flexibleDate === option} onClick={() => patchForm({ flexibleDate: option })} />)}
                       </div>
                     )}
@@ -609,14 +609,14 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                   </div>
                   <div>
                     <h3 className="font-black text-slate-900">When are you planning to book? </h3>
-                    <div className="mt-3 grid grid-cols-2 gap-3">
+                    <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-3">
                       {BOOKING_WINDOWS.map(option => <OptionButton key={option} label={option} selected={form.bookingWindow === option} onClick={() => chooseOption('bookingWindow', option)} />)}
                     </div>
                     {errors.bookingWindow && <p className="mt-2 text-sm font-semibold text-red-600">{errors.bookingWindow}</p>}
                   </div>
                   <div>
                     <h3 className="font-black text-slate-900">Have you booked your flight or train tickets?</h3>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    <div className="mt-3 grid gap-2 sm:grid-cols-3 sm:gap-3">
                       {TICKET_OPTIONS.map(option => <OptionButton key={option} label={option} selected={form.ticketStatus === option} onClick={() => chooseOption('ticketStatus', option)} />)}
                     </div>
                     {errors.ticketStatus && <p className="mt-2 text-sm font-semibold text-red-600">{errors.ticketStatus}</p>}
@@ -626,9 +626,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 4 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">What hotel category do you prefer?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">Choose a starting point. You can refine this with our team.</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">What hotel category do you prefer?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">Choose a starting point. You can refine this with our team.</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
                     {HOTEL_OPTIONS.map(option => {
                       const starCount = Number(option.charAt(0));
                       return (
@@ -637,7 +637,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                           type="button"
                           onClick={() => chooseOption('hotelCategory', option)}
                           aria-pressed={form.hotelCategory === option}
-                          className={`flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center font-bold transition-all hover:-translate-y-0.5 ${
+                          className={`flex min-h-11 flex-col items-center justify-center rounded-2xl border-2 p-2.5 text-center text-sm font-bold transition-all hover:-translate-y-0.5 sm:p-4 sm:text-base ${
                             form.hotelCategory === option ? 'border-blue-600 bg-blue-50 text-blue-800 shadow-md' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300'
                           }`}
                         >
@@ -655,8 +655,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 5 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">How many people are travelling?</h3>
-                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">How many people are travelling?</h3>
+                  <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2 sm:gap-4">
                     <label className="text-sm font-bold text-slate-700">Adults
                       <input type="number" min="1" max="20" value={form.pax} onChange={event => patchForm({ pax: event.target.value })} className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                     </label>
@@ -665,7 +665,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     </label>
                   </div>
                   {Number(form.children) > 0 && (
-                    <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:grid-cols-4 sm:gap-3">
                       {form.childAges.map((age, index) => (
                         <label key={index} className="text-sm font-bold text-slate-700">Child {index + 1} age
                           <input type="number" min="0" max="17" value={age} onChange={event => {
@@ -684,9 +684,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 6 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">What’s your budget per person?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">This helps us suggest the right trip options.</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">What’s your budget per person?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">This helps us suggest the right trip options.</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
                     {BUDGET_OPTIONS.map(option => <OptionButton key={option} label={option} selected={form.budgetRange === option} onClick={() => chooseOption('budgetRange', option)} />)}
                   </div>
                   {errors.budgetRange && <p className="mt-3 text-sm font-semibold text-red-600">{errors.budgetRange}</p>}
@@ -695,19 +695,19 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 7 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">Is {form.destination} your confirmed destination?</h3>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">Is {form.destination} your confirmed destination?</h3>
+                  <div className="mt-3 grid gap-2 sm:mt-4 sm:grid-cols-2 sm:gap-3">
                     <OptionButton label="Yes, this is my destination" selected={form.destinationPreference === 'Confirmed'} onClick={() => patchForm({ destinationPreference: 'Confirmed', destinationOptions: [] })} />
                     <OptionButton label="I have 2–3 destinations in mind" selected={form.destinationPreference === 'Exploring options'} onClick={() => patchForm({ destinationPreference: 'Exploring options', destinationOptions: form.destinationOptions.length ? form.destinationOptions : [form.destination] })} />
                   </div>
                   {form.destinationPreference === 'Exploring options' && (
-                    <div className="mt-5">
+                    <div className="mt-4 sm:mt-5">
                       <p className="mb-3 text-sm font-semibold text-slate-600">Choose up to three places you are considering.</p>
-                      <div className="space-y-5">
+                      <div className="space-y-4 sm:space-y-5">
                         {DESTINATION_GROUPS.map(group => (
                           <section key={group.label} aria-label={`${group.label} destinations`}>
                             <h4 className="mb-2 text-xs font-black uppercase tracking-wider text-slate-500">{group.label}</h4>
-                            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">
                               {group.destinations.map(destination => (
                                 <button key={`${destination.type}-${destination.id}`} type="button" onClick={() => toggleDestinationOption(destination.name)} className={`rounded-xl border-2 p-2 text-center text-xs font-bold ${form.destinationOptions.includes(destination.name) ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-slate-200 text-slate-700'}`}>
                                   <img src={destination.image} alt="" className="mx-auto mb-2 aspect-square w-14 rounded-full object-cover" loading="lazy" />
@@ -727,9 +727,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
               {step === 8 && (
                 <div>
-                  <h3 className="text-lg font-black text-slate-900">Where should we send your trip plan?</h3>
-                  <p className="mb-5 mt-1 text-sm text-slate-500">We only need one way to reach you: phone or email.</p>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <h3 className="text-base font-black text-slate-900 sm:text-lg">Where should we send your trip plan?</h3>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">We only need one way to reach you: phone or email.</p>
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <label className="text-sm font-bold text-slate-700">Travelling from
                       <input required value={form.leavingFrom} onChange={event => patchForm({ leavingFrom: event.target.value })} placeholder="e.g. New Delhi" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                       {errors.leavingFrom && <span className="mt-1 block text-xs text-red-600">{errors.leavingFrom}</span>}
@@ -759,12 +759,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               )}
             </div>
 
-            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-gradient-to-r from-white to-blue-50/60 px-4 py-2 sm:px-8 sm:py-4">
-              <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="rounded-xl px-4 py-2 font-bold text-slate-600 hover:bg-slate-100 sm:px-5 sm:py-3">
+            <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 bg-gradient-to-r from-white to-blue-50/60 px-3 py-2 sm:px-8 sm:py-4">
+              <button type="button" onClick={() => step === 0 ? onClose() : setStep(current => current - 1)} className="min-h-11 rounded-xl px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 sm:px-5 sm:py-3 sm:text-base">
                 {step === 0 ? 'Cancel' : 'Back'}
               </button>
               <div className="flex flex-col items-end">
-                <button type="submit" className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2 font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:px-6 sm:py-3">
+                <button type="submit" className="min-h-11 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:px-6 sm:py-3 sm:text-base">
                   {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
                 </button>
                 {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
