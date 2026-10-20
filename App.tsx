@@ -85,14 +85,14 @@ const App: React.FC = () => {
     if (activeModal || showHomepageTripPrompt) return;
 
     const snoozeUntil = Number(sessionStorage.getItem(TRIP_PROMPT_SNOOZE_UNTIL_KEY) || 0);
-    const remainingSnooze = Math.max(0, snoozeUntil - Date.now());
+    const remainingSnooze = tripPromptSchedule === 0 ? 0 : Math.max(0, snoozeUntil - Date.now());
     const promptTimer = window.setTimeout(() => {
       if (snoozeUntil && remainingSnooze === 0) {
         sessionStorage.removeItem(TRIP_PROMPT_SNOOZE_UNTIL_KEY);
         sessionStorage.setItem(TRIP_PROMPT_DISMISSALS_KEY, '0');
       }
       setShowHomepageTripPrompt(true);
-    }, remainingSnooze || TRIP_PROMPT_INTERVAL_MS);
+    }, remainingSnooze > 0 ? remainingSnooze : TRIP_PROMPT_INTERVAL_MS);
     return () => window.clearTimeout(promptTimer);
   }, [activeModal, showHomepageTripPrompt, tripPromptSchedule]);
 
@@ -238,9 +238,24 @@ const App: React.FC = () => {
       <WhatsAppButton />
 
       {showHomepageTripPrompt && !activeModal && createPortal(
-        <div className="fixed inset-0 z-[180] flex items-center justify-center overflow-y-auto bg-slate-950/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Plan your next trip">
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-slate-950/55 p-4 backdrop-blur-sm"
+          style={{
+            minHeight: '100dvh',
+            paddingTop: 'max(1rem, env(safe-area-inset-top))',
+            paddingRight: 'max(1rem, env(safe-area-inset-right))',
+            paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+            paddingLeft: 'max(1rem, env(safe-area-inset-left))',
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Plan your next trip"
+        >
           <button type="button" className="absolute inset-0 cursor-default" onClick={dismissHomepageTripPrompt} aria-label="Dismiss trip suggestion" />
-          <section className="relative my-auto w-full max-w-md rounded-3xl bg-white p-7 text-center shadow-2xl animate-in zoom-in duration-300 sm:p-9">
+          <section
+            className="relative my-auto max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 text-center shadow-2xl animate-in zoom-in duration-300 sm:p-9"
+            style={{ maxHeight: 'calc(100dvh - 2rem)' }}
+          >
             <button type="button" onClick={dismissHomepageTripPrompt} className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800" aria-label="Dismiss trip suggestion">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" /></svg>
             </button>
