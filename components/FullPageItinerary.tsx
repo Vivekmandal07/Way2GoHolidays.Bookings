@@ -95,7 +95,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   useEffect(() => {
     if (!editNotice) return;
 
-    const timeout = window.setTimeout(() => setEditNotice(null), 2000);
+    const timeout = window.setTimeout(() => setEditNotice(null), 3000);
     return () => window.clearTimeout(timeout);
   }, [editNotice]);
 
