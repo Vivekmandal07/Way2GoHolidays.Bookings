@@ -23,7 +23,7 @@ If this project already has a deployment, open **Deploy → Manage deployments**
 The frontend has the current documented deployment URL as a default. To use a different deployment, set its URL as an environment variable for both local development and the production build:
 
 ```text
-VITE_TRIP_REQUEST_WEB_APP_URL=https://script.google.com/macros/s/AKfycbz-qBsfunv5TN0tro9bRJqVjtSuXcDng8v2tQ3Nz1k_dby01E9b3lN5ONPZWeaQAO-wJA/exec
+VITE_TRIP_REQUEST_WEB_APP_URL=https://script.google.com/macros/s/AKfycbyZ9PT8-3DMZdqB4XtoKkxRExVpavQH1eS0iqps4_aBGy-oratHw86njK4FSLJ-GbBQ/exec
 ```
 
 For local development, place it in `.env.local`. In production, configure it in the site's build environment and rebuild/redeploy the frontend. The URL is public submission configuration, not a credential; never put passwords, API keys, or Google credentials in it.
