@@ -237,10 +237,10 @@ const App: React.FC = () => {
       <Footer />
       <WhatsAppButton />
 
-      {showHomepageTripPrompt && !activeModal && (
-        <div className="fixed inset-0 z-[180] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Plan your next trip">
+      {showHomepageTripPrompt && !activeModal && createPortal(
+        <div className="fixed inset-0 z-[180] flex items-center justify-center overflow-y-auto bg-slate-950/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Plan your next trip">
           <button type="button" className="absolute inset-0 cursor-default" onClick={dismissHomepageTripPrompt} aria-label="Dismiss trip suggestion" />
-          <section className="relative w-full max-w-md rounded-3xl bg-white p-7 text-center shadow-2xl animate-in zoom-in duration-300 sm:p-9">
+          <section className="relative my-auto w-full max-w-md rounded-3xl bg-white p-7 text-center shadow-2xl animate-in zoom-in duration-300 sm:p-9">
             <button type="button" onClick={dismissHomepageTripPrompt} className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800" aria-label="Dismiss trip suggestion">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" /></svg>
             </button>
@@ -258,7 +258,8 @@ const App: React.FC = () => {
               <span className="relative z-10">Raise Your Trip</span>
             </button>
           </section>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Modals */}
