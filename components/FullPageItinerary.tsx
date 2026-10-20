@@ -761,6 +761,97 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
               </div>
             </aside>
           </div>
+
+          <section className="mt-12 md:mt-20 border-t border-slate-200 pt-10 md:pt-14">
+            <div className="mb-8">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Way2Go Holidays</p>
+              <h3 className="mt-2 text-2xl md:text-4xl font-bold tracking-tight text-slate-900">
+                Company Bio &amp; Policies
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+              <section className="break-inside-avoid rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7">
+                <h4 className="mb-3 text-lg md:text-xl font-bold text-slate-900">Company Bio</h4>
+                <p className="text-sm md:text-base leading-relaxed text-slate-600">
+                  Way2Go Holidays is a New Delhi-based travel company specializing in domestic and
+                  international holiday packages, honeymoon tours, family vacations, group tours,
+                  and customized travel experiences for any destination. We are committed to
+                  providing the best hotels, sightseeing, and transportation at competitive prices,
+                  along with 24×7 customer support to ensure a smooth and memorable journey for every
+                  traveler. Customer satisfaction and personalized service are our top priorities.
+                </p>
+              </section>
+
+              <section className="break-inside-avoid rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7">
+                <h4 className="mb-3 text-lg md:text-xl font-bold text-slate-900">Terms &amp; Conditions</h4>
+                <p className="text-sm md:text-base leading-relaxed text-slate-600">
+                  Way2Go Holidays is a Delhi-based travel company specializing in domestic and
+                  international holiday packages, honeymoon tours, family vacations, group tours,
+                  and customized travel experiences. We are committed to providing the best hotels,
+                  sightseeing, and transportation at competitive prices for any destination, along
+                  with 24×7 customer support to ensure a smooth and memorable journey for every
+                  traveler. Customer satisfaction and personalized service are our top priorities.
+                </p>
+              </section>
+
+              <section className="break-inside-avoid rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7">
+                <h4 className="mb-3 text-lg md:text-xl font-bold text-slate-900">Payment Policy</h4>
+                <div className="space-y-3 text-sm md:text-base leading-relaxed text-slate-600">
+                  <p>
+                    A minimum advance payment of 30% of the total tour/package cost is required to
+                    confirm a booking. The remaining balance must be paid at least 15 days before
+                    travel. Hotels, flights, and transfers are subject to availability at the time
+                    of confirmation.
+                  </p>
+                  <p>
+                    Flight bookings require 100% payment at the time of booking because tickets are
+                    subject to instant issuance and fare changes. Flight cancellations are subject
+                    to the airline&apos;s policy.
+                  </p>
+                  <p>
+                    Non-refundable hotel bookings require 100% payment. Once confirmed, the amount
+                    paid is non-refundable in accordance with the hotel&apos;s cancellation policy.
+                  </p>
+                </div>
+              </section>
+
+              <section className="break-inside-avoid rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7">
+                <h4 className="mb-3 text-lg md:text-xl font-bold text-slate-900">Payment Methods</h4>
+                <p className="mb-3 text-sm md:text-base leading-relaxed text-slate-600">
+                  We accept payments only through these official methods:
+                </p>
+                <ul className="mb-3 list-disc space-y-1 pl-5 text-sm md:text-base leading-relaxed text-slate-600">
+                  <li>Company QR code (scanner)</li>
+                  <li>Bank account transfer (NEFT/RTGS/IMPS)</li>
+                </ul>
+                <div className="space-y-2 text-sm md:text-base leading-relaxed text-slate-600">
+                  <p>We do not accept payments through any personal UPI ID.</p>
+                  <p>
+                    Payments made to an unauthorized account or UPI ID are at the payer&apos;s own
+                    risk. Booking confirmation is subject to service availability and receipt of the
+                    required payment. All payments must be made using a payment method approved by
+                    Way2Go Holidays.
+                  </p>
+                </div>
+              </section>
+
+              <section className="break-inside-avoid rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-7 md:col-span-2">
+                <h4 className="mb-3 text-lg md:text-xl font-bold text-slate-900">Cancellation Policy</h4>
+                <p className="mb-3 text-sm md:text-base leading-relaxed text-slate-600">
+                  A 30% cancellation charge applies to guest cancellations. For cancellations
+                  within the following periods, the applicable charge is based on the total
+                  package cost:
+                </p>
+                <ul className="list-disc space-y-1 pl-5 text-sm md:text-base leading-relaxed text-slate-600">
+                  <li>15–20 days before travel: 50%</li>
+                  <li>7–14 days before travel: 60%</li>
+                  <li>3–6 days before travel: 75%</li>
+                  <li>Within 72 hours of travel or a no-show: no refund</li>
+                </ul>
+              </section>
+            </div>
+          </section>
         </main>
       </div>
 
