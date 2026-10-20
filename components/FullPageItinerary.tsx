@@ -164,79 +164,28 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const handleDownloadPDF = async () => {
     if (!contentRef.current) return;
     setIsDownloading(true);
+    const originalTitle = document.title;
+    document.title = `Way2Go_${pkg.title.replace(/\s+/g, '_')}`;
 
-    // @ts-ignore
-    const html2pdf = window.html2pdf;
-
-    if (html2pdf) {
-      const element = contentRef.current;
-
-      const originalElementHeight = element.style.height;
-      const originalElementOverflow = element.style.overflow;
-      const originalElementWidth = element.style.width;
-      const originalBodyOverflow = document.body.style.overflow;
-      const exportWidth = 794;
-
-      try {
-        await document.fonts.ready;
-        await Promise.all(
-          Array.from(element.querySelectorAll('img')).map(image => {
-            if (image.complete) return image.decode().catch(() => undefined);
-            return new Promise<void>(resolve => {
-              const finishLoading = () => {
-                image.decode().catch(() => undefined).finally(resolve);
-              };
-              image.addEventListener('load', finishLoading, { once: true });
-              image.addEventListener('error', resolve, { once: true });
-            });
-          })
-        );
-
-        element.style.height = 'auto';
-        element.style.overflow = 'visible';
-        element.style.width = `${exportWidth}px`;
-        document.body.style.overflow = 'visible';
-        element.classList.add('pdf-export');
-
-        const captureHeight = element.scrollHeight;
-        const opt = {
-          margin: [0.35, 0.35],
-          filename: `Way2Go_${pkg.title.replace(/\s+/g, '_')}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            scale: 1.5,
-            useCORS: true,
-            letterRendering: true,
-            scrollY: 0,
-            scrollX: 0,
-            windowWidth: exportWidth,
-            windowHeight: captureHeight,
-            height: captureHeight,
-            logging: false
-          },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-          pagebreak: {
-            mode: ['css', 'legacy'],
-            avoid: ['.pdf-day']
-          }
-        };
-
-        await html2pdf().set(opt).from(element).save();
-      } catch (err) {
-        console.error("PDF Download failed:", err);
-        window.print();
-      } finally {
-        element.style.height = originalElementHeight;
-        element.style.overflow = originalElementOverflow;
-        element.style.width = originalElementWidth;
-        document.body.style.overflow = originalBodyOverflow;
-        element.classList.remove('pdf-export');
-      }
-    } else {
+    try {
+      await document.fonts.ready;
+      await Promise.all(
+        Array.from(contentRef.current.querySelectorAll('img')).map(image => {
+          if (image.complete) return image.decode().catch(() => undefined);
+          return new Promise<void>(resolve => {
+            const finishLoading = () => {
+              image.decode().catch(() => undefined).finally(resolve);
+            };
+            image.addEventListener('load', finishLoading, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+          });
+        })
+      );
       window.print();
+    } finally {
+      document.title = originalTitle;
+      setIsDownloading(false);
     }
-    
-    setIsDownloading(false);
   };
 
   const StarRating = ({ rating, dayIndex, editable }: { rating: number, dayIndex: number, editable: boolean }) => {
@@ -840,7 +789,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                       ) : (
                         <svg className="w-5 h-5 transition-transform group-hover:scale-125" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                       )}
-                      <span className="group-hover:scale-110 transition-transform">{isDownloading ? 'Saving...' : 'Download PDF'}</span>
+                      <span className="group-hover:scale-110 transition-transform">{isDownloading ? 'Preparing...' : 'Save as PDF'}</span>
                     </button>
                   </div>
 
@@ -954,8 +903,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 
       <style>{`
         .pdf-day {
-          break-inside: avoid;
-          page-break-inside: avoid;
+          break-inside: auto;
+          page-break-inside: auto;
         }
 
         .pdf-day + .pdf-day {
@@ -963,24 +912,64 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           page-break-before: auto;
         }
 
-        .pdf-export > header {
-          height: 360px !important;
-          break-inside: avoid;
-          page-break-inside: avoid;
-        }
-
-        .pdf-export > header > img {
-          width: 100% !important;
-          height: 100% !important;
-          object-fit: cover !important;
-        }
-
         @media print {
+          @page { size: A4 portrait; margin: 12mm; }
+          html, body {
+            width: 100% !important;
+            height: auto !important;
+            overflow: visible !important;
+            background: #fff !important;
+          }
+          body > #root { display: none !important; }
+          body > .itinerary-print-container {
+            position: static !important;
+            inset: auto !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+            background: #fff !important;
+            animation: none !important;
+          }
+          .itinerary-print-container > div {
+            min-height: 0 !important;
+            padding-bottom: 0 !important;
+          }
           .no-print { display: none !important; }
-          #pdf-content { width: 100% !important; padding: 0 !important; margin: 0 !important; }
+          #pdf-content {
+            width: 100% !important;
+            overflow: visible !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+          #pdf-content > header {
+            height: 100mm !important;
+            min-height: 100mm !important;
+            overflow: hidden !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+          #pdf-content > header > img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+          }
+          #pdf-content > main {
+            width: 100% !important;
+            max-width: none !important;
+            padding: 8mm 0 !important;
+          }
+          .pdf-day {
+            break-inside: auto !important;
+            page-break-inside: auto !important;
+          }
           .pdf-day + .pdf-day { break-before: auto; page-break-before: auto; }
-          #pdf-content > header { height: 360px !important; }
-          #pdf-content > header > img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+          .pdf-day h4,
+          .pdf-day .rounded-xl,
+          .pdf-day .rounded-2xl { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
         }
       `}</style>
     </div>
