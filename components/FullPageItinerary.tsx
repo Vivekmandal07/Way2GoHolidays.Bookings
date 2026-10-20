@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Coffee, MapPin, Moon, Utensils } from 'lucide-react';
+import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
 import { CONTACT_DETAILS, INTERNATIONAL_DESTINATIONS } from '../constants';
 
 const dayDetailFields = [
-  { key: 'sightseeing', label: 'Sightseeing', Icon: MapPin },
-  { key: 'breakfast', label: 'Breakfast', Icon: Coffee },
-  { key: 'lunch', label: 'Lunch', Icon: Utensils },
-  { key: 'dinner', label: 'Dinner', Icon: Moon },
+  { key: 'sightseeingIncluded', label: 'Sightseeing', Icon: MapPin },
+  { key: 'breakfastIncluded', label: 'Breakfast', Icon: Coffee },
+  { key: 'lunchIncluded', label: 'Lunch', Icon: Utensils },
+  { key: 'dinnerIncluded', label: 'Dinner', Icon: UtensilsCrossed },
 ] as const;
 
 interface FullPageItineraryProps {
@@ -52,6 +52,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return value;
     return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  const getDayDescriptionPlaceholder = (day: ItineraryDay) => {
+    const title = day.title.toLowerCase();
+    if (/arrival|arrive/.test(title) || day.day === 1) {
+      return `Arrival: Pick-up from [airport] and transfer to [hotel] by [car/other transport] ([distance] km, about [travel time]). En route: [optional stop/activity]. Evening: [nearby activity].`;
+    }
+    if (/departure|depart/.test(title) || day.day === numberOfDays) {
+      return `After breakfast, transfer from [hotel/city] to [airport/station] by [transport] ([distance] km, about [travel time]). Include the pick-up time and any optional costs.`;
+    }
+    return `After breakfast, [activity or transfer] in [city]. If travelling to [next city], include transport ([distance] km, about [travel time]), en-route stops if travelling by car, and a possible evening activity. List optional activities or costs payable on your own.`;
   };
 
   
@@ -536,8 +547,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 <div className="absolute left-6 md:left-12 top-4 bottom-4 w-0.5 bg-slate-100 no-print"></div>
                 
                 {editableItinerary.map((day, idx) => {
-  const isEmptyDay = !day.title && !day.activities && !day.sightseeing &&
-    !day.breakfast && !day.lunch && !day.dinner;
+  const isEmptyDay = !day.title && !day.activities;
           const showHotelSection = isEmptyDay || (!isEmptyDay && day.hotel !== 'N/A');
 
           return (
@@ -630,7 +640,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <div className="mb-5">
               <textarea
                 value={day.activities}
-                placeholder={`Describe Day ${day.day}: after breakfast, travel from [city] to [city] by [car/flight/train] (approx. [distance/time]). Add en-route stops for car journeys and note optional costs paid locally.`}
+                placeholder={`Add detailed plans for Day ${day.day}`}
                 rows={4}
                 onChange={(e) =>
                   handleUpdateDay(idx, 'activities', e.target.value)
@@ -638,7 +648,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 className="w-full text-sm md:text-base text-slate-800 leading-relaxed mb-2 bg-white border-2 border-orange-100 rounded-xl p-4 outline-none resize-y placeholder:text-slate-400"
               />
               <p className="text-xs text-slate-500">
-                Keep it simple: include the route, travel mode and distance or time, en-route activities, and optional activities or entrance fees payable on your own.
+                <span className="font-semibold">Suggested details:</span> {getDayDescriptionPlaceholder(day)} Use confirmed route estimates and mention optional costs payable on your own.
               </p>
             </div>
           ) : (
@@ -662,35 +672,36 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {dayDetailFields.map(({ key, label, Icon }) => (
-              <div
+              <label
                 key={key}
-                className="flex min-w-0 items-start gap-2 rounded-xl bg-slate-50 px-3 py-2"
+                htmlFor={`day-${day.day}-${key}`}
+                className={`flex min-w-0 items-center gap-2 rounded-xl border px-3 py-2 transition-colors ${
+                  day[key] ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-white'
+                } ${isEditMode ? 'cursor-pointer hover:border-blue-300' : ''}`}
               >
-                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
-                <div className="min-w-0 flex-1">
-                  <label
-                    htmlFor={`day-${day.day}-${key}`}
-                    className="block text-[10px] font-bold uppercase tracking-wide text-slate-500"
+                {isEditMode ? (
+                  <input
+                    id={`day-${day.day}-${key}`}
+                    type="checkbox"
+                    checked={Boolean(day[key])}
+                    onChange={(e) => handleUpdateDay(idx, key, e.target.checked)}
+                    className="h-4 w-4 shrink-0 accent-blue-600"
+                  />
+                ) : (
+                  <span
+                    className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                      day[key] ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'
+                    }`}
+                    aria-hidden="true"
                   >
-                    {label}
-                  </label>
-                  {isEditMode ? (
-                    <input
-                      id={`day-${day.day}-${key}`}
-                      value={day[key] || ''}
-                      placeholder={`Add ${label.toLowerCase()} details`}
-                      onChange={(e) => handleUpdateDay(idx, key, e.target.value)}
-                      className="mt-1 w-full border-b border-orange-200 bg-transparent py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400 focus:border-orange-500"
-                    />
-                  ) : (
-                    <p className="mt-0.5 break-words text-sm text-slate-700">
-                      {day[key]?.trim() || 'Not listed'}
-                    </p>
-                  )}
-                </div>
-              </div>
+                    {day[key] && <Check className="h-3 w-3" strokeWidth={3} />}
+                  </span>
+                )}
+                <Icon className="h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
+                <span className="text-xs font-semibold text-slate-700">{label}</span>
+              </label>
             ))}
           </div>
 
