@@ -14,6 +14,10 @@ export interface ItineraryDay {
   activities: string;
   hotel: string;
   rating?: number;
+  sightseeing?: string;
+  breakfast?: string;
+  lunch?: string;
+  dinner?: string;
 }
 
 export interface Package {

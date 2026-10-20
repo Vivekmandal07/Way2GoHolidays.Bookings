@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Coffee, MapPin, Moon, Utensils } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
 import { CONTACT_DETAILS, INTERNATIONAL_DESTINATIONS } from '../constants';
+
+const dayDetailFields = [
+  { key: 'sightseeing', label: 'Sightseeing', Icon: MapPin },
+  { key: 'breakfast', label: 'Breakfast', Icon: Coffee },
+  { key: 'lunch', label: 'Lunch', Icon: Utensils },
+  { key: 'dinner', label: 'Dinner', Icon: Moon },
+] as const;
 
 interface FullPageItineraryProps {
   pkg: Package;
@@ -325,13 +333,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <div className="lg:col-span-8 space-y-12 md:space-y-20">
               <div className="border-b border-slate-100 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                  <div className="max-w-xl">
-                   <h3 className="text-2xl md:text-5xl font-bold text-slate-900 tracking-tight mb-2 hover:text-blue-600 transition-colors cursor-default">The Experience</h3>
-                   <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed">
-                     Your curated {pkg.duration} holiday to {pkg.destination}. Every detail designed for perfection.
+                   <h3 className="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2 hover:text-blue-600 transition-colors cursor-default">Your trip at a glance</h3>
+                   <p className="text-sm md:text-base text-slate-500 font-medium leading-relaxed">
+                     A day-by-day plan for your {pkg.duration} trip to {pkg.destination}.
                    </p>
-                   <p className="text-sm md:text-base text-slate-400 mt-4">
-                    <b>Note:</b> This Price is subject to availability at the time of booking & You can edit this day-wise itinerary as per your preferences after editing and as per your requirements price may increase or decrease when confirming the booking
-
+                   <p className="text-xs md:text-sm text-slate-400 mt-3">
+                    Prices depend on availability. Optional activities or upgrades may change the final price.
                    </p>
                  </div>
                   <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
@@ -525,11 +532,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
               </div>
 
               {/* Day wise details */}
-              <div className="relative space-y-12 md:space-y-20">
+              <div className="relative space-y-10 md:space-y-16">
                 <div className="absolute left-6 md:left-12 top-4 bottom-4 w-0.5 bg-slate-100 no-print"></div>
                 
                 {editableItinerary.map((day, idx) => {
-  const isEmptyDay = !day.title && !day.activities;
+  const isEmptyDay = !day.title && !day.activities && !day.sightseeing &&
+    !day.breakfast && !day.lunch && !day.dinner;
           const showHotelSection = isEmptyDay || (!isEmptyDay && day.hotel !== 'N/A');
 
           return (
@@ -565,7 +573,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         </span>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
 
         {/* DAY TITLE */}
         {isEditMode ? (
@@ -579,12 +587,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             onChange={(e) =>
               handleUpdateDay(idx, 'title', e.target.value)
             }
-            className="text-lg md:text-4xl font-bold text-black tracking-tight leading-tight w-full bg-orange-50 border-b-2 border-orange-400 outline-none p-2 rounded-t-lg placeholder:text-orange-300"
+            className="text-lg md:text-3xl font-bold text-black tracking-tight leading-tight w-full bg-orange-50 border-b-2 border-orange-400 outline-none p-2 rounded-t-lg placeholder:text-orange-300"
           />
         ) : (
           <h4
             className={`
-              text-lg md:text-4xl font-bold
+              text-lg md:text-3xl font-bold
               tracking-tight leading-tight pt-2
               transition-all
               ${
@@ -603,7 +611,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         {/* DAY CONTENT */}
         <div
           className={`
-            p-5 md:p-12
+            p-4 md:p-8
             rounded-3xl md:rounded-[2.5rem]
             border
             transition-all duration-500
@@ -619,22 +627,27 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         >
 
           {isEditMode ? (
-            <textarea
-              value={day.activities}
-              placeholder={`Type description for Day ${day.day}`}
-              rows={4}
-              onChange={(e) =>
-                handleUpdateDay(idx, 'activities', e.target.value)
-              }
-              className="w-full text-base md:text-xl text-black leading-relaxed font-bold mb-6 bg-white border-2 border-orange-100 rounded-xl p-4 outline-none resize-none placeholder:text-slate-300"
-            />
+            <div className="mb-5">
+              <textarea
+                value={day.activities}
+                placeholder={`Describe Day ${day.day}: after breakfast, travel from [city] to [city] by [car/flight/train] (approx. [distance/time]). Add en-route stops for car journeys and note optional costs paid locally.`}
+                rows={4}
+                onChange={(e) =>
+                  handleUpdateDay(idx, 'activities', e.target.value)
+                }
+                className="w-full text-sm md:text-base text-slate-800 leading-relaxed mb-2 bg-white border-2 border-orange-100 rounded-xl p-4 outline-none resize-y placeholder:text-slate-400"
+              />
+              <p className="text-xs text-slate-500">
+                Keep it simple: include the route, travel mode and distance or time, en-route activities, and optional activities or entrance fees payable on your own.
+              </p>
+            </div>
           ) : (
             <p
               className={`
-                text-sm md:text-xl
+                text-sm md:text-base
                 leading-relaxed
                 font-medium
-                mb-6
+                mb-5
 
                 ${
                   isEmptyDay
@@ -648,6 +661,38 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 : day.activities}
             </p>
           )}
+
+          <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {dayDetailFields.map(({ key, label, Icon }) => (
+              <div
+                key={key}
+                className="flex min-w-0 items-start gap-2 rounded-xl bg-slate-50 px-3 py-2"
+              >
+                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
+                <div className="min-w-0 flex-1">
+                  <label
+                    htmlFor={`day-${day.day}-${key}`}
+                    className="block text-[10px] font-bold uppercase tracking-wide text-slate-500"
+                  >
+                    {label}
+                  </label>
+                  {isEditMode ? (
+                    <input
+                      id={`day-${day.day}-${key}`}
+                      value={day[key] || ''}
+                      placeholder={`Add ${label.toLowerCase()} details`}
+                      onChange={(e) => handleUpdateDay(idx, key, e.target.value)}
+                      className="mt-1 w-full border-b border-orange-200 bg-transparent py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400 focus:border-orange-500"
+                    />
+                  ) : (
+                    <p className="mt-0.5 break-words text-sm text-slate-700">
+                      {day[key]?.trim() || 'Not listed'}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* HOTEL */}
           {showHotelSection && (
