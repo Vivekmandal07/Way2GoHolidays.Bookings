@@ -155,7 +155,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     }
 
     message += `\nI'm viewing this day-wise itinerary and want to proceed with booking!\n\n`;
-    message += `*Thankyou for Connecting Way2GoHolidays!*\n`;
+    message += `*Thankyou for Connecting Way2Go Holidays!*\n`;
     message += `Our Destination Expert will Connect you very Shortly!`;
 
     window.open(`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
@@ -278,8 +278,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 no-print"></div>
           <div className="absolute top-4 right-4 md:top-8 md:right-12 bg-white rounded-xl p-2 shadow-lg">
             <img
-              src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnUfOv4EZ8M1fHZ7WSxWepYoP47Ck73y0JjDwPiAtrD9PAFQSco01SP_CUBH8Qav3QiIKONM9q49lYOL1vEExflcUJVUqmmdnnyUERrJrvyRSyy46LJ-_GRzlcnDiyBFUe-sh8pBZxEWvxV=s1360-w1360-h1020-rw"
-              alt="Way2Go Holidays"
+              src="https://scontent.fdel93-2.fna.fbcdn.net/v/t39.30808-1/724714759_122193664424944287_3966463320523682050_n.jpg?stp=c43.43.938.938a_dst-jpg_tt6&cstp=mx938x938&ctp=s480x480&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=wRST3qMFkT8Q7kNvwEaKAYZ&_nc_oc=AdrZyz476ZEdr2M5UZr5_J2CCY_oKQLKq1aY87Cj2SiTN2xk09VyiHjKeJ9i_zy3uvRybw2bUwoJIbVlGlMVDfl7&_nc_zt=24&_nc_ht=scontent.fdel93-2.fna&_nc_gid=t2_uO-XXIvaUVUbti_cpGg&_nc_ss=7b2a8&oh=00_AQO7LOgOfzgzl3kgTefmBIK12NVQxlgY15BrRyxa_T7RGw&oe=6ADD4F5D"
               className="w-20 md:w-32 h-auto object-contain"
             />
           </div>
