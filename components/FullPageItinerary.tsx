@@ -173,37 +173,43 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 
       const originalElementHeight = element.style.height;
       const originalElementOverflow = element.style.overflow;
+      const originalElementWidth = element.style.width;
       const originalBodyOverflow = document.body.style.overflow;
+      const exportWidth = 794;
 
       try {
         await document.fonts.ready;
         await Promise.all(
           Array.from(element.querySelectorAll('img')).map(image => {
-            if (image.complete) return Promise.resolve();
+            if (image.complete) return image.decode().catch(() => undefined);
             return new Promise<void>(resolve => {
-              image.addEventListener('load', () => resolve(), { once: true });
-              image.addEventListener('error', () => resolve(), { once: true });
+              const finishLoading = () => {
+                image.decode().catch(() => undefined).finally(resolve);
+              };
+              image.addEventListener('load', finishLoading, { once: true });
+              image.addEventListener('error', resolve, { once: true });
             });
           })
         );
 
         element.style.height = 'auto';
         element.style.overflow = 'visible';
+        element.style.width = `${exportWidth}px`;
         document.body.style.overflow = 'visible';
+        element.classList.add('pdf-export');
 
         const captureHeight = element.scrollHeight;
-        const captureWidth = element.scrollWidth;
         const opt = {
-          margin: [0, 0],
+          margin: [0.35, 0.35],
           filename: `Way2Go_${pkg.title.replace(/\s+/g, '_')}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: {
-            scale: 2,
+            scale: 1.5,
             useCORS: true,
             letterRendering: true,
             scrollY: 0,
             scrollX: 0,
-            windowWidth: captureWidth,
+            windowWidth: exportWidth,
             windowHeight: captureHeight,
             height: captureHeight,
             logging: false
@@ -211,7 +217,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
           pagebreak: {
             mode: ['css', 'legacy'],
-            before: '.pdf-day'
+            avoid: ['.pdf-day']
           }
         };
 
@@ -222,7 +228,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       } finally {
         element.style.height = originalElementHeight;
         element.style.overflow = originalElementOverflow;
+        element.style.width = originalElementWidth;
         document.body.style.overflow = originalBodyOverflow;
+        element.classList.remove('pdf-export');
       }
     } else {
       window.print();
@@ -951,13 +959,28 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         }
 
         .pdf-day + .pdf-day {
-          break-before: page;
-          page-break-before: always;
+          break-before: auto;
+          page-break-before: auto;
+        }
+
+        .pdf-export > header {
+          height: 360px !important;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .pdf-export > header > img {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
         }
 
         @media print {
           .no-print { display: none !important; }
           #pdf-content { width: 100% !important; padding: 0 !important; margin: 0 !important; }
+          .pdf-day + .pdf-day { break-before: auto; page-break-before: auto; }
+          #pdf-content > header { height: 360px !important; }
+          #pdf-content > header > img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
         }
       `}</style>
     </div>
