@@ -18,3 +18,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1POtkp0GGcPdHGoapXwIevP
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Raised trip requests
+
+Configure Google Sheets storage and email notifications using the [Google trip requests setup guide](./GOOGLE_TRIP_REQUESTS_SETUP.md).

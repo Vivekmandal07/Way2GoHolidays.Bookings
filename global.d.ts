@@ -8,6 +8,9 @@ declare module '*.svg';
 
 // Vite specific import.meta extensions
 interface ImportMeta {
+  readonly env: {
+    readonly VITE_TRIP_REQUEST_WEB_APP_URL?: string;
+  };
   readonly glob: (
     glob: string,
     options?: { eager?: boolean; as?: 'url' | 'raw' | 'default' }

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AuthUser } from '../types';
 import { CONTACT_DETAILS, COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
+import { createTripRequestToken, submitTripRequest } from '../services/tripRequests';
+import type { TripRequestSubmission } from '../services/tripRequests';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
 const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
@@ -84,6 +86,14 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedTripId, setSubmittedTripId] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [tripEmailSent, setTripEmailSent] = useState(true);
+  const [emailRetryError, setEmailRetryError] = useState('');
+  const [isRetryingEmail, setIsRetryingEmail] = useState(false);
+  const submissionToken = useRef<string | null>(null);
+  const savedSubmission = useRef<TripRequestSubmission | null>(null);
   const [showRequests, setShowRequests] = useState(false);
   const [viewingRequest, setViewingRequest] = useState<TripRequest | null>(null);
   const [requests, setRequests] = useState<TripRequest[]>([]);
@@ -199,7 +209,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!validateStep()) return;
     if (step < TOTAL_STEPS - 1) {
@@ -214,8 +224,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     const destination = form.destinationPreference === 'Exploring options'
       ? form.destinationOptions.join(', ')
       : form.destination;
-    const request: TripRequest = {
-      id: Date.now().toString(),
+    const request: TripRequestSubmission = {
       name: form.name,
       phone: fullPhone,
       email: form.email,
@@ -234,35 +243,87 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       budgetRange: form.budgetRange,
       bookingWindow: form.bookingWindow,
       ticketStatus: form.ticketStatus,
-      submittedAt: new Date().toLocaleString('en-GB'),
     };
-    const updatedRequests = [request, ...requests];
-    setRequests(updatedRequests);
-    localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
 
-    const message = [
-      '*Custom Trip Request - Way2GoHolidays*',
-      `*Name:* ${request.name}`,
-      fullPhone ? `*WhatsApp:* ${fullPhone}` : '',
-      request.email ? `*Email:* ${request.email}` : '',
-      `*Travelling from:* ${request.leavingFrom}`,
-      `*Destination:* ${destination}`,
-      form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
-      `*Destination status:* ${request.destinationPreference}`,
-      `*Duration:* ${request.noOfNights}`,
-      `*Travellers:* ${request.tripType}`,
-      `*Dates:* ${travelDate}`,
-      `*Booking plan:* ${request.bookingWindow}`,
-      `*Flight/train tickets:* ${request.ticketStatus}`,
-      `*Hotel:* ${request.hotelCategory}`,
-      `*Adults:* ${request.pax}`,
-      `*Children:* ${request.children}`,
-      request.childAges.length ? `*Children's ages:* ${request.childAges.join(', ')}` : '',
-      `*Budget:* ${request.budgetRange}`,
-    ].filter(Boolean).join('\n');
-    const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-    setSubmitted(true);
+    if (!submissionToken.current) submissionToken.current = createTripRequestToken();
+    savedSubmission.current = request;
+    const whatsappWindow = window.open('about:blank', '_blank');
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      const result = await submitTripRequest(request, submissionToken.current);
+      const savedRequest: TripRequest = {
+        ...request,
+        id: result.tripId,
+        submittedAt: new Date(result.submittedAt).toLocaleString('en-GB'),
+      };
+      setSubmittedTripId(savedRequest.id);
+      const updatedRequests = [savedRequest, ...requests];
+      setRequests(updatedRequests);
+      try {
+        localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
+      } catch (error) {
+        console.error('Unable to cache the saved trip request locally:', error);
+      }
+      setTripEmailSent(result.emailSent);
+      if (result.emailSent) {
+        submissionToken.current = null;
+        savedSubmission.current = null;
+      }
+
+      const message = [
+        '*Custom Trip Request - Way2GoHolidays*',
+        `*Trip ID:* ${savedRequest.id}`,
+        `*Name:* ${savedRequest.name}`,
+        fullPhone ? `*WhatsApp:* ${fullPhone}` : '',
+        savedRequest.email ? `*Email:* ${savedRequest.email}` : '',
+        `*Travelling from:* ${savedRequest.leavingFrom}`,
+        `*Destination:* ${destination}`,
+        form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
+        `*Destination status:* ${savedRequest.destinationPreference}`,
+        `*Duration:* ${savedRequest.noOfNights}`,
+        `*Travellers:* ${savedRequest.tripType}`,
+        `*Dates:* ${savedRequest.travelDate}`,
+        `*Booking plan:* ${savedRequest.bookingWindow}`,
+        `*Flight/train tickets:* ${savedRequest.ticketStatus}`,
+        `*Hotel:* ${savedRequest.hotelCategory}`,
+        `*Adults:* ${savedRequest.pax}`,
+        `*Children:* ${savedRequest.children}`,
+        savedRequest.childAges.length ? `*Children's ages:* ${savedRequest.childAges.join(', ')}` : '',
+        `*Budget:* ${savedRequest.budgetRange}`,
+      ].filter(Boolean).join('\n');
+      const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+      if (whatsappWindow) {
+        whatsappWindow.opener = null;
+        whatsappWindow.location.href = whatsappUrl;
+      }
+      setSubmitted(true);
+    } catch (error) {
+      whatsappWindow?.close();
+      setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const retryTripEmail = async () => {
+    if (!savedSubmission.current || !submissionToken.current) return;
+    setIsRetryingEmail(true);
+    setEmailRetryError('');
+    try {
+      const result = await submitTripRequest(savedSubmission.current, submissionToken.current);
+      setTripEmailSent(result.emailSent);
+      if (result.emailSent) {
+        submissionToken.current = null;
+        savedSubmission.current = null;
+      } else {
+        setEmailRetryError('The email could not be sent yet. Please try again shortly.');
+      }
+    } catch (error) {
+      setEmailRetryError(error instanceof Error ? error.message : 'Unable to retry the email notification.');
+    } finally {
+      setIsRetryingEmail(false);
+    }
   };
 
   const OptionButton = ({ label, selected, onClick, icon }: { label: string; selected: boolean; onClick: () => void; icon?: string }) => (
@@ -286,6 +347,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   };
 
   const startNewRequest = () => {
+    submissionToken.current = null;
+    savedSubmission.current = null;
+    setSubmittedTripId('');
+    setSubmitError('');
+    setTripEmailSent(true);
+    setEmailRetryError('');
     setForm({
       destination: suggestedDestination,
       noOfNights: '',
@@ -377,7 +444,22 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" /></svg>
             </div>
             <h3 className="text-xl font-black text-slate-900 sm:text-2xl">Trip request raised — thanks, {form.name}!</h3>
-            <p className="mx-auto mt-2 max-w-md text-slate-600">Your details are saved. You can view your raised trips or start another request.</p>
+            {submittedTripId && <p className="mt-2 text-lg font-black text-blue-700">Trip ID: {submittedTripId}</p>}
+            <p className="mx-auto mt-2 max-w-md text-slate-600">Your details are saved in Google Drive. You can view your raised trips or start another request.</p>
+            {tripEmailSent && (
+              <p className="mx-auto mt-2 max-w-md text-sm font-semibold text-emerald-700" role="status">
+                Trip details emailed to way2goholidays.bookings@gmail.com.
+              </p>
+            )}
+            {!tripEmailSent && (
+              <div className="mx-auto mt-2 max-w-md text-sm font-semibold text-amber-700" role="status">
+                <p>Your request is saved, but the email notification has not been sent.</p>
+                <button type="button" onClick={retryTripEmail} disabled={isRetryingEmail} className="mt-2 underline disabled:opacity-60">
+                  {isRetryingEmail ? 'Retrying email...' : 'Retry email notification'}
+                </button>
+                {emailRetryError && <p className="mt-1 text-red-600">{emailRetryError}</p>}
+              </div>
+            )}
             <div className="mx-auto mt-5 flex max-w-lg flex-col justify-center gap-2 sm:mt-7 sm:flex-row sm:gap-3">
               <button type="button" onClick={() => { setSubmitted(false); setShowRequests(true); }} className="rounded-xl border-2 border-blue-200 bg-blue-50 px-6 py-3 font-bold text-blue-700 transition hover:border-blue-400 hover:bg-blue-100">
                 View Raised Trips
@@ -755,6 +837,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     </label>
                   </div>
                   {errors.contact && <p className="mt-3 text-sm font-semibold text-red-600">{errors.contact}</p>}
+                  {submitError && <p className="mt-3 text-sm font-semibold text-red-600" role="alert">{submitError}</p>}
                 </div>
               )}
             </div>
@@ -764,8 +847,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                 {step === 0 ? 'Cancel' : 'Back'}
               </button>
               <div className="flex min-w-0 flex-1 flex-col items-end sm:flex-none">
-                <button type="submit" className="min-h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:w-auto sm:px-6 sm:py-3 sm:text-base">
-                  {step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
+                <button type="submit" disabled={isSubmitting} className="min-h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:cursor-wait disabled:opacity-70 sm:w-auto sm:px-6 sm:py-3 sm:text-base">
+                  {isSubmitting ? 'Saving trip...' : step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
                 </button>
                 {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
               </div>
