@@ -26,6 +26,8 @@ export interface TripRequestSubmissionResult {
 }
 
 const RESPONSE_TIMEOUT_MS = 30_000;
+const DEFAULT_TRIP_REQUEST_WEB_APP_URL =
+  'https://script.google.com/macros/s/AKfycbz-qBsfunv5TN0tro9bRJqVjtSuXcDng8v2tQ3Nz1k_dby01E9b3lN5ONPZWeaQAO-wJA/exec';
 
 const createNonce = () => {
   if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
@@ -39,7 +41,9 @@ export const submitTripRequest = (
   request: TripRequestSubmission,
   submissionToken: string
 ): Promise<TripRequestSubmissionResult> => {
-  const endpoint = import.meta.env.VITE_TRIP_REQUEST_WEB_APP_URL?.trim();
+  const endpoint = (
+    import.meta.env.VITE_TRIP_REQUEST_WEB_APP_URL || DEFAULT_TRIP_REQUEST_WEB_APP_URL
+  ).trim();
   if (!endpoint) {
     return Promise.reject(new Error('Trip requests are not configured yet. Please contact us directly.'));
   }
@@ -83,7 +87,9 @@ export const submitTripRequest = (
 
     const timeout = window.setTimeout(() => {
       cleanup();
-      reject(new Error('We could not confirm your trip request. Please try again.'));
+      reject(new Error(
+        'Could not reach the trip request service. Check that its Google Apps Script deployment is active and accessible to Anyone, then try again.'
+      ));
     }, RESPONSE_TIMEOUT_MS);
 
     const handleMessage = (event: MessageEvent) => {
