@@ -19,7 +19,7 @@ The web app must be publicly callable so the website can submit without exposing
 Set the deployment URL as an environment variable for both local development and the production build:
 
 ```text
-VITE_TRIP_REQUEST_WEB_APP_URL=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+VITE_TRIP_REQUEST_WEB_APP_URL=https://script.google.com/macros/s/AKfycbz-qBsfunv5TN0tro9bRJqVjtSuXcDng8v2tQ3Nz1k_dby01E9b3lN5ONPZWeaQAO-wJA/exec
 ```
 
 For local development, place it in `.env.local`. In production, configure it in the site's build environment and rebuild/redeploy the frontend. This value is included in the public frontend bundle; do not put passwords, API keys, or Google credentials in it.
