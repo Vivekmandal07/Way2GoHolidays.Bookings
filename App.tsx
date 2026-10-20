@@ -250,13 +250,62 @@ const App: React.FC = () => {
             <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
               Answer a few quick questions, one step at a time, and we’ll help plan a trip that fits you.
             </p>
-            <button type="button" onClick={() => handleOpenRaiseYourTrip(viewingPackage?.destination || '')} className="mt-6 w-full rounded-xl bg-blue-600 px-6 py-4 font-black text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">
-              Raise Your Trip
+            <button
+              type="button"
+              onClick={() => handleOpenRaiseYourTrip(viewingPackage?.destination || '')}
+              className="trip-prompt-wave-btn mt-6 w-full rounded-2xl bg-blue-600 px-6 py-4 font-black text-white shadow-lg shadow-blue-200 transition duration-300 hover:scale-[1.01] hover:bg-blue-700 active:scale-[0.99]"
+            >
+              <span className="relative z-10">Raise Your Trip</span>
             </button>
-            
           </section>
         </div>
       )}
+
+      <style>{`
+        .trip-prompt-wave-btn {
+          position: relative;
+          overflow: hidden;
+          isolation: isolate;
+        }
+
+        .trip-prompt-wave-btn::before,
+        .trip-prompt-wave-btn::after {
+          content: "";
+          position: absolute;
+          inset: auto 8% 0 8%;
+          height: 42%;
+          border-radius: 9999px;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .trip-prompt-wave-btn::before {
+          bottom: -10%;
+          background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0));
+          transform: translateX(-65%) skewX(-18deg);
+          animation: tripWaveSweep 2.7s ease-in-out infinite;
+        }
+
+        .trip-prompt-wave-btn::after {
+          inset: auto 18% -18% 18%;
+          height: 68%;
+          background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0) 75%);
+          opacity: 0.9;
+          animation: tripWaveGlow 2.3s ease-in-out infinite;
+        }
+
+        @keyframes tripWaveSweep {
+          0% { transform: translateX(-110%) skewX(-18deg); opacity: 0; }
+          20% { opacity: 0.9; }
+          50% { opacity: 1; }
+          100% { transform: translateX(120%) skewX(-18deg); opacity: 0; }
+        }
+
+        @keyframes tripWaveGlow {
+          0%, 100% { opacity: 0.35; transform: scaleX(0.96); }
+          50% { opacity: 0.8; transform: scaleX(1.08); }
+        }
+      `}</style>
 
       {/* Modals */}
       {activeModal === 'booking' && <BookingModal onClose={() => setActiveModal(null)} />}
