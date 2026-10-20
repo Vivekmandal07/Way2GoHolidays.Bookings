@@ -255,9 +255,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </button>
           <button
             onClick={handleRaiseYourTrip}
-            className="hidden sm:inline-flex rounded-xl border-2 border-blue-600 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-blue-700 transition hover:bg-blue-50"
+            className="group hidden sm:inline-flex rounded-xl border-2 border-blue-600 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-blue-700 transition hover:bg-blue-50"
           >
-            Raise Your Trip
+            <span className="inline-block transition-transform duration-200 group-hover:scale-110">Raise Your Trip</span>
           </button>
         </div>
       </nav>
