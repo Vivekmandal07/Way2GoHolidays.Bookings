@@ -15,6 +15,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     1
   );
   const [isEditMode, setIsEditMode] = useState(false);
+  const [editNotice, setEditNotice] = useState<string | null>(null);
   const [editablePrice, setEditablePrice] = useState(pkg.price);
   const [isDownloading, setIsDownloading] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -91,6 +92,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     };
   }, []);
 
+  useEffect(() => {
+    if (!editNotice) return;
+
+    const timeout = window.setTimeout(() => setEditNotice(null), 2000);
+    return () => window.clearTimeout(timeout);
+  }, [editNotice]);
+
   const handleUpdateDay = (index: number, field: keyof ItineraryDay, value: any) => {
     const newItinerary = [...editableItinerary];
     newItinerary[index] = { ...newItinerary[index], [field]: value };
@@ -99,6 +107,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 
   const handleRaiseYourTrip = () => {
     onRaiseYourTrip(pkg.destination);
+  };
+
+  const handleToggleEditMode = () => {
+    if (isEditMode) {
+      setIsEditMode(false);
+      setEditNotice('Itinerary updated successfully. Your changes are visible in this view.');
+      return;
+    }
+
+    setIsEditMode(true);
+    setEditNotice("You're in edit mode. Customize the itinerary to suit your preferences.");
   };
 
   const handleBookNow = () => {
@@ -239,7 +258,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         
         <div className="flex items-center space-x-2 md:space-x-6">
           <button 
-            onClick={() => setIsEditMode(!isEditMode)}
+            onClick={handleToggleEditMode}
             className={`group flex items-center gap-2 px-3 md:px-6 py-2 md:py-3 rounded-lg md:rounded-2xl font-bold text-[9px] md:text-[11px] uppercase tracking-widest border-2 transition-all duration-300 hover:scale-110 active:scale-95 ${isEditMode ? 'bg-orange-500 border-orange-500 text-white shadow-lg' : 'border-slate-200 text-slate-500 hover:border-blue-500 hover:text-blue-600 bg-white'}`}
           >
             <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
@@ -261,6 +280,20 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </button>
         </div>
       </nav>
+
+      {editNotice && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-20 right-4 left-4 md:left-auto z-[170] md:max-w-md rounded-xl border px-4 py-3 text-sm font-semibold shadow-lg ${
+            isEditMode
+              ? 'border-blue-200 bg-blue-50 text-blue-900'
+              : 'border-green-200 bg-green-50 text-green-900'
+          }`}
+        >
+          {editNotice}
+        </div>
+      )}
 
       {/* Main Content Area focused on full capture */}
       <div ref={contentRef} id="pdf-content" className="bg-white">
