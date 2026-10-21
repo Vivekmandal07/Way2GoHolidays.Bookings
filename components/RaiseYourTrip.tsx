@@ -264,7 +264,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
     if (!submissionToken.current) submissionToken.current = createTripRequestToken();
     savedSubmission.current = request;
-    const whatsappWindow = window.open('about:blank', '_blank');
+    // const whatsappWindow = window.open('about:blank', '_blank');
     setIsSubmitting(true);
     setSubmitError('');
     try {
@@ -309,14 +309,17 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
         savedRequest.childAges.length ? `*Children's ages:* ${savedRequest.childAges.join(', ')}` : '',
         `*Budget:* ${savedRequest.budgetRange}`,
       ].filter(Boolean).join('\n');
-      const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-      if (whatsappWindow) {
-        whatsappWindow.opener = null;
-        whatsappWindow.location.href = whatsappUrl;
-      }
+      console.log("message",message)
+
+      sendEmail(message)
+      // const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+      // if (whatsappWindow) {
+      //   whatsappWindow.opener = null;
+      //   whatsappWindow.location.href = whatsappUrl;
+      // }
       setSubmitted(true);
     } catch (error) {
-      whatsappWindow?.close();
+      // whatsappWindow?.close();
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
     } finally {
       setIsSubmitting(false);
