@@ -20,6 +20,7 @@ import TravelersReview from './components/TravelersReview';
 import { INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS, PACKAGES } from './constants';
 import { Package, AuthUser } from './types';
 import PaymentModal from './components/PaymentModal';
+import sendEmail from './mailer/agent';
 
 const TRIP_PROMPT_DISMISSALS_KEY = 'raiseYourTripPromptDismissals';
 const TRIP_PROMPT_SNOOZE_UNTIL_KEY = 'raiseYourTripPromptSnoozeUntil';
@@ -35,6 +36,7 @@ const getTripPromptDismissalCount = () => {
   }
   return Math.max(0, Math.floor(savedDismissals));
 };
+
 
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'booking' | 'create' | 'expert' | 'login' | 'payment' | null>(null);
@@ -53,6 +55,7 @@ const App: React.FC = () => {
       if (found) setViewingPackage(found);
     }
   }, []);
+  sendEmail(`hello`)
 
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
