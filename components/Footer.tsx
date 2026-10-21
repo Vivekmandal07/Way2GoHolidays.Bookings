@@ -5,6 +5,34 @@ import { CONTACT_DETAILS } from '../constants';
 import '../types';
 
 const Footer: React.FC = () => {
+  const testEmail = async () => {
+    try {
+      const response = await fetch(
+        "https://mailer-beta-three.vercel.app/api/send-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            template: "<h1>Email test successful</h1>",
+          }),
+        }
+      );
+  
+      const data = await response.json();
+      console.log("Email API response:", data);
+  
+      alert(
+        data.success
+          ? "Email API accepted the email. Check your inbox."
+          : `Email failed: ${data.message}`
+      );
+    } catch (error) {
+      console.error("Email test failed:", error);
+      alert("Could not connect to the email API.");
+    }
+  };
   return (
     <footer id="footer" className="bg-slate-950 text-slate-300 pt-24 pb-12">
       <div className="container mx-auto px-6">
@@ -76,6 +104,10 @@ const Footer: React.FC = () => {
           </p>
         </div>
       </div>
+      <button type="button" onClick={testEmail}>
+  Test Email
+</button>
+
     </footer>
   );
 };
