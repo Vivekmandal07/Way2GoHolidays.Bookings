@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AuthUser } from '../types';
-import { CONTACT_DETAILS, COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
+import { COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 import { createTripRequestToken, submitTripRequest } from '../services/tripRequests';
 import type { TripRequestSubmission } from '../services/tripRequests';
 
@@ -96,6 +96,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   const savedSubmission = useRef<TripRequestSubmission | null>(null);
   const [showRequests, setShowRequests] = useState(false);
   const [viewingRequest, setViewingRequest] = useState<TripRequest | null>(null);
+  const [requestToDelete, setRequestToDelete] = useState<TripRequest | null>(null);
+  const [deleteError, setDeleteError] = useState('');
   const [requests, setRequests] = useState<TripRequest[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]);
   const [phone, setPhone] = useState(currentUser?.phone?.replace(/\D/g, '') || '');
@@ -247,7 +249,6 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
     if (!submissionToken.current) submissionToken.current = createTripRequestToken();
     savedSubmission.current = request;
-    const whatsappWindow = window.open('about:blank', '_blank');
     setIsSubmitting(true);
     setSubmitError('');
     try {
@@ -271,35 +272,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
         savedSubmission.current = null;
       }
 
-      const message = [
-        '*Custom Trip Request - Way2GoHolidays*',
-        `*Trip ID:* ${savedRequest.id}`,
-        `*Name:* ${savedRequest.name}`,
-        fullPhone ? `*WhatsApp:* ${fullPhone}` : '',
-        savedRequest.email ? `*Email:* ${savedRequest.email}` : '',
-        `*Travelling from:* ${savedRequest.leavingFrom}`,
-        `*Destination:* ${destination}`,
-        form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
-        `*Destination status:* ${savedRequest.destinationPreference}`,
-        `*Duration:* ${savedRequest.noOfNights}`,
-        `*Travellers:* ${savedRequest.tripType}`,
-        `*Dates:* ${savedRequest.travelDate}`,
-        `*Booking plan:* ${savedRequest.bookingWindow}`,
-        `*Flight/train tickets:* ${savedRequest.ticketStatus}`,
-        `*Hotel:* ${savedRequest.hotelCategory}`,
-        `*Adults:* ${savedRequest.pax}`,
-        `*Children:* ${savedRequest.children}`,
-        savedRequest.childAges.length ? `*Children's ages:* ${savedRequest.childAges.join(', ')}` : '',
-        `*Budget:* ${savedRequest.budgetRange}`,
-      ].filter(Boolean).join('\n');
-      const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-      if (whatsappWindow) {
-        whatsappWindow.opener = null;
-        whatsappWindow.location.href = whatsappUrl;
-      }
       setSubmitted(true);
     } catch (error) {
-      whatsappWindow?.close();
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -342,8 +316,15 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
   const removeRequest = (id: string) => {
     const updatedRequests = requests.filter(request => request.id !== id);
-    setRequests(updatedRequests);
-    localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
+    try {
+      localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
+      setRequests(updatedRequests);
+      setRequestToDelete(null);
+      setDeleteError('');
+    } catch (error) {
+      console.error('Unable to delete the raised trip from this browser:', error);
+      setDeleteError('Unable to delete this raised trip. Please try again.');
+    }
   };
 
   const startNewRequest = () => {
@@ -445,7 +426,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             </div>
             <h3 className="text-xl font-black text-slate-900 sm:text-2xl">Trip request raised — thanks, {form.name}!</h3>
             {submittedTripId && <p className="mt-2 text-lg font-black text-blue-700">Trip ID: {submittedTripId}</p>}
-            <p className="mx-auto mt-2 max-w-md text-slate-600">Your details are saved in Google Drive. You can view your raised trips or start another request.</p>
+            <p className="mx-auto mt-2 max-w-md text-slate-600">Your trip has been raised. Our expert will connect with you shortly.</p>
+            <p className="mx-auto mt-1 max-w-md text-sm text-slate-500">Your details are saved in Google Drive. You can view your raised trips or start another request.</p>
             {tripEmailSent && (
               <p className="mx-auto mt-2 max-w-md text-sm font-semibold text-emerald-700" role="status">
                 Trip details emailed to way2goholidays.bookings@gmail.com.
@@ -485,13 +467,34 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     <button type="button" onClick={() => setViewingRequest(request)} className="text-sm font-bold text-blue-600 hover:text-blue-800">
                       View
                     </button>
-                    {currentUser?.role !== 'customer' && (
-                      <button type="button" onClick={() => removeRequest(request.id)} className="text-sm font-bold text-red-500 hover:text-red-700">Delete</button>
-                    )}
+                    <button type="button" onClick={() => { setRequestToDelete(request); setDeleteError(''); }} className="text-sm font-bold text-red-500 hover:text-red-700">Delete</button>
                   </div>
                 </article>
               ))}
             </div>
+
+            {requestToDelete && (
+              <div className="fixed inset-0 z-[240] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm" role="alertdialog" aria-modal="true" aria-labelledby="delete-raised-trip-title">
+                <section className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+                  <h3 id="delete-raised-trip-title" className="text-lg font-black text-slate-900">Delete raised trip?</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    Are you sure you want to delete this raised trip to {requestToDelete.destination}?
+                  </p>
+                  <p className="mt-2 text-xs text-slate-500">
+                    This removes it from your raised trips in this browser. The Google Drive record will remain unchanged.
+                  </p>
+                  {deleteError && <p className="mt-3 text-sm font-semibold text-red-600" role="alert">{deleteError}</p>}
+                  <div className="mt-6 flex justify-end gap-3">
+                    <button type="button" onClick={() => { setRequestToDelete(null); setDeleteError(''); }} className="rounded-xl border border-slate-200 px-5 py-2.5 font-bold text-slate-700 hover:bg-slate-50">
+                      No
+                    </button>
+                    <button type="button" onClick={() => removeRequest(requestToDelete.id)} className="rounded-xl bg-red-600 px-5 py-2.5 font-bold text-white hover:bg-red-700">
+                      Yes, delete
+                    </button>
+                  </div>
+                </section>
+              </div>
+            )}
 
             {viewingRequest && (
               <div className="fixed inset-0 z-[230] flex items-center justify-center overflow-y-auto bg-slate-950/50 p-1 backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label="Raised trip details">
