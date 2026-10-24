@@ -3,7 +3,6 @@ import { AuthUser } from '../types';
 import { COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 import { createTripRequestToken, submitTripRequest } from '../services/tripRequests';
 import type { TripRequestSubmission } from '../services/tripRequests';
-import sendEmail from '@/mailer/agent';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
 const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
@@ -90,11 +89,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   const [submittedTripId, setSubmittedTripId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [tripEmailSent, setTripEmailSent] = useState(true);
-  const [emailRetryError, setEmailRetryError] = useState('');
-  const [isRetryingEmail, setIsRetryingEmail] = useState(false);
   const submissionToken = useRef<string | null>(null);
-  const savedSubmission = useRef<TripRequestSubmission | null>(null);
   const [showRequests, setShowRequests] = useState(false);
   const [viewingRequest, setViewingRequest] = useState<TripRequest | null>(null);
   const [requestToDelete, setRequestToDelete] = useState<TripRequest | null>(null);
@@ -213,23 +208,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   };
   
 
-  async function handleSendEmail() {
-    const template = `
-      <h2>Hello!</h2>
-      <p>This email was sent from my React application.</p>
-    `;
-  
-    try {
-      const result = await sendEmail(template);
-      console.log("email sent:",result.message);
-    } catch (error) {
-      console.error("Email error:", error);
-    }
-  }
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    handleSendEmail();
     if (!validateStep()) return;
     if (step < TOTAL_STEPS - 1) {
       setStep(current => current + 1);
@@ -265,7 +245,6 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     };
 
     if (!submissionToken.current) submissionToken.current = createTripRequestToken();
-    savedSubmission.current = request;
     setIsSubmitting(true);
     setSubmitError('');
     try {
@@ -283,37 +262,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       } catch (error) {
         console.error('Unable to cache the saved trip request locally:', error);
       }
-      setTripEmailSent(result.emailSent);
-      if (result.emailSent) {
-        submissionToken.current = null;
-        savedSubmission.current = null;
-      }
-
+      submissionToken.current = null;
       setSubmitted(true);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const retryTripEmail = async () => {
-    if (!savedSubmission.current || !submissionToken.current) return;
-    setIsRetryingEmail(true);
-    setEmailRetryError('');
-    try {
-      const result = await submitTripRequest(savedSubmission.current, submissionToken.current);
-      setTripEmailSent(result.emailSent);
-      if (result.emailSent) {
-        submissionToken.current = null;
-        savedSubmission.current = null;
-      } else {
-        setEmailRetryError('The email could not be sent yet. Please try again shortly.');
-      }
-    } catch (error) {
-      setEmailRetryError(error instanceof Error ? error.message : 'Unable to retry the email notification.');
-    } finally {
-      setIsRetryingEmail(false);
     }
   };
 
@@ -346,11 +300,8 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
   const startNewRequest = () => {
     submissionToken.current = null;
-    savedSubmission.current = null;
     setSubmittedTripId('');
     setSubmitError('');
-    setTripEmailSent(true);
-    setEmailRetryError('');
     setForm({
       destination: suggestedDestination,
       noOfNights: '',
@@ -444,21 +395,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
             <h3 className="text-xl font-black text-slate-900 sm:text-2xl">Trip request raised — thanks, {form.name}!</h3>
             {submittedTripId && <p className="mt-2 text-lg font-black text-blue-700">Trip ID: {submittedTripId}</p>}
             <p className="mx-auto mt-2 max-w-md text-slate-600">Your trip has been raised. Our expert will connect with you shortly.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-slate-500">Your details are saved in Google Drive. You can view your raised trips or start another request.</p>
-            {tripEmailSent && (
-              <p className="mx-auto mt-2 max-w-md text-sm font-semibold text-emerald-700" role="status">
-                Trip details emailed to way2goholidays.bookings@gmail.com.
-              </p>
-            )}
-            {!tripEmailSent && (
-              <div className="mx-auto mt-2 max-w-md text-sm font-semibold text-amber-700" role="status">
-                <p>Your request is saved, but the email notification has not been sent.</p>
-                <button type="button" onClick={retryTripEmail} disabled={isRetryingEmail} className="mt-2 underline disabled:opacity-60">
-                  {isRetryingEmail ? 'Retrying email...' : 'Retry email notification'}
-                </button>
-                {emailRetryError && <p className="mt-1 text-red-600">{emailRetryError}</p>}
-              </div>
-            )}
+            <p className="mx-auto mt-2 max-w-md text-sm font-semibold text-emerald-700" role="status">
+              Your trip details have been emailed to our team. A copy of this request is available in Raised Trips on this browser.
+            </p>
             <div className="mx-auto mt-5 flex max-w-lg flex-col justify-center gap-2 sm:mt-7 sm:flex-row sm:gap-3">
               <button type="button" onClick={() => { setSubmitted(false); setShowRequests(true); }} className="rounded-xl border-2 border-blue-200 bg-blue-50 px-6 py-3 font-bold text-blue-700 transition hover:border-blue-400 hover:bg-blue-100">
                 View Raised Trips
@@ -498,7 +437,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     Are you sure you want to delete this raised trip to {requestToDelete.destination}?
                   </p>
                   <p className="mt-2 text-xs text-slate-500">
-                    This removes it from your raised trips in this browser. The Google Drive record will remain unchanged.
+                    This removes it from raised trips on this browser only.
                   </p>
                   {deleteError && <p className="mt-3 text-sm font-semibold text-red-600" role="alert">{deleteError}</p>}
                   <div className="mt-6 flex justify-end gap-3">
@@ -868,7 +807,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               </button>
               <div className="flex min-w-0 flex-1 flex-col items-end sm:flex-none">
                 <button type="submit" disabled={isSubmitting} className="min-h-11 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:cursor-wait disabled:opacity-70 sm:w-auto sm:px-6 sm:py-3 sm:text-base">
-                  {isSubmitting ? 'Saving trip...' : step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
+                  {isSubmitting ? 'Sending trip request...' : step === TOTAL_STEPS - 1 ? 'Send my trip request' : 'Continue'}
                 </button>
                 {step === TOTAL_STEPS - 1 && <span className="mt-1 text-[10px] text-slate-500">You can still review before sending</span>}
               </div>

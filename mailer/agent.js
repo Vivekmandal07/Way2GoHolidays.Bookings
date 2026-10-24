@@ -11,10 +11,10 @@ async function sendEmail(template) {
     }
   );
 
-  const result = await response.json();
+  const result = await response.json().catch(() => null);
 
-  if (!response.ok) {
-    throw new Error(result.message || "Failed to send email");
+  if (!response.ok || !result?.success) {
+    throw new Error(result?.message || "Failed to send email");
   }
 
   return result;

@@ -21,4 +21,4 @@ View your app in AI Studio: https://ai.studio/apps/drive/1POtkp0GGcPdHGoapXwIevP
 
 ## Raised trip requests
 
-Configure Google Sheets storage and email notifications using the [Google trip requests setup guide](./GOOGLE_TRIP_REQUESTS_SETUP.md).
+Trip requests are emailed through the existing mail API at `mailer-beta-three.vercel.app`. Keep the mail API key, ID, and token configured in that service's hosting environment; do not add them to frontend environment variables. Successfully submitted requests are cached in the current browser under **View Raised Trips**.
