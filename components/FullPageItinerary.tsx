@@ -46,8 +46,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
-  const [travellerCountsUpdated, setTravellerCountsUpdated] = useState(false);
-  const [roomsUpdated, setRoomsUpdated] = useState(false);
   const packageAmount = Number(pkg.price.replace(/[^\d.]/g, ''));
   const bookingConfirmationAmount = Number.isFinite(packageAmount) && packageAmount > 0
     ? Math.round(packageAmount * 0.3)
@@ -70,12 +68,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     travelName.trim() && ['Guest name', travelName.trim()],
     travelDate && ['Date of journey', formatTravelDate(travelDate)],
     travelOrigin.trim() && ['Starting from', travelOrigin.trim()],
-    roomsUpdated && ['Rooms', String(rooms)],
-    travellerCountsUpdated && [
-      'Travellers',
-      `${adults} adult${adults === 1 ? '' : 's'}, ${children} ${children === 1 ? 'child' : 'children'}${
-        childrenAges.length > 0 ? ` (ages ${childrenAges.join(', ')})` : ''
-      }`,
+    ['Rooms', String(rooms)],
+    ['Adults', String(adults)],
+    [
+      'Children',
+      `${children}${childrenAges.length > 0 ? ` (ages ${childrenAges.join(', ')})` : ''}`,
     ],
     travelEmail.trim() && ['Email', travelEmail.trim()],
     travelPhone.trim() && ['WhatsApp', travelPhone.trim()],
@@ -344,7 +341,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </section>
 
           {customerDetails.length > 0 && (
-            <section className="mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
+            <section className="pdf-customer-details mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
               {customerDetails.map(([label, value]) => (
                 <div key={label}>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</p>
@@ -507,10 +504,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Rooms</label>
                     <select
                       value={rooms}
-                      onChange={(e) => {
-                        setRooms(Number(e.target.value));
-                        setRoomsUpdated(true);
-                      }}
+                      onChange={(e) => setRooms(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
@@ -523,10 +517,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Adults</label>
                     <select
                       value={adults}
-                      onChange={(e) => {
-                        setAdults(Number(e.target.value));
-                        setTravellerCountsUpdated(true);
-                      }}
+                      onChange={(e) => setAdults(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => (
@@ -539,10 +530,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Children</label>
                     <select
                       value={children}
-                      onChange={(e) => {
-                        setChildren(Number(e.target.value));
-                        setTravellerCountsUpdated(true);
-                      }}
+                      onChange={(e) => setChildren(Number(e.target.value))}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 30 }, (_, i) => i).map((num) => (
@@ -563,7 +551,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                             const next = [...childrenAges];
                             next[idx] = e.target.value;
                             setChildrenAges(next);
-                            setTravellerCountsUpdated(true);
                           }}
                           className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                         >
@@ -1042,6 +1029,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .print-summary { break-inside: avoid; page-break-inside: avoid; }
           .print-summary,
           .print-summary * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          .pdf-customer-details {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            column-gap: 16mm !important;
+          }
           #pdf-content header > div:last-child,
           #pdf-content header > div:last-child h1,
           #pdf-content header > div:last-child p { color: #fff !important; }
