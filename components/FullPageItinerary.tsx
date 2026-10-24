@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
-import { CONTACT_DETAILS } from '../constants';
+import { CONTACT_DETAILS, DESTINATION_CITIES } from '../constants';
 import way2goLogo from '../assets/image/way2goholiday logo.png';
 
 const HOTEL_ROOM_IMAGE =
@@ -73,12 +73,35 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     travelEmail.trim() && ['Email', travelEmail.trim()],
     travelPhone.trim() && ['WhatsApp', travelPhone.trim()],
   ].filter((detail): detail is [string, string] => Boolean(detail));
+  const getDayCity = (day: ItineraryDay) => {
+    if (day.city?.trim()) return day.city.trim();
+    const searchableDay = `${day.title} ${day.activities}`.toLowerCase();
+    const destinationCities = DESTINATION_CITIES[pkg.destination] || [];
+    return destinationCities.find(city => {
+      const aliases = [city, ...Array.from(city.matchAll(/\(([^)]+)\)/g), match => match[1])];
+      return aliases.some(alias => searchableDay.includes(alias.toLowerCase()));
+    }) || pkg.destination;
+  };
   const quotedCities = Array.from(new Set(
     editableItinerary
       .filter(day => !/departure|depart/i.test(day.title))
-      .map(day => day.city?.trim() || day.title.trim())
+      .map(getDayCity)
       .filter(Boolean)
   ));
+  const hotelStays = editableItinerary.reduce<Array<{ hotel: string; nights: number; cities: string[] }>>((stays, day) => {
+    const hotel = day.hotel.trim();
+    if (!hotel || hotel.toLowerCase() === 'n/a' || /departure|depart/i.test(day.title)) return stays;
+
+    const existingStay = stays.find(stay => stay.hotel.toLowerCase() === hotel.toLowerCase());
+    if (existingStay) {
+      existingStay.nights += 1;
+      const city = getDayCity(day);
+      if (!existingStay.cities.includes(city)) existingStay.cities.push(city);
+    } else {
+      stays.push({ hotel, nights: 1, cities: [getDayCity(day)] });
+    }
+    return stays;
+  }, []);
 
   const getDayDescriptionPlaceholder = (day: ItineraryDay) => {
     const title = day.title.toLowerCase();
@@ -367,23 +390,32 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <h2 className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-[#1f70b5]">
               Cities &amp; hotel plan
             </h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div className="rounded-xl border border-blue-100 bg-white p-4">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Cities included</p>
-                <p className="mt-2 text-sm font-bold leading-relaxed text-slate-900">
-                  {quotedCities.length > 0 ? quotedCities.join(' · ') : pkg.destination}
-                </p>
+            <div className="mb-4 rounded-xl border border-blue-100 bg-white p-4">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Cities included</p>
+              <p className="mt-2 text-sm font-bold leading-relaxed text-slate-900">
+                {quotedCities.length > 0 ? quotedCities.join(' · ') : pkg.destination}
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-blue-100 bg-white">
+              <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1.3fr)] gap-3 bg-[#123b78] px-4 py-3 text-[9px] font-extrabold uppercase tracking-[0.1em] text-white">
+                <span>Hotel name</span>
+                <span>Nights</span>
+                <span>Room category</span>
               </div>
-              <div className="rounded-xl border border-blue-100 bg-white p-4">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Number of nights</p>
-                <p className="mt-2 text-sm font-bold text-slate-900">
-                  {numberOfNights} night{numberOfNights === 1 ? '' : 's'}
-                </p>
-              </div>
-              <div className="rounded-xl border border-blue-100 bg-white p-4">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Hotel room category</p>
-                <p className="mt-2 text-sm font-bold text-slate-900">{hotelRoomCategory}</p>
-              </div>
+              {hotelStays.length > 0 ? hotelStays.map(stay => (
+                <div key={stay.hotel} className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1.3fr)] gap-3 border-t border-slate-100 px-4 py-3 text-sm">
+                  <span className="break-words font-bold text-slate-900">
+                    {stay.hotel}
+                    <span className="mt-1 block text-xs font-medium text-slate-500">{stay.cities.join(' · ')}</span>
+                  </span>
+                  <span className="font-semibold text-slate-700">{stay.nights} night{stay.nights === 1 ? '' : 's'}</span>
+                  <span className="font-semibold text-slate-700">{hotelRoomCategory}</span>
+                </div>
+              )) : (
+                <div className="px-4 py-3 text-sm text-slate-600">
+                  No hotel stays are listed in this itinerary yet.
+                </div>
+              )}
             </div>
           </section>
 
