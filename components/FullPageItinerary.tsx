@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
 import { CONTACT_DETAILS, INTERNATIONAL_DESTINATIONS } from '../constants';
+import way2goLogo from '../assets/image/way2goholiday logo.png';
+
+const HOTEL_ROOM_IMAGE =
+  'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80';
 
 const dayDetailFields = [
   { key: 'sightseeingIncluded', label: 'Sightseeing', Icon: MapPin },
@@ -36,11 +40,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const [travelName, setTravelName] = useState<string>('');
   const [travelEmail, setTravelEmail] = useState<string>('');
   const [travelPhone, setTravelPhone] = useState<string>('');
+  const [travelOrigin, setTravelOrigin] = useState<string>('');
   const [travelDate, setTravelDate] = useState<string>('');
   const [rooms, setRooms] = useState<number>(1);
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
+  const packageAmount = Number(pkg.price.replace(/[^\d.]/g, ''));
+  const bookingConfirmationAmount = Number.isFinite(packageAmount) && packageAmount > 0
+    ? Math.round(packageAmount * 0.3)
+    : null;
+  const formatCurrency = (amount: number) => `₹ ${amount.toLocaleString('en-IN')}`;
 
   const getDestinationSuggestion = (dayNumber: number) => {
     const suggestions = INTERNATIONAL_DESTINATIONS.map(destination => destination.name);
@@ -143,6 +153,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     let message = `*Interest in ${pkg.title}*\n`;
     message += `*Destination:* ${pkg.destination}\n`;
     message += `*Price Quote:* ${editablePrice}\n`;
+    if (travelOrigin) message += `*Starting From:* ${travelOrigin}\n`;
     if (travelName) message += `*Traveller:* ${travelName}\n`;
     if (travelEmail) message += `*Email:* ${travelEmail}\n`;
     if (travelPhone) message += `*WhatsApp:* ${travelPhone}\n`;
@@ -177,7 +188,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
               image.decode().catch(() => undefined).finally(resolve);
             };
             image.addEventListener('load', finishLoading, { once: true });
-            image.addEventListener('error', resolve, { once: true });
+            image.addEventListener('error', () => resolve(), { once: true });
           });
         })
       );
@@ -275,26 +286,102 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       <div ref={contentRef} id="pdf-content" className="bg-white">
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 no-print"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="absolute top-4 right-4 md:top-8 md:right-12 bg-white rounded-xl p-2 shadow-lg">
             <img
-              src="https://scontent.fdel93-2.fna.fbcdn.net/v/t39.30808-1/724714759_122193664424944287_3966463320523682050_n.jpg?stp=c43.43.938.938a_dst-jpg_tt6&cstp=mx938x938&ctp=s480x480&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=wRST3qMFkT8Q7kNvwEaKAYZ&_nc_oc=AdrZyz476ZEdr2M5UZr5_J2CCY_oKQLKq1aY87Cj2SiTN2xk09VyiHjKeJ9i_zy3uvRybw2bUwoJIbVlGlMVDfl7&_nc_zt=24&_nc_ht=scontent.fdel93-2.fna&_nc_gid=t2_uO-XXIvaUVUbti_cpGg&_nc_ss=7b2a8&oh=00_AQO7LOgOfzgzl3kgTefmBIK12NVQxlgY15BrRyxa_T7RGw&oe=6ADD4F5D"
-              className="w-20 md:w-32 h-auto object-contain"
+              src={way2goLogo}
+              alt="Way2Go Holidays"
+              className="w-28 md:w-40 h-auto object-contain"
             />
           </div>
           <div className="absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
             <div className="max-w-4xl space-y-2">
-               <div className="inline-block bg-blue-600 text-white px-3 py-1 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest shadow-lg no-print animate-pulse">
-                 Detailed Itinerary
-               </div>
-               <h1 className="text-2xl md:text-7xl font-bold text-slate-900 tracking-tighter leading-tight origin-left transition-transform hover:scale-105 cursor-default">
+               <p className="text-sm md:text-lg font-bold text-white">
+                 {travelName.trim() ? `Hello ${travelName.trim()},` : 'Your holiday quotation'}
+               </p>
+               <h1 className="text-2xl md:text-7xl font-bold text-white tracking-tighter leading-tight origin-left transition-transform hover:scale-105 cursor-default">
                  {pkg.title}
                </h1>
+               <p className="text-xs md:text-base font-medium text-white/90">
+                 Quotation by <span className="font-bold text-[#1f70b5]">Way2Go Holidays</span>
+                 {travelName.trim() ? ` for ${travelName.trim()}` : ''}
+               </p>
             </div>
           </div>
         </header>
 
         <main className="container mx-auto px-5 md:px-12 py-8 md:py-20">
+          <section className="mb-8 md:mb-12 overflow-hidden rounded-2xl bg-[#123b78] text-white shadow-lg print-summary">
+            <div className="grid grid-cols-1 divide-y divide-white/15 md:grid-cols-2 md:divide-x md:divide-y-0">
+              <div className="p-5 md:p-8">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Total package cost</p>
+                <p className="mt-2 text-3xl font-black tracking-tight">{pkg.price}</p>
+              </div>
+              <div className="p-5 md:p-8">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Booking confirmation amount (30%)</p>
+                <p className="mt-2 text-3xl font-black tracking-tight">
+                  {bookingConfirmationAmount === null ? 'Not available' : formatCurrency(bookingConfirmationAmount)}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Guest name</p>
+              <p className="mt-1 break-words font-semibold text-slate-900">{travelName.trim() || 'Not provided'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Date of journey</p>
+              <p className="mt-1 font-semibold text-slate-900">{formatTravelDate(travelDate) || 'To be confirmed'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Duration</p>
+              <p className="mt-1 font-semibold text-slate-900">{numberOfNights} night{numberOfNights === 1 ? '' : 's'} / {numberOfDays} days</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Travellers</p>
+              <p className="mt-1 font-semibold text-slate-900">
+                {adults} adult{adults === 1 ? '' : 's'}, {children} {children === 1 ? 'child' : 'children'}
+                {childrenAges.length > 0 ? ` (ages ${childrenAges.join(', ')})` : ''}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Starting from</p>
+              <p className="mt-1 font-semibold text-slate-900">{travelOrigin.trim() || 'Not specified'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Destination</p>
+              <p className="mt-1 font-semibold text-slate-900">{pkg.destination}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Rooms</p>
+              <p className="mt-1 font-semibold text-slate-900">{rooms}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Guest contact</p>
+              <p className="mt-1 break-words font-semibold text-slate-900">
+                {[travelEmail.trim(), travelPhone.trim()].filter(Boolean).join(' · ') || 'Not provided'}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Tour company</p>
+              <p className="mt-1 font-semibold text-[#1f70b5]">Way2Go Holidays</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Contact person</p>
+              <p className="mt-1 font-semibold text-slate-900">Vivek</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Company location</p>
+              <p className="mt-1 font-semibold text-slate-900">{CONTACT_DETAILS.location}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Reviews / trips</p>
+              <p className="mt-1 font-semibold text-slate-900">47 reviews · 74 trips</p>
+            </div>
+          </section>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-24">
             
             <div className="lg:col-span-8 space-y-12 md:space-y-20">
@@ -310,11 +397,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                  </div>
                   <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
-                    <span className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
+                    <span className="text-2xl md:text-3xl font-bold text-[#1f70b5] tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
                  </div>
               </div>
              {/* Trip Duration */}
-<div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 md:p-6 rounded-3xl border border-blue-100 shadow-sm focus-within:border-blue-400 focus-within:shadow-lg">
+<div className="screen-only bg-gradient-to-r from-blue-50 to-indigo-50 p-5 md:p-6 rounded-3xl border border-blue-100 shadow-sm focus-within:border-blue-400 focus-within:shadow-lg">
   <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
 
     <div>
@@ -378,7 +465,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 </div>
 
               {/* Booking Details */}
-              <div className="bg-gradient-to-r from-orange-100 to-orange-100 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
+              <div className="screen-only bg-gradient-to-r from-orange-100 to-orange-100 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
                 <div className="flex items-center justify-between">
                   <h4 className="text-lg md:text-xl font-bold text-slate-900">Travel Details</h4>
                   <span className="text-sm text-slate-500">Specify your travel preferences</span>
@@ -419,7 +506,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Travel Date</label>
                     <input
@@ -431,6 +518,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     {travelDate && (
                       <p className="text-xs text-slate-500 mt-1">{formatTravelDate(travelDate)}</p>
                     )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Starting From</label>
+                    <input
+                      type="text"
+                      value={travelOrigin}
+                      onChange={(e) => setTravelOrigin(e.target.value)}
+                      placeholder="City / airport"
+                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -693,8 +791,21 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   />
                 </svg>
               </div>
-
-              <div className="flex-grow min-w-0">
+                {day.hotel && day.hotel !== 'N/A' && (
+                  <div className="w-28 shrink-0 overflow-hidden rounded-xl md:w-40">
+                    <img
+                      src={day.hotelImage || HOTEL_ROOM_IMAGE}
+                      alt={day.hotelImage ? `Room at ${day.hotel}` : 'Representative hotel room'}
+                      className="h-20 w-full object-cover md:h-28"
+                    />
+                    {!day.hotelImage && (
+                      <span className="block px-1 pt-1 text-[9px] font-medium text-slate-500">
+                        Representative room photo
+                      </span>
+                    )}
+                  </div>
+                )}
+                <div className="flex-grow min-w-0">
                 <div className="flex items-center gap-2 md:gap-4 mb-1">
                   <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">
                     Accommodation
@@ -710,14 +821,24 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 </div>
 
                 {isEditMode ? (
-                  <input
-                    value={day.hotel === 'N/A' ? '' : day.hotel}
-                    placeholder="Enter hotel name"
-                    onChange={(e) =>
-                      handleUpdateDay(idx, 'hotel', e.target.value)
-                    }
-                    className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white placeholder:text-slate-300"
-                  />
+                  <div className="space-y-2">
+                    <input
+                      value={day.hotel === 'N/A' ? '' : day.hotel}
+                      placeholder="Enter hotel name"
+                      onChange={(e) =>
+                        handleUpdateDay(idx, 'hotel', e.target.value)
+                      }
+                      className="w-full font-bold text-black text-sm md:text-xl outline-none border-b border-orange-100 bg-white placeholder:text-slate-300"
+                    />
+                    <input
+                      type="url"
+                      value={day.hotelImage || ''}
+                      placeholder="Optional: this hotel's room image URL"
+                      aria-label={`Room image URL for day ${day.day}`}
+                      onChange={(e) => handleUpdateDay(idx, 'hotelImage', e.target.value)}
+                      className="no-print w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700"
+                    />
+                  </div>
                 ) : isEmptyDay ? (
                   <span className="text-sm md:text-xl font-bold text-slate-300 italic block truncate transition-all">
                     Enter hotel name
@@ -935,6 +1056,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             padding-bottom: 0 !important;
           }
           .no-print { display: none !important; }
+          .screen-only { display: none !important; }
+          .print-summary { break-inside: avoid; page-break-inside: avoid; }
+          .print-summary,
+          .print-summary * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          #pdf-content header > div:last-child,
+          #pdf-content header > div:last-child h1,
+          #pdf-content header > div:last-child p { color: #fff !important; }
           #pdf-content {
             width: 100% !important;
             overflow: visible !important;

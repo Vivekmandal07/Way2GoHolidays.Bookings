@@ -13,6 +13,7 @@ export interface ItineraryDay {
   title: string;
   activities: string;
   hotel: string;
+  hotelImage?: string;
   rating?: number;
   sightseeingIncluded?: boolean;
   breakfastIncluded?: boolean;
