@@ -1140,6 +1140,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           #pdf-content > header {
             height: 100mm !important;
             min-height: 100mm !important;
+            width: calc(100% + 24mm) !important;
+            margin-left: -12mm !important;
+            margin-right: -12mm !important;
             overflow: hidden !important;
             break-inside: avoid;
             page-break-inside: avoid;
