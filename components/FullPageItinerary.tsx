@@ -304,13 +304,15 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
-          <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-2 shadow-lg">
-            <img
-              src={way2goLogo}
-              alt="Way2Go Holidays"
-              className="w-28 md:w-40 h-auto object-contain"
-            />
-            <p className="mt-1 text-center text-xs font-extrabold tracking-wide text-[#1f70b5]">
+          <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-3 shadow-lg">
+            <div className="h-12 w-32 overflow-hidden">
+              <img
+                src={way2goLogo}
+                alt="Way2Go Holidays airplane mark"
+                className="block h-auto w-32"
+              />
+            </div>
+            <p className="mt-1 text-center text-sm font-black tracking-wide text-[#1f70b5]">
               Way2Go Holidays
             </p>
           </div>
