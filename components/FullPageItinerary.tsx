@@ -303,6 +303,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
+          <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
           <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-2 shadow-lg">
             <img
               src={way2goLogo}
@@ -1156,6 +1157,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             object-fit: cover !important;
             object-position: center !important;
           }
+          #pdf-content > header > .pdf-cover-bottom-fade {
+            height: 18mm !important;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.45) 48%, #fff 100%) !important;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+          }
           #pdf-content > header > .pdf-cover-brand {
             top: 10mm !important;
             right: 12mm !important;
@@ -1164,7 +1171,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           }
           #pdf-content > header > .pdf-cover-caption {
             right: 12mm !important;
-            bottom: 10mm !important;
+            bottom: 18mm !important;
             left: 12mm !important;
             width: auto !important;
             max-width: none !important;
