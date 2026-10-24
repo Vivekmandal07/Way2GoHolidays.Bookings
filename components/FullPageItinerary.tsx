@@ -303,14 +303,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
-          <div className="absolute top-4 right-4 md:top-8 md:right-12 bg-white rounded-xl p-2 shadow-lg">
+          <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-2 shadow-lg">
             <img
               src={way2goLogo}
               alt="Way2Go Holidays"
               className="w-28 md:w-40 h-auto object-contain"
             />
+            <p className="mt-1 text-center text-xs font-extrabold tracking-wide text-[#1f70b5]">
+              Way2Go Holidays
+            </p>
           </div>
-          <div className="absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
+          <div className="pdf-cover-caption absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
             <div className="max-w-4xl space-y-2">
                <p className="text-sm md:text-lg font-bold text-white">
                  Dear {travelName.trim() || 'Guest'},
@@ -1140,18 +1143,33 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           #pdf-content > header {
             height: 100mm !important;
             min-height: 100mm !important;
-            width: calc(100% + 24mm) !important;
-            margin-left: -12mm !important;
-            margin-right: -12mm !important;
             overflow: hidden !important;
             break-inside: avoid;
             page-break-inside: avoid;
           }
           #pdf-content > header > img {
-            width: 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: -12mm !important;
+            width: calc(100% + 24mm) !important;
             height: 100% !important;
             object-fit: cover !important;
             object-position: center !important;
+          }
+          #pdf-content > header > .pdf-cover-brand {
+            top: 10mm !important;
+            right: 12mm !important;
+            left: auto !important;
+            z-index: 2 !important;
+          }
+          #pdf-content > header > .pdf-cover-caption {
+            right: 12mm !important;
+            bottom: 10mm !important;
+            left: 12mm !important;
+            width: auto !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
           #pdf-content > main {
             width: 100% !important;
