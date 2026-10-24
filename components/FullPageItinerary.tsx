@@ -341,13 +341,18 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </section>
 
           {customerDetails.length > 0 && (
-            <section className="pdf-customer-details mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
-              {customerDetails.map(([label, value]) => (
-                <div key={label}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</p>
-                  <p className="mt-1 break-words font-semibold text-slate-900">{value}</p>
-                </div>
-              ))}
+            <section className="pdf-customer-details mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-7 print-summary">
+              <h2 className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-[#1f70b5]">
+                Traveller details
+              </h2>
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                {customerDetails.map(([label, value]) => (
+                  <div key={label} className="min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                    <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+                    <p className="mt-1 break-words text-sm font-bold leading-snug text-slate-900">{value}</p>
+                  </div>
+                ))}
+              </div>
             </section>
           )}
 
@@ -1031,8 +1036,22 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .print-summary * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
           .pdf-customer-details {
             display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            column-gap: 16mm !important;
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 4mm !important;
+          }
+          .pdf-customer-details > div {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 3mm !important;
+          }
+          .pdf-customer-details > div > div {
+            min-width: 0 !important;
+            padding: 3mm !important;
+            border: 1px solid #dbe3ed !important;
+            border-radius: 3mm !important;
+            background: #fff !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
           }
           #pdf-content header > div:last-child,
           #pdf-content header > div:last-child h1,
