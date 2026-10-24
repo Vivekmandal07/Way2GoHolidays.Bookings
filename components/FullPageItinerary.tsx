@@ -46,6 +46,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
+  const [travellerCountsUpdated, setTravellerCountsUpdated] = useState(false);
+  const [roomsUpdated, setRoomsUpdated] = useState(false);
   const packageAmount = Number(pkg.price.replace(/[^\d.]/g, ''));
   const bookingConfirmationAmount = Number.isFinite(packageAmount) && packageAmount > 0
     ? Math.round(packageAmount * 0.3)
@@ -63,6 +65,21 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     if (Number.isNaN(date.getTime())) return value;
     return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
   };
+
+  const customerDetails = [
+    travelName.trim() && ['Guest name', travelName.trim()],
+    travelDate && ['Date of journey', formatTravelDate(travelDate)],
+    travelOrigin.trim() && ['Starting from', travelOrigin.trim()],
+    roomsUpdated && ['Rooms', String(rooms)],
+    travellerCountsUpdated && [
+      'Travellers',
+      `${adults} adult${adults === 1 ? '' : 's'}, ${children} ${children === 1 ? 'child' : 'children'}${
+        childrenAges.length > 0 ? ` (ages ${childrenAges.join(', ')})` : ''
+      }`,
+    ],
+    travelEmail.trim() && ['Email', travelEmail.trim()],
+    travelPhone.trim() && ['WhatsApp', travelPhone.trim()],
+  ].filter((detail): detail is [string, string] => Boolean(detail));
 
   const getDayDescriptionPlaceholder = (day: ItineraryDay) => {
     const title = day.title.toLowerCase();
@@ -326,61 +343,16 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </div>
           </section>
 
-          <section className="mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Guest name</p>
-              <p className="mt-1 break-words font-semibold text-slate-900">{travelName.trim() || 'Not provided'}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Date of journey</p>
-              <p className="mt-1 font-semibold text-slate-900">{formatTravelDate(travelDate) || 'To be confirmed'}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Duration</p>
-              <p className="mt-1 font-semibold text-slate-900">{numberOfNights} night{numberOfNights === 1 ? '' : 's'} / {numberOfDays} days</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Travellers</p>
-              <p className="mt-1 font-semibold text-slate-900">
-                {adults} adult{adults === 1 ? '' : 's'}, {children} {children === 1 ? 'child' : 'children'}
-                {childrenAges.length > 0 ? ` (ages ${childrenAges.join(', ')})` : ''}
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Starting from</p>
-              <p className="mt-1 font-semibold text-slate-900">{travelOrigin.trim() || 'Not specified'}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Destination</p>
-              <p className="mt-1 font-semibold text-slate-900">{pkg.destination}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Rooms</p>
-              <p className="mt-1 font-semibold text-slate-900">{rooms}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Guest contact</p>
-              <p className="mt-1 break-words font-semibold text-slate-900">
-                {[travelEmail.trim(), travelPhone.trim()].filter(Boolean).join(' · ') || 'Not provided'}
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Tour company</p>
-              <p className="mt-1 font-semibold text-[#1f70b5]">Way2Go Holidays</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Contact person</p>
-              <p className="mt-1 font-semibold text-slate-900">Vivek</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Company location</p>
-              <p className="mt-1 font-semibold text-slate-900">{CONTACT_DETAILS.location}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Reviews / trips</p>
-              <p className="mt-1 font-semibold text-slate-900">47 reviews · 74 trips</p>
-            </div>
-          </section>
+          {customerDetails.length > 0 && (
+            <section className="mb-12 grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2 md:p-8 print-summary">
+              {customerDetails.map(([label, value]) => (
+                <div key={label}>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</p>
+                  <p className="mt-1 break-words font-semibold text-slate-900">{value}</p>
+                </div>
+              ))}
+            </section>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-24">
             
@@ -535,7 +507,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Rooms</label>
                     <select
                       value={rooms}
-                      onChange={(e) => setRooms(Number(e.target.value))}
+                      onChange={(e) => {
+                        setRooms(Number(e.target.value));
+                        setRoomsUpdated(true);
+                      }}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
@@ -548,7 +523,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Adults</label>
                     <select
                       value={adults}
-                      onChange={(e) => setAdults(Number(e.target.value))}
+                      onChange={(e) => {
+                        setAdults(Number(e.target.value));
+                        setTravellerCountsUpdated(true);
+                      }}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => (
@@ -561,7 +539,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Children</label>
                     <select
                       value={children}
-                      onChange={(e) => setChildren(Number(e.target.value))}
+                      onChange={(e) => {
+                        setChildren(Number(e.target.value));
+                        setTravellerCountsUpdated(true);
+                      }}
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                     >
                       {Array.from({ length: 30 }, (_, i) => i).map((num) => (
@@ -582,6 +563,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                             const next = [...childrenAges];
                             next[idx] = e.target.value;
                             setChildrenAges(next);
+                            setTravellerCountsUpdated(true);
                           }}
                           className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none"
                         >
