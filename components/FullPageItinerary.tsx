@@ -325,14 +325,14 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         </header>
 
         <main className="container mx-auto px-5 md:px-12 py-8 md:py-20">
-          <section className="mb-8 md:mb-12 overflow-hidden rounded-2xl bg-[#123b78] text-white shadow-lg print-summary">
-            <div className="grid grid-cols-1 divide-y divide-white/15 md:grid-cols-2 md:divide-x md:divide-y-0">
+          <section className="pdf-price-summary mb-8 md:mb-12 overflow-hidden rounded-2xl bg-[#123b78] text-white shadow-lg print-summary">
+            <div className="pdf-price-summary-content grid grid-cols-1 divide-y divide-white/15 md:grid-cols-2 md:divide-x md:divide-y-0">
               <div className="p-5 md:p-8">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Total package cost</p>
                 <p className="mt-2 text-3xl font-black tracking-tight">{pkg.price}</p>
               </div>
               <div className="p-5 md:p-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Booking confirmation amount (30%)</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Booking confirmation amount</p>
                 <p className="mt-2 text-3xl font-black tracking-tight">
                   {bookingConfirmationAmount === null ? 'Not available' : formatCurrency(bookingConfirmationAmount)}
                 </p>
@@ -1034,6 +1034,20 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .print-summary { break-inside: avoid; page-break-inside: avoid; }
           .print-summary,
           .print-summary * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          .pdf-price-summary-content {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-rows: 1fr !important;
+            divide-y: 0 !important;
+          }
+          .pdf-price-summary-content > div {
+            border: 0 !important;
+            border-top: 0 !important;
+            padding: 8mm !important;
+          }
+          .pdf-price-summary-content > div + div {
+            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+          }
           .pdf-customer-details {
             display: grid !important;
             grid-template-columns: minmax(0, 1fr) !important;
