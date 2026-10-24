@@ -11,6 +11,7 @@ export interface Destination {
 export interface ItineraryDay {
   day: number;
   title: string;
+  city?: string;
   activities: string;
   hotel: string;
   hotelImage?: string;

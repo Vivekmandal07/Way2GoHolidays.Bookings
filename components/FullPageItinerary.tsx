@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
-import { CONTACT_DETAILS, INTERNATIONAL_DESTINATIONS } from '../constants';
+import { CONTACT_DETAILS } from '../constants';
 import way2goLogo from '../assets/image/way2goholiday logo.png';
 
 const HOTEL_ROOM_IMAGE =
@@ -37,6 +37,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   
   const [numberOfDays, setNumberOfDays] = useState<number>(durationDays);
   const [numberOfNights, setNumberOfNights] = useState<number>(Math.max(0, durationDays - 1));
+  const [hotelRoomCategory, setHotelRoomCategory] = useState('Standard');
   const [travelName, setTravelName] = useState<string>('');
   const [travelEmail, setTravelEmail] = useState<string>('');
   const [travelPhone, setTravelPhone] = useState<string>('');
@@ -51,11 +52,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     ? Math.round(packageAmount * 0.3)
     : null;
   const formatCurrency = (amount: number) => `₹ ${amount.toLocaleString('en-IN')}`;
-
-  const getDestinationSuggestion = (dayNumber: number) => {
-    const suggestions = INTERNATIONAL_DESTINATIONS.map(destination => destination.name);
-    return suggestions[dayNumber - 1] || '';
-  };
 
   const formatTravelDate = (value: string) => {
     if (!value) return '';
@@ -77,6 +73,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     travelEmail.trim() && ['Email', travelEmail.trim()],
     travelPhone.trim() && ['WhatsApp', travelPhone.trim()],
   ].filter((detail): detail is [string, string] => Boolean(detail));
+  const quotedCities = Array.from(new Set(
+    editableItinerary
+      .filter(day => !/departure|depart/i.test(day.title))
+      .map(day => day.city?.trim() || day.title.trim())
+      .filter(Boolean)
+  ));
 
   const getDayDescriptionPlaceholder = (day: ItineraryDay) => {
     const title = day.title.toLowerCase();
@@ -341,7 +343,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </section>
 
           {customerDetails.length > 0 && (
-            <section className="pdf-customer-details mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-7 print-summary">
+            <section className="pdf-only pdf-customer-details mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-7 print-summary">
               <h2 className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-[#1f70b5]">
                 Traveller details
               </h2>
@@ -356,6 +358,30 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </section>
           )}
 
+          <section className="pdf-only pdf-stay-summary mb-12 rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm md:p-7 print-summary">
+            <h2 className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-[#1f70b5]">
+              Cities &amp; hotel plan
+            </h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-blue-100 bg-white p-4">
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Cities included</p>
+                <p className="mt-2 text-sm font-bold leading-relaxed text-slate-900">
+                  {quotedCities.length > 0 ? quotedCities.join(' · ') : pkg.destination}
+                </p>
+              </div>
+              <div className="rounded-xl border border-blue-100 bg-white p-4">
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Number of nights</p>
+                <p className="mt-2 text-sm font-bold text-slate-900">
+                  {numberOfNights} night{numberOfNights === 1 ? '' : 's'}
+                </p>
+              </div>
+              <div className="rounded-xl border border-blue-100 bg-white p-4">
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Hotel room category</p>
+                <p className="mt-2 text-sm font-bold text-slate-900">{hotelRoomCategory}</p>
+              </div>
+            </div>
+          </section>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-24">
             
             <div className="lg:col-span-8 space-y-12 md:space-y-20">
@@ -369,7 +395,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     Prices depend on availability. Optional activities or upgrades may change the final price.
                    </p>
                  </div>
-                  <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
+                  <div className="pdf-only pdf-package-quote bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
                     <span className="text-2xl md:text-3xl font-bold text-[#1f70b5] tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
                  </div>
@@ -437,6 +463,24 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     </div>
   </div>
 </div>
+
+{isEditMode && (
+  <section className="screen-only rounded-2xl border border-orange-200 bg-orange-50 p-5">
+    <label htmlFor="hotel-room-category" className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+      Hotel room category for this quote
+    </label>
+    <select
+      id="hotel-room-category"
+      value={hotelRoomCategory}
+      onChange={event => setHotelRoomCategory(event.target.value)}
+      className="mt-2 w-full max-w-sm rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800"
+    >
+      {['Standard', 'Deluxe', 'Super-Deluxe', 'Executive', 'Premium'].map(category => (
+        <option key={category} value={category}>{category}</option>
+      ))}
+    </select>
+  </section>
+)}
 
               {/* Booking Details */}
               <div className="screen-only bg-gradient-to-r from-orange-100 to-orange-100 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 transition-all duration-300 focus-within:border-orange-400 focus-within:shadow-lg">
@@ -615,6 +659,14 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 
         {/* DAY TITLE */}
         {isEditMode ? (
+          <>
+          <input
+            value={day.city || ''}
+            placeholder={`Enter city / stop for Day ${day.day}`}
+            aria-label={`City or stop for day ${day.day}`}
+            onChange={(e) => handleUpdateDay(idx, 'city', e.target.value)}
+            className="w-full rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-semibold text-slate-700 placeholder:text-orange-300"
+          />
           <input
             value={day.title}
             placeholder={
@@ -627,6 +679,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             }
             className="text-lg md:text-3xl font-bold text-black tracking-tight leading-tight w-full bg-orange-50 border-b-2 border-orange-400 outline-none p-2 rounded-t-lg placeholder:text-orange-300"
           />
+          </>
         ) : (
           <h4
             className={`
@@ -996,6 +1049,10 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       </div>
 
       <style>{`
+        .pdf-only {
+          display: none;
+        }
+
         .pdf-day {
           break-inside: auto;
           page-break-inside: auto;
@@ -1053,6 +1110,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             grid-template-columns: minmax(0, 1fr) !important;
             gap: 4mm !important;
           }
+          .pdf-only.pdf-customer-details { display: grid !important; }
+          .pdf-only.pdf-package-quote { display: block !important; }
+          .pdf-only.pdf-stay-summary { display: block !important; }
           .pdf-customer-details > div {
             display: grid !important;
             grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
