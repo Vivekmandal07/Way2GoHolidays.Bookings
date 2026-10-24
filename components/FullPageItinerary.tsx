@@ -317,7 +317,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                  {pkg.title}
                </h1>
                <p className="text-xs md:text-base font-medium text-white/90">
-                 Quotation by <span className="font-bold text-[#1f70b5]">Way2Go Holidays</span>
+                 Quotation by <span className="font-bold text-[#c7c7d6]">Way2Go Holidays</span>
                  {travelName.trim() ? ` for ${travelName.trim()}` : ''}
                </p>
             </div>
