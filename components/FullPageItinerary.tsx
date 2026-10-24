@@ -313,14 +313,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           <div className="absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
             <div className="max-w-4xl space-y-2">
                <p className="text-sm md:text-lg font-bold text-white">
-                 {travelName.trim() ? `Hello ${travelName.trim()},` : 'Your holiday quotation'}
+                 Dear {travelName.trim() || 'Guest'},
                </p>
                <h1 className="text-2xl md:text-7xl font-bold text-white tracking-tighter leading-tight origin-left transition-transform hover:scale-105 cursor-default">
                  {pkg.title}
                </h1>
                <p className="text-xs md:text-base font-medium text-white/90">
                  Quotation by <span className="font-bold text-[#c7c7d6]">Way2Go Holidays</span>
-                 {travelName.trim() ? ` for ${travelName.trim()}` : ''}
                </p>
             </div>
           </div>
