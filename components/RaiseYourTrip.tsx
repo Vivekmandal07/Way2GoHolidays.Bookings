@@ -3,6 +3,7 @@ import { AuthUser } from '../types';
 import { COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTINATIONS, DOMESTIC_DESTINATIONS } from '../constants';
 import { createTripRequestToken, submitTripRequest } from '../services/tripRequests';
 import type { TripRequestSubmission } from '../services/tripRequests';
+import sendEmail from '@/mailer/agent';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
 const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
@@ -210,9 +211,25 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       childAges: Array.from({ length: count }, (_, index) => form.childAges[index] || ''),
     });
   };
+  
+
+  async function handleSendEmail() {
+    const template = `
+      <h2>Hello!</h2>
+      <p>This email was sent from my React application.</p>
+    `;
+  
+    try {
+      const result = await sendEmail(template);
+      console.log("email sent:",result.message);
+    } catch (error) {
+      console.error("Email error:", error);
+    }
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    handleSendEmail();
     if (!validateStep()) return;
     if (step < TOTAL_STEPS - 1) {
       setStep(current => current + 1);
