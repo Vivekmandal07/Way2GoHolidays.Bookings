@@ -4,6 +4,7 @@ import { CONTACT_DETAILS, COUNTRY_CODES, DESTINATION_CITIES, INTERNATIONAL_DESTI
 import { createTripRequestToken, submitTripRequest } from '../services/tripRequests';
 import type { TripRequestSubmission } from '../services/tripRequests';
 import sendEmail from '@/mailer/agent';
+import template from '@/mailer/template';
 
 const DESTINATIONS = [...INTERNATIONAL_DESTINATIONS, ...DOMESTIC_DESTINATIONS];
 const prioritizeDestinations = (destinations: typeof DESTINATIONS, featuredNames: string[]) => {
@@ -227,12 +228,12 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    handleSendEmail();
     if (!validateStep()) return;
     if (step < TOTAL_STEPS - 1) {
       setStep(current => current + 1);
       return;
     }
+    console.log("passed validation")
 
     const fullPhone = phone ? `${selectedCountry.code}${phone}` : '';
     const travelDate = form.travelDateMode === 'fixed'
@@ -262,68 +263,81 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
       ticketStatus: form.ticketStatus,
     };
 
-    if (!submissionToken.current) submissionToken.current = createTripRequestToken();
-    savedSubmission.current = request;
-    // const whatsappWindow = window.open('about:blank', '_blank');
-    setIsSubmitting(true);
-    setSubmitError('');
-    try {
-      const result = await submitTripRequest(request, submissionToken.current);
-      const savedRequest: TripRequest = {
-        ...request,
-        id: result.tripId,
-        submittedAt: new Date(result.submittedAt).toLocaleString('en-GB'),
-      };
-      setSubmittedTripId(savedRequest.id);
-      const updatedRequests = [savedRequest, ...requests];
-      setRequests(updatedRequests);
-      try {
-        localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
-      } catch (error) {
-        console.error('Unable to cache the saved trip request locally:', error);
-      }
-      setTripEmailSent(result.emailSent);
-      if (result.emailSent) {
-        submissionToken.current = null;
-        savedSubmission.current = null;
-      }
-
-      const message = [
-        '*Custom Trip Request - Way2GoHolidays*',
-        `*Trip ID:* ${savedRequest.id}`,
-        `*Name:* ${savedRequest.name}`,
-        fullPhone ? `*WhatsApp:* ${fullPhone}` : '',
-        savedRequest.email ? `*Email:* ${savedRequest.email}` : '',
-        `*Travelling from:* ${savedRequest.leavingFrom}`,
-        `*Destination:* ${destination}`,
-        form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
-        `*Destination status:* ${savedRequest.destinationPreference}`,
-        `*Duration:* ${savedRequest.noOfNights}`,
-        `*Travellers:* ${savedRequest.tripType}`,
-        `*Dates:* ${savedRequest.travelDate}`,
-        `*Booking plan:* ${savedRequest.bookingWindow}`,
-        `*Flight/train tickets:* ${savedRequest.ticketStatus}`,
-        `*Hotel:* ${savedRequest.hotelCategory}`,
-        `*Adults:* ${savedRequest.pax}`,
-        `*Children:* ${savedRequest.children}`,
-        savedRequest.childAges.length ? `*Children's ages:* ${savedRequest.childAges.join(', ')}` : '',
-        `*Budget:* ${savedRequest.budgetRange}`,
-      ].filter(Boolean).join('\n');
-      console.log("message",message)
-
-      sendEmail(message)
-      // const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-      // if (whatsappWindow) {
-      //   whatsappWindow.opener = null;
-      //   whatsappWindow.location.href = whatsappUrl;
-      // }
-      setSubmitted(true);
-    } catch (error) {
-      // whatsappWindow?.close();
-      setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+    const emailTemplate=template(request)
+    console.log(emailTemplate)
+    try{
+      setIsSubmitting(true)
+      const result = await sendEmail(emailTemplate)
+      setSubmitted(true)
+      setIsSubmitting(false)
+    }catch{
+      setIsSubmitting(false)
+      setSubmitted(true)
     }
+    
+
+    // if (!submissionToken.current) submissionToken.current = createTripRequestToken();
+    // savedSubmission.current = request;
+    // const whatsappWindow = window.open('about:blank', '_blank');
+    // setIsSubmitting(true);
+    // setSubmitError('');
+    // try {
+    //   const result = await submitTripRequest(request, submissionToken.current);
+    //   const savedRequest: TripRequest = {
+    //     ...request,
+    //     id: result.tripId,
+    //     submittedAt: new Date(result.submittedAt).toLocaleString('en-GB'),
+    //   };
+    //   setSubmittedTripId(savedRequest.id);
+    //   const updatedRequests = [savedRequest, ...requests];
+    //   setRequests(updatedRequests);
+    //   try {
+    //     localStorage.setItem('raisedQueries', JSON.stringify(updatedRequests));
+    //   } catch (error) {
+    //     console.error('Unable to cache the saved trip request locally:', error);
+    //   }
+    //   setTripEmailSent(result.emailSent);
+    //   if (result.emailSent) {
+    //     submissionToken.current = null;
+    //     savedSubmission.current = null;
+    //   }
+
+    //   const message = [
+    //     '*Custom Trip Request - Way2GoHolidays*',
+    //     `*Trip ID:* ${savedRequest.id}`,
+    //     `*Name:* ${savedRequest.name}`,
+    //     fullPhone ? `*WhatsApp:* ${fullPhone}` : '',
+    //     savedRequest.email ? `*Email:* ${savedRequest.email}` : '',
+    //     `*Travelling from:* ${savedRequest.leavingFrom}`,
+    //     `*Destination:* ${destination}`,
+    //     form.destinationCities.length ? `*Cities / places:* ${form.destinationCities.join(', ')}` : '',
+    //     `*Destination status:* ${savedRequest.destinationPreference}`,
+    //     `*Duration:* ${savedRequest.noOfNights}`,
+    //     `*Travellers:* ${savedRequest.tripType}`,
+    //     `*Dates:* ${savedRequest.travelDate}`,
+    //     `*Booking plan:* ${savedRequest.bookingWindow}`,
+    //     `*Flight/train tickets:* ${savedRequest.ticketStatus}`,
+    //     `*Hotel:* ${savedRequest.hotelCategory}`,
+    //     `*Adults:* ${savedRequest.pax}`,
+    //     `*Children:* ${savedRequest.children}`,
+    //     savedRequest.childAges.length ? `*Children's ages:* ${savedRequest.childAges.join(', ')}` : '',
+    //     `*Budget:* ${savedRequest.budgetRange}`,
+    //   ].filter(Boolean).join('\n');
+    //   console.log("message",message)
+
+    //   sendEmail(message)
+    //   // const whatsappUrl = `https://wa.me/${CONTACT_DETAILS.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    //   // if (whatsappWindow) {
+    //   //   whatsappWindow.opener = null;
+    //   //   whatsappWindow.location.href = whatsappUrl;
+    //   // }
+    //   setSubmitted(true);
+    // } catch (error) {
+    //   // whatsappWindow?.close();
+    //   setSubmitError(error instanceof Error ? error.message : 'Unable to submit your trip request. Please try again.');
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   const retryTripEmail = async () => {
