@@ -55,7 +55,6 @@ const App: React.FC = () => {
       if (found) setViewingPackage(found);
     }
   }, []);
-  sendEmail(`hello`)
 
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
