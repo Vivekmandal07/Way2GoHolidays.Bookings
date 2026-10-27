@@ -468,6 +468,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                   <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-7">
                     <div className="grid gap-3 sm:grid-cols-2">
                       {[
+                        ['Trip ID', viewingRequest.id],
                         ['Destination', viewingRequest.destination],
                         ['Cities / places', viewingRequest.destinationCities?.length ? viewingRequest.destinationCities.join(', ') : 'Not selected'],
                         ['Destination plan', viewingRequest.destinationPreference],
