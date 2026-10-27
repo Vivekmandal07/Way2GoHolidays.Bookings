@@ -27,6 +27,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     1
   );
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditingQuote, setIsEditingQuote] = useState(false);
   const [editNotice, setEditNotice] = useState<string | null>(null);
   const [editablePrice, setEditablePrice] = useState(pkg.price);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -47,7 +48,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
-  const packageAmount = Number(pkg.price.replace(/[^\d.]/g, ''));
+  const packageAmount = Number(editablePrice.replace(/[^\d.]/g, ''));
+  const gstAmount = Number.isFinite(packageAmount) && packageAmount > 0
+    ? Math.round(packageAmount * 0.18)
+    : null;
+  const totalPackageAmount = gstAmount === null ? null : packageAmount + gstAmount;
   const bookingConfirmationAmount = Number.isFinite(packageAmount) && packageAmount > 0
     ? Math.round(packageAmount * 0.3)
     : null;
@@ -353,7 +358,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <div className="pdf-price-summary-content grid grid-cols-1 divide-y divide-white/15 md:grid-cols-2 md:divide-x md:divide-y-0">
               <div className="p-5 md:p-8">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Total package cost</p>
-                <p className="mt-2 text-3xl font-black tracking-tight">{pkg.price}</p>
+                <p className="mt-2 text-3xl font-black tracking-tight">{editablePrice}</p>
               </div>
               <div className="p-5 md:p-8">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Booking confirmation amount</p>
@@ -428,7 +433,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                  </div>
                   <div className="pdf-only pdf-package-quote bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-slate-200 w-full md:w-auto text-left md:text-right group hover:scale-110 transition-transform shadow-sm">
                     <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Package Quote</span>
-                    <span className="text-2xl md:text-3xl font-bold text-[#1f70b5] tracking-tighter transition-all group-hover:text-blue-700 block">{pkg.price}</span>
+                    <span className="text-2xl md:text-3xl font-bold text-[#1f70b5] tracking-tighter transition-all group-hover:text-blue-700 block">{editablePrice}</span>
                  </div>
               </div>
              {/* Trip Duration */}
@@ -944,23 +949,46 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </div>
 
             <aside className="lg:col-span-4 no-print">
-              <div className="fixed bottom-6 left-5 right-5 z-[180] lg:static lg:block space-y-6">
-                <div className="bg-slate-950 text-white p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] relative overflow-hidden flex lg:flex-col items-center justify-between gap-4 border border-white/5">
-                  <div className="hidden lg:block w-full">
-                    <h5 className="text-3xl font-bold mb-10 tracking-tighter text-center lg:text-left">Plan Actions</h5>
+              <div className="fixed bottom-4 left-4 right-4 z-[180] max-h-[78vh] overflow-y-auto lg:static lg:max-h-none lg:overflow-visible">
+                <div className="bg-slate-950 text-white p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] relative border border-white/5">
+                  <div className="w-full">
+                    <h5 className="text-xl md:text-3xl font-bold mb-5 md:mb-8 tracking-tighter">Plan Actions</h5>
                   </div>
-                  
-                  <div className="flex lg:flex-col gap-4 w-full">
-                    <button 
+
+                  <div className="mb-5 space-y-3 border-b border-white/10 pb-5">
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="font-semibold text-white/65">Package total cost</span>
+                      <span className="text-right font-bold">{editablePrice}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="font-semibold text-white/65">GST (18%)</span>
+                      <span className="text-right font-bold text-green-400">
+                        {gstAmount === null ? 'Not available' : formatCurrency(gstAmount)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 pt-1">
+                      <span className="font-bold">Total package amount</span>
+                      <span className="text-right text-lg font-black text-green-400">
+                        {totalPackageAmount === null ? 'Not available' : formatCurrency(totalPackageAmount)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 pt-1 text-sm">
+                      <span className="font-semibold text-white/65">Duration</span>
+                      <span className="text-right font-bold">{pkg.duration}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid w-full grid-cols-2 gap-3">
+                    <button
                       onClick={handleBookNow}
-                      className="group flex-1 bg-blue-600 text-white py-4 md:py-6 rounded-2xl md:rounded-[2rem] font-bold text-[10px] md:text-lg uppercase tracking-widest hover:bg-blue-500 transition-all duration-300 shadow-xl shadow-blue-900/40 flex items-center justify-center hover:scale-105 active:scale-95"
+                      className="group bg-blue-600 text-white py-3 md:py-5 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all duration-300 shadow-xl shadow-blue-900/40 flex items-center justify-center hover:scale-105 active:scale-95"
                     >
-                      <span className="group-hover:scale-110 transition-transform">Confirm Booking</span>
+                      <span className="group-hover:scale-110 transition-transform">Book Now</span>
                     </button>
-                    <button 
+                    <button
                       onClick={handleDownloadPDF}
                       disabled={isDownloading}
-                      className={`group flex-1 bg-white/5 text-white py-4 md:py-6 rounded-2xl md:rounded-[2rem] font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-white/10 border border-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3 ${isDownloading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`group bg-white/5 text-white py-3 md:py-5 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-white/10 border border-white/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 ${isDownloading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {isDownloading ? (
                         <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -971,16 +999,33 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     </button>
                   </div>
 
-                  <div className="hidden lg:block mt-12 pt-10 border-t border-white/10 space-y-6 w-full">
-                    <div className="flex justify-between items-center group cursor-default">
-                      <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest">Duration</span>
-                      <span className="font-bold text-xl transition-all group-hover:text-blue-400 group-hover:scale-125">{pkg.duration}</span>
-                    </div>
-                    <div className="flex justify-between items-center group cursor-default">
-                      <span className="text-white/40 font-bold uppercase text-[10px] tracking-widest">Quote</span>
-                      <span className="font-bold text-3xl text-blue-400 transition-all group-hover:text-blue-300 group_hover:scale-110">{editablePrice}</span>
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingQuote(editing => !editing)}
+                    className="mt-3 w-full rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-white/15"
+                  >
+                    {isEditingQuote ? 'Done Editing Quote' : 'Edit This Quote'}
+                  </button>
+                  {isEditingQuote && (
+                    <label className="mt-3 block">
+                      <span className="sr-only">Package quote</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={editablePrice}
+                        onChange={event => setEditablePrice(event.target.value)}
+                        className="w-full rounded-xl border border-white/20 bg-white px-4 py-3 font-bold text-slate-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-300"
+                      />
+                    </label>
+                  )}
+                  <a
+                    href={`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(`Hello, I need customer support for the ${pkg.title} package.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 flex w-full items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-orange-400"
+                  >
+                    Customer Support
+                  </a>
                 </div>
               </div>
             </aside>
