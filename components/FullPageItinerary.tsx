@@ -1095,7 +1095,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
         }
 
         @media print {
-          @page { size: A4 portrait; margin: 12mm; }
+          @page { size: A4 portrait; margin: 0; }
           html, body {
             width: 100% !important;
             height: auto !important;
@@ -1179,8 +1179,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           #pdf-content > header > img {
             position: absolute !important;
             top: 0 !important;
-            left: -12mm !important;
-            width: calc(100% + 24mm) !important;
+            left: 0 !important;
+            width: 100% !important;
             height: 100% !important;
             object-fit: cover !important;
             object-position: center !important;
@@ -1209,7 +1209,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           #pdf-content > main {
             width: 100% !important;
             max-width: none !important;
-            padding: 8mm 0 !important;
+            padding: 8mm 12mm !important;
           }
           .pdf-day {
             break-inside: auto !important;
