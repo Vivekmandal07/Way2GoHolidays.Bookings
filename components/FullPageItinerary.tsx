@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
 import { CONTACT_DETAILS, DESTINATION_CITIES, getDestinationImage } from '../constants';
-import way2goLogo from '../assets/image/way2goholiday logo.png';
 
 const HOTEL_ROOM_IMAGE =
   'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80';
@@ -328,23 +327,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
-          <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-3 shadow-lg">
-            <div className="h-12 w-32 overflow-hidden">
-              <img
-                src={way2goLogo}
-                alt="Way2Go Holidays airplane mark"
-                className="block h-auto w-32"
-              />
-            </div>
-            <p className="mt-1 text-center text-sm font-black tracking-wide text-[#1f70b5]">
-              Way2Go Holidays
+          <div className="pdf-cover-brand absolute top-4 left-5 md:top-8 md:left-12 rounded-xl bg-white p-4 shadow-lg">
+            <p className="text-lg font-black tracking-wide">
+              <span className="text-orange-500">Way2Go</span>{' '}
+              <span className="text-sky-500">Holidays</span>
+            </p>
+            <p className="mt-1 text-sm font-bold text-slate-700">
+              Dear {travelName.trim() || 'Guest'},
             </p>
           </div>
           <div className="pdf-cover-caption absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
             <div className="max-w-4xl space-y-2">
-               <p className="text-sm md:text-lg font-bold text-white">
-                 Dear {travelName.trim() || 'Guest'},
-               </p>
                <h1 className="text-2xl md:text-7xl font-bold text-white tracking-tighter leading-tight origin-left transition-transform hover:scale-105 cursor-default">
                  {pkg.title}
                </h1>
@@ -1200,8 +1193,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           }
           #pdf-content > header > .pdf-cover-brand {
             top: 10mm !important;
-            right: 12mm !important;
-            left: auto !important;
+            right: auto !important;
+            left: 12mm !important;
             z-index: 2 !important;
           }
           #pdf-content > header > .pdf-cover-caption {
