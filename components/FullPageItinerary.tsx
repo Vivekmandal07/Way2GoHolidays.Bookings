@@ -27,7 +27,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
     1
   );
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isEditingQuote, setIsEditingQuote] = useState(false);
   const [editNotice, setEditNotice] = useState<string | null>(null);
   const [editablePrice, setEditablePrice] = useState(pkg.price);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -418,9 +417,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </div>
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
             
-            <div className="lg:col-span-8 space-y-12 md:space-y-20">
+            <div className="lg:col-span-7 space-y-12 md:space-y-20">
               <div className="border-b border-slate-100 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                  <div className="max-w-xl">
                    <h3 className="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2 hover:text-blue-600 transition-colors cursor-default">Your trip at a glance</h3>
@@ -948,7 +947,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
               </div>
             </div>
 
-            <aside className="lg:col-span-4 no-print">
+            <aside className="lg:col-span-5 no-print">
               <div className="fixed bottom-4 left-4 right-4 z-[180] max-h-[78vh] overflow-y-auto lg:static lg:max-h-none lg:overflow-visible">
                 <div className="bg-slate-950 text-white p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] relative border border-white/5">
                   <div className="w-full">
@@ -956,25 +955,36 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   </div>
 
                   <div className="mb-5 space-y-3 border-b border-white/10 pb-5">
-                    <div className="flex items-center justify-between gap-3 text-sm">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-sm">
                       <span className="font-semibold text-white/65">Package total cost</span>
-                      <span className="text-right font-bold">{editablePrice}</span>
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          aria-label="Package total cost"
+                          value={editablePrice}
+                          onChange={event => setEditablePrice(event.target.value)}
+                          className="w-36 max-w-full rounded-lg border border-white/20 bg-white px-3 py-2 text-right font-bold text-slate-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-300"
+                        />
+                      ) : (
+                        <span className="whitespace-nowrap text-right font-bold">{editablePrice}</span>
+                      )}
                     </div>
-                    <div className="flex items-center justify-between gap-3 text-sm">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-sm">
                       <span className="font-semibold text-white/65">GST (18%)</span>
-                      <span className="text-right font-bold text-green-400">
+                      <span className="whitespace-nowrap text-right font-bold text-green-400">
                         {gstAmount === null ? 'Not available' : formatCurrency(gstAmount)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between gap-3 pt-1">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 pt-1">
                       <span className="font-bold">Total package amount</span>
-                      <span className="text-right text-lg font-black text-green-400">
+                      <span className="whitespace-nowrap text-right text-lg font-black text-green-400">
                         {totalPackageAmount === null ? 'Not available' : formatCurrency(totalPackageAmount)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between gap-3 pt-1 text-sm">
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 pt-1 text-sm">
                       <span className="font-semibold text-white/65">Duration</span>
-                      <span className="text-right font-bold">{pkg.duration}</span>
+                      <span className="whitespace-nowrap text-right font-bold">{pkg.duration}</span>
                     </div>
                   </div>
 
@@ -1001,23 +1011,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
 
                   <button
                     type="button"
-                    onClick={() => setIsEditingQuote(editing => !editing)}
+                    onClick={handleToggleEditMode}
                     className="mt-3 w-full rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-white/15"
                   >
-                    {isEditingQuote ? 'Done Editing Quote' : 'Edit This Quote'}
+                    {isEditMode ? 'Finish Editing' : 'Edit This Quote'}
                   </button>
-                  {isEditingQuote && (
-                    <label className="mt-3 block">
-                      <span className="sr-only">Package quote</span>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={editablePrice}
-                        onChange={event => setEditablePrice(event.target.value)}
-                        className="w-full rounded-xl border border-white/20 bg-white px-4 py-3 font-bold text-slate-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-300"
-                      />
-                    </label>
-                  )}
                   <a
                     href={`${CONTACT_DETAILS.whatsapp}?text=${encodeURIComponent(`Hello, I need customer support for the ${pkg.title} package.`)}`}
                     target="_blank"
