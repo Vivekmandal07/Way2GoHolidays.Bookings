@@ -71,7 +71,7 @@ const createTripRequestEmail = (request: TripRequestSubmission, tripId: string) 
   ).join('');
 
   return `
-    <h2>New trip request ${escapeHtml(tripId)}</h2>
+    <h2>New Trip Request ${escapeHtml(tripId)}</h2>
     <table style="border-collapse:collapse;width:100%"><tbody>${rows}</tbody></table>
   `;
 };

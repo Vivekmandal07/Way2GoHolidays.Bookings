@@ -460,6 +460,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       <p className="text-xs font-black uppercase tracking-wider text-blue-600">Raised trip details</p>
                       <h3 className="mt-1 text-lg font-black text-slate-900 sm:text-xl">{viewingRequest.destination}</h3>
                       <p className="mt-1 text-sm text-slate-500">Requested by {viewingRequest.name}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-500">Trip ID: {viewingRequest.id}</p>
                     </div>
                     <button type="button" onClick={() => setViewingRequest(null)} className="shrink-0 rounded-xl px-3 py-2 text-sm font-bold text-slate-600 hover:bg-white" aria-label="Back to raised trips">
                       Back
