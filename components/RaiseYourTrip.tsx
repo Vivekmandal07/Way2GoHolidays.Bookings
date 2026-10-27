@@ -177,7 +177,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
     if (step === 8) {
       if (!form.leavingFrom.trim()) nextErrors.leavingFrom = 'Enter your departure city.';
       if (!form.name.trim()) nextErrors.name = 'Enter your name.';
-      if (!phone.trim() && !form.email.trim()) nextErrors.contact = 'Add a phone number or email so we can contact you.';
+      if (!phone.trim()) nextErrors.phone = 'Enter your phone number.';
       if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) nextErrors.email = 'Enter a valid email address.';
     }
     setErrors(nextErrors);
@@ -769,7 +769,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
               {step === 8 && (
                 <div>
                   <h3 className="text-base font-black text-slate-900 sm:text-lg">Where should we send your trip plan?</h3>
-                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">We only need one way to reach you: phone or email.</p>
+                  <p className="mb-3 mt-1 text-sm text-slate-500 sm:mb-5">Add your phone number so we can contact you. Email is optional.</p>
                   <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <label className="text-sm font-bold text-slate-700">Travelling from
                       <input required value={form.leavingFrom} onChange={event => patchForm({ leavingFrom: event.target.value })} placeholder="e.g. New Delhi" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
@@ -779,11 +779,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                       <input required value={form.name} onChange={event => patchForm({ name: event.target.value })} placeholder="Full name" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                       {errors.name && <span className="mt-1 block text-xs text-red-600">{errors.name}</span>}
                     </label>
-                    <label className="text-sm font-bold text-slate-700">Email Address (optional if you add a phone)
+                    <label className="text-sm font-bold text-slate-700">Email Address (optional)
                       <input type="email" value={form.email} onChange={event => patchForm({ email: event.target.value })} placeholder="you@example.com" className="mt-2 block w-full rounded-xl border border-slate-300 px-4 py-3" />
                       {errors.email && <span className="mt-1 block text-xs text-red-600">{errors.email}</span>}
                     </label>
-                    <label className="text-sm font-bold text-slate-700">Phone or WhatsApp Number
+                    <label className="text-sm font-bold text-slate-700">Phone or WhatsApp Number (required)
                       <span className="mt-2 flex overflow-hidden rounded-xl border border-slate-300">
                         <select aria-label="Country calling code" value={selectedCountry.code} onChange={event => {
                           const country = COUNTRY_CODES.find(item => item.code === event.target.value);
@@ -791,11 +791,14 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                         }} className="max-w-24 border-r border-slate-300 bg-slate-50 px-2 text-sm">
                           {COUNTRY_CODES.map(country => <option key={`${country.code}-${country.country}`} value={country.code}>{country.code}</option>)}
                         </select>
-                        <input type="tel" value={phone} onChange={event => setPhone(event.target.value.replace(/\D/g, ''))} placeholder="Phone number" className="min-w-0 flex-1 px-4 py-3 outline-none" />
+                        <input type="tel" required value={phone} onChange={event => {
+                          setPhone(event.target.value.replace(/\D/g, ''));
+                          setErrors(current => ({ ...current, phone: '' }));
+                        }} aria-invalid={Boolean(errors.phone)} placeholder="Phone number" className="min-w-0 flex-1 px-4 py-3 outline-none" />
                       </span>
+                      {errors.phone && <span className="mt-1 block text-xs text-red-600">{errors.phone}</span>}
                     </label>
                   </div>
-                  {errors.contact && <p className="mt-3 text-sm font-semibold text-red-600">{errors.contact}</p>}
                   {submitError && <p className="mt-3 text-sm font-semibold text-red-600" role="alert">{submitError}</p>}
                 </div>
               )}
