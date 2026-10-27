@@ -200,6 +200,11 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   };
 
   const handleChildCount = (value: string) => {
+    if (value === '') {
+      patchForm({ children: '', childAges: [] });
+      return;
+    }
+
     const count = Math.min(10, Math.max(0, Number(value) || 0));
     patchForm({
       children: String(count),
@@ -211,6 +216,9 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!validateStep()) return;
+    if (step === 5 && !form.children.trim()) {
+      patchForm({ children: '0', childAges: [] });
+    }
     if (step < TOTAL_STEPS - 1) {
       setStep(current => current + 1);
       return;
