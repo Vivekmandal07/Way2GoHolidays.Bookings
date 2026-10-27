@@ -327,12 +327,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
-          <div className="pdf-cover-brand absolute top-4 left-5 md:top-8 md:left-12 rounded-xl bg-white p-4 shadow-lg">
-            <p className="text-lg font-black tracking-wide">
+          <div className="pdf-cover-brand absolute top-5 left-5 z-10 md:top-8 md:left-12">
+            <p className="text-lg font-black leading-tight tracking-wide drop-shadow-md md:text-2xl">
               <span className="text-orange-500">Way2Go</span>{' '}
               <span className="text-sky-500">Holidays</span>
             </p>
-            <p className="mt-1 text-sm font-bold text-slate-700">
+            <p className="mt-1 text-sm font-bold leading-tight text-white drop-shadow-md md:mt-2 md:text-base">
               Dear {travelName.trim() || 'Guest'},
             </p>
           </div>
