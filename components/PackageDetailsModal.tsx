@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Package, ItineraryDay } from '../types';
+import { getDestinationImage } from '../constants';
 
 interface PackageDetailsModalProps {
   pkg: Package;
@@ -9,6 +10,7 @@ interface PackageDetailsModalProps {
 }
 
 const PackageDetailsModal: React.FC<PackageDetailsModalProps> = ({ pkg, onClose, onBook }) => {
+  const destinationImage = getDestinationImage(pkg.destination, pkg.image);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [editableItinerary, setEditableItinerary] = useState<ItineraryDay[]>(pkg.itinerary.map(item => ({ ...item, rating: item.rating || 5 })));
@@ -24,6 +26,20 @@ const PackageDetailsModal: React.FC<PackageDetailsModalProps> = ({ pkg, onClose,
     const element = document.getElementById('package-detail-modal-content');
     if (!element) return;
     setIsDownloading(true);
+    const coverImage = element.querySelector('img');
+    if (coverImage) {
+      if (coverImage.complete) {
+        await coverImage.decode().catch(() => undefined);
+      } else {
+        await new Promise<void>(resolve => {
+          const finishLoading = () => {
+            coverImage.decode().catch(() => undefined).finally(resolve);
+          };
+          coverImage.addEventListener('load', finishLoading, { once: true });
+          coverImage.addEventListener('error', () => resolve(), { once: true });
+        });
+      }
+    }
 
     // @ts-ignore
     const html2pdf = window.html2pdf;
@@ -104,7 +120,7 @@ const PackageDetailsModal: React.FC<PackageDetailsModalProps> = ({ pkg, onClose,
         
         {/* Header Area */}
         <div className="relative h-48 sm:h-80 shrink-0">
-          <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+          <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent no-print"></div>
           
           <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center gap-3 no-print z-20">

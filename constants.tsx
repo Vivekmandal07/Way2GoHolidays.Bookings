@@ -49,6 +49,16 @@ export const DOMESTIC_DESTINATIONS: Destination[] = [
   { id: '14', name: 'Wayanad', type: 'Domestic', image: PICS.wayanad, description: 'The greenest corner of Kerala with lush forests and waterfalls.' }
 ];
 
+export const getDestinationImage = (destination: string, fallbackImage: string) => {
+  const normalizedDestination = destination.trim().toLowerCase();
+  const destinations = [...DOMESTIC_DESTINATIONS, ...INTERNATIONAL_DESTINATIONS];
+  const matchedDestination = destinations
+    .filter(item => normalizedDestination.includes(item.name.toLowerCase()))
+    .sort((a, b) => b.name.length - a.name.length)[0];
+
+  return matchedDestination?.image || fallbackImage;
+};
+
 export const DESTINATION_CITIES: Record<string, string[]> = {
   Kerala: ['Kochi (Cochin)', 'Munnar', 'Thekkady', 'Alleppey', 'Kovalam', 'Varkala', 'Wayanad', 'Kanyakumari'],
   Goa: ['North Goa', 'South Goa', 'Panaji', 'Candolim', 'Calangute', 'Baga', 'Palolem'],

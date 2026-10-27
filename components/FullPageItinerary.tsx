@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Check, Coffee, MapPin, Utensils, UtensilsCrossed } from 'lucide-react';
 import { Package, ItineraryDay } from '../types';
-import { CONTACT_DETAILS, DESTINATION_CITIES } from '../constants';
+import { CONTACT_DETAILS, DESTINATION_CITIES, getDestinationImage } from '../constants';
 import way2goLogo from '../assets/image/way2goholiday logo.png';
 
 const HOTEL_ROOM_IMAGE =
@@ -21,6 +21,7 @@ interface FullPageItineraryProps {
 }
 
 const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRaiseYourTrip }) => {
+  const destinationImage = getDestinationImage(pkg.destination, pkg.image);
   const durationDays = Number(pkg.duration.match(/\/\s*(\d+)\s*D/i)?.[1]) || Math.max(
     pkg.itinerary.reduce((maxDay, item) => Math.max(maxDay, item.day), 0),
     pkg.itinerary.length,
@@ -324,7 +325,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       {/* Main Content Area focused on full capture */}
       <div ref={contentRef} id="pdf-content" className="bg-white">
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
-          <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+          <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
           <div className="pdf-cover-brand absolute top-4 right-4 md:top-8 md:right-12 rounded-xl bg-white p-3 shadow-lg">
