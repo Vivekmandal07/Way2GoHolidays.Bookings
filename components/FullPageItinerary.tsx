@@ -336,13 +336,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
               Dear {travelName.trim() || 'Guest'},
             </p>
           </div>
-          <div className="pdf-cover-caption absolute bottom-6 left-0 right-0 container mx-auto px-5 md:px-12">
-            <div className="max-w-4xl space-y-2">
-               <h1 className="text-2xl md:text-7xl font-bold text-white tracking-tighter leading-tight origin-left transition-transform hover:scale-105 cursor-default">
+          <div className="pdf-cover-caption absolute bottom-8 left-0 right-0 container mx-auto px-5 md:px-12">
+            <div className="max-w-4xl space-y-3">
+               <h1 className="pdf-cover-title text-3xl md:text-7xl font-extrabold text-white tracking-tight leading-tight origin-left transition-transform hover:scale-105 cursor-default">
                  {pkg.title}
                </h1>
-               <p className="text-xs md:text-base font-medium text-white/90">
-                 Quotation by <span className="font-bold text-[#c7c7d6]">Way2Go Holidays</span>
+               <p className="pdf-cover-quote text-base md:text-xl font-semibold text-white/95">
+                 Quotation by <span className="font-extrabold"><span className="text-orange-400">Way2Go</span>{' '}<span className="text-sky-300">Holidays</span></span>
                </p>
             </div>
           </div>
@@ -1199,12 +1199,20 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           }
           #pdf-content > header > .pdf-cover-caption {
             right: 12mm !important;
-            bottom: 18mm !important;
+            bottom: 26mm !important;
             left: 12mm !important;
             width: auto !important;
             max-width: none !important;
             margin: 0 !important;
             padding: 0 !important;
+          }
+          #pdf-content .pdf-cover-title {
+            font-size: 30pt !important;
+            line-height: 1.08 !important;
+          }
+          #pdf-content .pdf-cover-quote {
+            margin-top: 3mm !important;
+            font-size: 14pt !important;
           }
           #pdf-content > main {
             width: 100% !important;
