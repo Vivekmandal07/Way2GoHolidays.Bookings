@@ -85,7 +85,7 @@ export const submitTripRequest = async (
     throw new Error('Unable to create a trip request ID. Please try again.');
   }
 
-  const tripId = `W2H${parseInt(tokenPrefix, 16).toString().padStart(12, '0')}`;
+  const tripId = `W2GH${parseInt(tokenPrefix, 16).toString().padStart(12, '0')}`;
   await sendEmail(createTripRequestEmail(request, tripId));
 
   return {
