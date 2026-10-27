@@ -418,6 +418,7 @@ const RaiseYourTrip: React.FC<RaiseYourTripProps> = ({ onClose, currentUser, ini
                     <h3 className="font-black text-slate-900">{request.name} · {request.destination}</h3>
                     <p className="mt-1 text-sm text-slate-600">{request.noOfNights} · {request.tripType} · {request.travelDate}</p>
                     <p className="mt-1 text-xs text-slate-400">{request.submittedAt}</p>
+                    <p className="mt-1 text-xs font-semibold text-slate-500">Trip ID: {request.id}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
                     <button type="button" onClick={() => setViewingRequest(request)} className="text-sm font-bold text-blue-600 hover:text-blue-800">
