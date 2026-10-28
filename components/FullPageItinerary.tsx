@@ -360,7 +360,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 <p className="mt-2 text-3xl font-black tracking-tight">{editablePrice}</p>
               </div>
               <div className="p-5 md:p-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Booking confirmation amount</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Advance to Confirm Booking</p>
                 <p className="mt-2 text-3xl font-black tracking-tight">
                   {bookingConfirmationAmount === null ? 'Not available' : formatCurrency(bookingConfirmationAmount)}
                 </p>
