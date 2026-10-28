@@ -329,7 +329,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       <div ref={contentRef} id="pdf-content" className="bg-white">
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
-          <div className="pdf-cover-image-overlay absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
           <div className="pdf-cover-brand absolute top-5 left-5 z-10 md:top-8 md:left-12">
             <p className="text-lg font-black leading-tight tracking-wide drop-shadow-md md:text-2xl">
@@ -1235,14 +1235,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.45) 48%, #fff 100%) !important;
             backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(2px);
-          }
-          #pdf-content > header > .pdf-cover-image-overlay {
-            background: none !important;
-          }
-          #pdf-content .pdf-cover-title,
-          #pdf-content .pdf-cover-quote,
-          #pdf-content > header > .pdf-cover-brand > p:last-child {
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
           }
           #pdf-content > header > .pdf-cover-brand {
             top: 10mm !important;
