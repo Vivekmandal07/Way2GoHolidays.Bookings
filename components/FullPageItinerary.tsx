@@ -825,6 +825,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           {showHotelSection && (
             <div
               className={`
+                itinerary-hotel-card
                 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-3
                 xl:grid-cols-[4rem_9rem_minmax(0,1fr)] xl:gap-4
                 p-4 md:p-6 xl:px-5
@@ -855,7 +856,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 </svg>
               </div>
                 {day.hotel && day.hotel !== 'N/A' && (
-                  <div className="col-start-2 w-full min-w-0 overflow-hidden rounded-xl xl:col-start-2 xl:row-span-2">
+                  <div className="itinerary-hotel-image col-start-2 w-full min-w-0 overflow-hidden rounded-xl xl:col-start-2 xl:row-span-2">
                     <img
                       src={day.hotelImage || HOTEL_ROOM_IMAGE}
                       alt={day.hotelImage ? `Room at ${day.hotel}` : 'Representative hotel room'}
@@ -868,7 +869,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     )}
                   </div>
                 )}
-                <div className={`col-span-2 min-w-0 overflow-hidden ${day.hotel && day.hotel !== 'N/A' ? 'xl:col-start-3' : 'xl:col-start-2 xl:col-span-2'}`}>
+                <div className={`itinerary-hotel-details col-span-2 min-w-0 overflow-hidden ${day.hotel && day.hotel !== 'N/A' ? 'xl:col-start-3' : 'xl:col-start-2 xl:col-span-2'}`}>
                 <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-4">
                   <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">
                     Accommodation
@@ -1297,6 +1298,38 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           }
           .pdf-day .itinerary-inclusion > span:first-child {
             flex: 0 0 auto !important;
+          }
+          .pdf-day .itinerary-hotel-card {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 5mm !important;
+            padding: 5mm !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+          .pdf-day .itinerary-hotel-image {
+            display: block !important;
+            flex: 0 0 40mm !important;
+            width: 40mm !important;
+            min-width: 40mm !important;
+            overflow: visible !important;
+          }
+          .pdf-day .itinerary-hotel-image img {
+            display: block !important;
+            width: 40mm !important;
+            height: 27mm !important;
+            aspect-ratio: auto !important;
+            object-fit: cover !important;
+          }
+          .pdf-day .itinerary-hotel-image > span {
+            padding-top: 1mm !important;
+            font-size: 7pt !important;
+          }
+          .pdf-day .itinerary-hotel-details {
+            flex: 1 1 0% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
           }
         }
       `}</style>
