@@ -788,12 +788,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-1.5">
+          <div className="itinerary-inclusions mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-1.5">
             {dayDetailFields.map(({ key, label, Icon }) => (
               <label
                 key={key}
                 htmlFor={`day-${day.day}-${key}`}
-                className={`flex min-h-11 min-w-0 items-center gap-1 rounded-xl border px-1.5 py-2 transition-colors lg:gap-1.5 lg:px-2 ${
+                className={`itinerary-inclusion flex min-h-11 min-w-0 items-center gap-1 rounded-xl border px-1.5 py-2 transition-colors lg:gap-1.5 lg:px-2 ${
                   day[key] ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-white'
                 } ${isEditMode ? 'cursor-pointer hover:border-blue-300' : ''}`}
               >
@@ -1271,6 +1271,25 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .pdf-day h4,
           .pdf-day .rounded-xl,
           .pdf-day .rounded-2xl { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          .pdf-day .itinerary-inclusions {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 2mm !important;
+          }
+          .pdf-day .itinerary-inclusion {
+            min-width: 0 !important;
+            min-height: 0 !important;
+            gap: 1mm !important;
+            padding: 1.5mm 1mm !important;
+          }
+          .pdf-day .itinerary-inclusion > span:last-child {
+            white-space: nowrap !important;
+            font-size: 7pt !important;
+          }
+          .pdf-day .itinerary-inclusion > svg {
+            width: 3mm !important;
+            height: 3mm !important;
+          }
         }
       `}</style>
     </div>
