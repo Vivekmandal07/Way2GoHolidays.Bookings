@@ -329,7 +329,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
       <div ref={contentRef} id="pdf-content" className="bg-white">
         <header className="relative h-[30vh] md:h-[60vh] overflow-hidden">
           <img src={destinationImage} alt={`${pkg.destination} destination`} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
+          <div className="pdf-cover-image-overlay absolute inset-0 bg-gradient-to-r from-[#092b50]/90 via-[#092b50]/55 to-transparent"></div>
           <div className="pdf-cover-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent via-white/45 to-white backdrop-blur-[2px]"></div>
           <div className="pdf-cover-brand absolute top-5 left-5 z-10 md:top-8 md:left-12">
             <p className="text-lg font-black leading-tight tracking-wide drop-shadow-md md:text-2xl">
@@ -1236,6 +1236,14 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(2px);
           }
+          #pdf-content > header > .pdf-cover-image-overlay {
+            background: none !important;
+          }
+          #pdf-content .pdf-cover-title,
+          #pdf-content .pdf-cover-quote,
+          #pdf-content > header > .pdf-cover-brand > p:last-child {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
+          }
           #pdf-content > header > .pdf-cover-brand {
             top: 10mm !important;
             right: auto !important;
@@ -1279,15 +1287,17 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           }
           .pdf-day .itinerary-inclusion {
             display: flex !important;
+            justify-content: center !important;
             min-width: 0 !important;
             min-height: 0 !important;
             gap: 1mm !important;
-            padding: 1.5mm 1mm !important;
+            padding: 1.5mm 0.6mm 1.5mm 1.8mm !important;
             overflow: hidden !important;
           }
           .pdf-day .itinerary-inclusion > span:last-child {
             min-width: 0 !important;
-            flex: 1 1 auto !important;
+            flex: 0 1 auto !important;
+            text-align: center !important;
             white-space: nowrap !important;
             font-size: 6.5pt !important;
           }
