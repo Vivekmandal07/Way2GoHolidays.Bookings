@@ -788,7 +788,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="itinerary-inclusions mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,minmax(0,1fr))] lg:gap-1.5">
+          <div className="itinerary-inclusions mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-1.5">
             {dayDetailFields.map(({ key, label, Icon }) => (
               <label
                 key={key}
@@ -816,7 +816,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   </span>
                 )}
                 <Icon className="h-3.5 w-3.5 shrink-0 text-blue-600" aria-hidden="true" />
-                <span title={label} className="min-w-0 flex-1 truncate text-[11px] font-semibold leading-none text-slate-700 lg:text-[11px]">{label}</span>
+                <span title={label} className="min-w-0 flex-1 whitespace-nowrap text-[10px] font-semibold leading-none text-slate-700 lg:text-[11px]">{label}</span>
               </label>
             ))}
           </div>
@@ -826,8 +826,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <div
               className={`
                 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-3
-                xl:grid-cols-[4rem_10rem_minmax(0,1fr)] xl:gap-6
-                p-4 md:p-6
+                xl:grid-cols-[4rem_9rem_minmax(0,1fr)] xl:gap-4
+                p-4 md:p-6 xl:px-5
                 rounded-2xl md:rounded-3xl
                 border
                 transition-all duration-300
@@ -903,11 +903,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     />
                   </div>
                 ) : isEmptyDay ? (
-                  <span className="block whitespace-nowrap text-sm font-bold italic text-slate-300 transition-all md:text-lg xl:text-xl">
+                  <span className="block whitespace-normal break-words text-sm font-bold italic text-slate-300 transition-all md:text-lg xl:text-xl">
                     Enter hotel name
                   </span>
                 ) : (
-                  <span title={day.hotel} className="block w-full max-w-full truncate whitespace-nowrap text-sm font-bold text-slate-900 transition-all group-hover:text-blue-700 md:text-lg xl:text-xl">
+                  <span title={day.hotel} className="block w-full max-w-full whitespace-normal break-words text-sm font-bold text-slate-900 transition-all group-hover:text-blue-700 md:text-lg xl:text-xl">
                     {day.hotel}
                   </span>
                 )}
@@ -1273,7 +1273,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .pdf-day .rounded-2xl { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
           .pdf-day .itinerary-inclusions {
             display: grid !important;
-            grid-template-columns: 1.4fr repeat(3, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
             gap: 2mm !important;
           }
           .pdf-day .itinerary-inclusion {
@@ -1287,10 +1287,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           .pdf-day .itinerary-inclusion > span:last-child {
             min-width: 0 !important;
             flex: 1 1 auto !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
             white-space: nowrap !important;
-            font-size: 7pt !important;
+            font-size: 6.5pt !important;
           }
           .pdf-day .itinerary-inclusion > svg {
             flex: 0 0 auto !important;
