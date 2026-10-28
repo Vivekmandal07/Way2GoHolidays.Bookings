@@ -788,12 +788,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-2">
+          <div className="mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-1.5">
             {dayDetailFields.map(({ key, label, Icon }) => (
               <label
                 key={key}
                 htmlFor={`day-${day.day}-${key}`}
-                className={`flex min-h-11 min-w-0 items-center gap-1.5 rounded-xl border px-2 py-2 transition-colors lg:gap-2 lg:px-2.5 ${
+                className={`flex min-h-11 min-w-0 items-center gap-1 rounded-xl border px-1.5 py-2 transition-colors lg:gap-1.5 lg:px-2 ${
                   day[key] ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-white'
                 } ${isEditMode ? 'cursor-pointer hover:border-blue-300' : ''}`}
               >
@@ -815,8 +815,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     {day[key] && <Check className="h-3 w-3" strokeWidth={3} />}
                   </span>
                 )}
-                <Icon className="h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
-                <span className="min-w-0 whitespace-nowrap text-xs font-semibold text-slate-700">{label}</span>
+                <Icon className="h-3.5 w-3.5 shrink-0 text-blue-600" aria-hidden="true" />
+                <span className="min-w-0 whitespace-nowrap text-[11px] font-semibold text-slate-700 lg:text-xs">{label}</span>
               </label>
             ))}
           </div>
@@ -826,7 +826,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             <div
               className={`
                 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-3
-                sm:flex sm:gap-4 md:gap-6
+                xl:flex xl:gap-6
                 p-4 md:p-6
                 rounded-2xl md:rounded-3xl
                 border
@@ -839,7 +839,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 }
               `}
             >
-              <div className={`w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110 ${day.hotel && day.hotel !== 'N/A' ? 'row-span-2' : ''}`}>
+              <div className={`w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110 ${day.hotel && day.hotel !== 'N/A' ? 'xl:row-span-2' : ''}`}>
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -855,11 +855,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 </svg>
               </div>
                 {day.hotel && day.hotel !== 'N/A' && (
-                  <div className="col-start-2 w-full min-w-0 overflow-hidden rounded-xl sm:col-auto sm:w-28 sm:shrink-0 md:w-40">
+                  <div className="col-start-2 w-full min-w-0 overflow-hidden rounded-xl xl:col-auto xl:w-40 xl:shrink-0">
                     <img
                       src={day.hotelImage || HOTEL_ROOM_IMAGE}
                       alt={day.hotelImage ? `Room at ${day.hotel}` : 'Representative hotel room'}
-                      className="aspect-[3/2] w-full object-cover sm:aspect-auto sm:h-20 md:h-28"
+                      className="aspect-[3/2] w-full object-cover xl:aspect-auto xl:h-28"
                     />
                     {!day.hotelImage && (
                       <span className="block px-1 pt-1 text-[10px] font-medium text-slate-500 sm:text-xs">
@@ -868,7 +868,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     )}
                   </div>
                 )}
-                <div className="col-start-2 min-w-0 sm:col-auto sm:flex-grow">
+                <div className="col-span-2 min-w-0 xl:col-auto xl:flex-grow">
                 <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-4">
                   <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">
                     Accommodation
@@ -903,11 +903,11 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     />
                   </div>
                 ) : isEmptyDay ? (
-                  <span className="block whitespace-normal break-words text-sm font-bold italic text-slate-300 transition-all md:text-xl">
+                  <span className="block whitespace-nowrap text-sm font-bold italic text-slate-300 transition-all md:text-lg xl:text-xl">
                     Enter hotel name
                   </span>
                 ) : (
-                  <span className="block whitespace-normal break-words text-sm font-bold text-slate-900 transition-all group-hover:text-blue-700 md:text-xl">
+                  <span className="block whitespace-nowrap text-sm font-bold text-slate-900 transition-all group-hover:text-blue-700 md:text-lg xl:text-xl">
                     {day.hotel}
                   </span>
                 )}
