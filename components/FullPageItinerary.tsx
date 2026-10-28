@@ -788,12 +788,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="itinerary-inclusions mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-1.5">
+          <div className="itinerary-inclusions mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-2">
             {dayDetailFields.map(({ key, label, Icon }) => (
               <label
                 key={key}
                 htmlFor={`day-${day.day}-${key}`}
-                className={`itinerary-inclusion flex min-h-11 min-w-0 items-center gap-1 rounded-xl border px-1.5 py-2 transition-colors lg:gap-1.5 lg:px-2 ${
+                className={`itinerary-inclusion flex min-h-11 min-w-0 items-center gap-2 rounded-xl border px-3 py-2 transition-colors ${
                   day[key] ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-white'
                 } ${isEditMode ? 'cursor-pointer hover:border-blue-300' : ''}`}
               >
@@ -815,8 +815,8 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     {day[key] && <Check className="h-3 w-3" strokeWidth={3} />}
                   </span>
                 )}
-                <Icon className="h-3.5 w-3.5 shrink-0 text-blue-600" aria-hidden="true" />
-                <span title={label} className="min-w-0 flex-1 whitespace-nowrap text-[10px] font-semibold leading-none text-slate-700 lg:text-[11px]">{label}</span>
+                <Icon className="h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
+                <span title={label} className="whitespace-nowrap text-[11px] font-semibold leading-none text-slate-700 lg:text-xs">{label}</span>
               </label>
             ))}
           </div>
@@ -1282,16 +1282,14 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             justify-content: center !important;
             min-width: 0 !important;
             min-height: 0 !important;
-            gap: 1mm !important;
-            padding: 1.5mm 0.6mm 1.5mm 1.8mm !important;
+            gap: 1.5mm !important;
+            padding: 1.5mm 2mm !important;
             overflow: hidden !important;
           }
           .pdf-day .itinerary-inclusion > span:last-child {
-            min-width: 0 !important;
-            flex: 0 1 auto !important;
             text-align: center !important;
             white-space: nowrap !important;
-            font-size: 6.5pt !important;
+            font-size: 7pt !important;
           }
           .pdf-day .itinerary-inclusion > svg {
             flex: 0 0 auto !important;
