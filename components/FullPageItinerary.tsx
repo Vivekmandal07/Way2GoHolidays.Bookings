@@ -788,12 +788,12 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
             </p>
           )}
 
-          <div className="mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 xl:grid-cols-4">
+          <div className="mb-5 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-4 lg:gap-2">
             {dayDetailFields.map(({ key, label, Icon }) => (
               <label
                 key={key}
                 htmlFor={`day-${day.day}-${key}`}
-                className={`flex min-h-11 min-w-0 items-center gap-2 rounded-xl border px-3 py-2 transition-colors ${
+                className={`flex min-h-11 min-w-0 items-center gap-1.5 rounded-xl border px-2 py-2 transition-colors lg:gap-2 lg:px-2.5 ${
                   day[key] ? 'border-blue-200 bg-blue-50' : 'border-slate-200 bg-white'
                 } ${isEditMode ? 'cursor-pointer hover:border-blue-300' : ''}`}
               >
@@ -816,7 +816,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   </span>
                 )}
                 <Icon className="h-4 w-4 shrink-0 text-blue-600" aria-hidden="true" />
-                <span className="min-w-0 text-xs font-semibold text-slate-700">{label}</span>
+                <span className="min-w-0 whitespace-nowrap text-xs font-semibold text-slate-700">{label}</span>
               </label>
             ))}
           </div>
