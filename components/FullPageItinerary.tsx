@@ -655,7 +655,9 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 
                 {editableItinerary.map((day, idx) => {
   const isEmptyDay = !day.title && !day.activities;
-          const showHotelSection = isEmptyDay || (!isEmptyDay && day.hotel !== 'N/A');
+          const hasHotel = Boolean(day.hotel.trim()) && day.hotel.trim().toLowerCase() !== 'n/a';
+          const isAddedDay = day.day > durationDays;
+          const showHotelSection = isEditMode || isEmptyDay || isAddedDay || hasHotel;
 
           return (
             <div
@@ -840,7 +842,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 }
               `}
             >
-              <div className={`w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110 ${day.hotel && day.hotel !== 'N/A' ? 'xl:row-span-2' : ''}`}>
+              <div className={`w-10 h-10 md:w-16 md:h-16 bg-blue-600 text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 no-print shadow-lg transition-transform group-hover:scale-110 ${hasHotel ? 'xl:row-span-2' : ''}`}>
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -855,7 +857,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   />
                 </svg>
               </div>
-                {day.hotel && day.hotel !== 'N/A' && (
+                {hasHotel && (
                   <div className="itinerary-hotel-image col-start-2 w-full min-w-0 overflow-hidden rounded-xl xl:col-start-2 xl:row-span-2">
                     <img
                       src={day.hotelImage || HOTEL_ROOM_IMAGE}
@@ -869,13 +871,13 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                     )}
                   </div>
                 )}
-                <div className={`itinerary-hotel-details col-span-2 min-w-0 overflow-hidden ${day.hotel && day.hotel !== 'N/A' ? 'xl:col-start-3' : 'xl:col-start-2 xl:col-span-2'}`}>
+                <div className={`itinerary-hotel-details col-span-2 min-w-0 overflow-hidden ${hasHotel ? 'xl:col-start-3' : 'xl:col-start-2 xl:col-span-2'}`}>
                 <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-4">
                   <span className="text-[8px] md:text-[10px] font-bold text-blue-500 uppercase tracking-widest no-print">
                     Accommodation
                   </span>
 
-                  {!isEmptyDay && day.hotel !== 'N/A' && (
+                  {!isEmptyDay && hasHotel && (
                     <StarRating
                       rating={day.rating || 5}
                       dayIndex={idx}
@@ -903,7 +905,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                       className="no-print w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700"
                     />
                   </div>
-                ) : isEmptyDay ? (
+                ) : !hasHotel ? (
                   <span className="block whitespace-normal break-words text-sm font-bold italic text-slate-300 transition-all md:text-lg xl:text-xl">
                     Enter hotel name
                   </span>
