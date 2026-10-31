@@ -656,8 +656,6 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                 {editableItinerary.map((day, idx) => {
   const isEmptyDay = !day.title && !day.activities;
           const hasHotel = Boolean(day.hotel.trim()) && day.hotel.trim().toLowerCase() !== 'n/a';
-          const isAddedDay = day.day > durationDays;
-          const showHotelSection = isEditMode || isEmptyDay || isAddedDay || hasHotel;
 
           return (
             <div
@@ -824,8 +822,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
           </div>
 
           {/* HOTEL */}
-          {showHotelSection && (
-            <div
+          <div
               className={`
                 itinerary-hotel-card
                 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-3
@@ -915,8 +912,7 @@ const FullPageItinerary: React.FC<FullPageItineraryProps> = ({ pkg, onBack, onRa
                   </span>
                 )}
               </div>
-            </div>
-          )}
+          </div>
 
           {/* EMPTY DAY INDICATOR */}
           {isEmptyDay && !isEditMode && (
